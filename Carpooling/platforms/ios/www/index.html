@@ -20,38 +20,140 @@
     </head>
     <body>
         
-        <!-- Start of first page -->
-        <div data-role="page" id="foo">
+        <!-- Start of login -->
+        <div data-role="page" id="login">
             
             <div data-role="header">
-                <h1>Iphone PRUEBA</h1>
+                <h1>Login</h1>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
-                <p>I'm first in the source order so I'm shown as the page.</p>
-                <p>View internal page called <a href="#bar">bar</a></p>
+                <p>This is the login page.</p>
+                <p><a href="#dashboard" data-transition="slide">Log me in</a></p>
             </div><!-- /content -->
             
-            <div data-role="footer">
-                <h4>Page Footer</h4>
-            </div><!-- /footer -->
         </div><!-- /page -->
         
-        <!-- Start of second page -->
-        <div data-role="page" id="bar">
+        <!-- Start of dashboard -->
+        <div data-role="page" id="dashboard">
             
             <div data-role="header">
-                <h1>Bar</h1>
+		        <h1>Mi Cuenta</h1>
+                <a href="#dashboard-menu" data-rel="popup" data-transition="slidedown" class="ui-btn-right" data-role="button" data-icon="bars" data-iconpos="notext"></a>
+
+                <div data-role="popup" id="dashboard-menu" data-theme="a">
+                    <ul data-role="listview" data-inset="true" style="min-width:210px;">
+                        <li data-icon="false"><a href="#dashboard" data-transition="slide">Mi cuenta</a></li>
+                        <li data-icon="false"><a href="#search-ride" data-transition="slide">Buscar viajes</a></li>
+                        <li data-icon="false"><a href="#add-ride" data-transition="slide">A&ntilde;adir viaje</a></li>
+                        <li data-icon="false"><a href="#login" data-transition="slide">Salir</a></li>
+                    </ul>
+                </div>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
-                <p>I'm the second in the source order so I'm hidden when the page loads. I'm just shown if a link that references my id is beeing clicked.</p>
-                <p><a href="#foo">Back to foo</a></p>
+                <ul data-role="listview" id="list-my-rides" data-inset="true" data-divider-theme="a"></ul>
+                <ul data-role="listview" id="list-next-rides" data-inset="true" data-divider-theme="a"></ul>
+                <p><a href="#login" data-transition="slide">Back to login</a></p>
             </div><!-- /content -->
             
-            <div data-role="footer">
-                <h4>Page Footer</h4>
-            </div><!-- /footer -->
+        </div><!-- /page -->
+
+        <!-- Start of search-ride -->
+        <div data-role="page" id="search-ride">
+            
+            <div data-role="header">
+                <a href="#dashboard" class="ui-btn-left" data-role="button" data-icon="back" data-iconpos="notext"></a>
+                <h1>Viajes</h1>
+                <a href="#search-ride-menu" data-rel="popup" data-transition="slidedown" class="ui-btn-right" data-role="button" data-icon="bars" data-iconpos="notext"></a>
+
+                <div data-role="popup" id="search-ride-menu" data-theme="a">
+                    <ul data-role="listview" data-inset="true" style="min-width:210px;">
+                        <li data-icon="false"><a href="#dashboard" data-transition="slide">Mi cuenta</a></li>
+                        <li data-icon="false"><a href="#search-ride" data-transition="slide">Buscar viajes</a></li>
+                        <li data-icon="false"><a href="#add-ride" data-transition="slide">A&ntilde;adir viaje</a></li>
+                        <li data-icon="false"><a href="#login" data-transition="slide">Salir</a></li>
+                    </ul>
+                </div>
+            </div><!-- /header -->
+            
+            <div role="main" class="ui-content">
+                <ul data-role="listview" id="list-all-rides" data-inset="true" data-divider-theme="a"></ul>
+            </div><!-- /content -->
+            
+        </div><!-- /page -->
+        
+        <!-- Start of add-ride -->
+        <div data-role="page" id="add-ride">
+            
+            <div data-role="header">
+                <a href="#dashboard" class="ui-btn-left" data-role="button" data-icon="back" data-iconpos="notext"></a>
+		        <h1>Add Ride</h1>
+            </div><!-- /header -->
+            
+            <div role="main" class="ui-content">
+            	<div>From:</div>
+            	<div>To:</div>
+            	<div>Time:</div>
+            </div><!-- /content -->
+            
+        </div><!-- /page -->
+        
+        <!-- Start of view-my-ride -->
+        <div data-role="page" id="view-my-ride">
+            
+            <div data-role="header">
+            	<a href="#dashboard" class="ui-btn-left" data-role="button" data-icon="back" data-iconpos="notext"></a>
+		        <h1>My Ride Details</h1>
+            </div><!-- /header -->
+            
+            <div role="main" class="ui-content">
+                <div>From:</div>
+            	<div class="view-my-ride-from"></div>
+                <div>To:</div>
+            	<div class="view-my-ride-to"></div>
+                <div>Time:</div>
+            	<div class="view-my-ride-time"></div>
+            </div><!-- /content -->
+            
+        </div><!-- /page -->
+        
+        <!-- Start of view-next-ride -->
+        <div data-role="page" id="view-next-ride">
+            
+            <div data-role="header">
+            	<a href="#dashboard" class="ui-btn-left" data-role="button" data-icon="back" data-iconpos="notext"></a>
+		        <h1>Ride Details</h1>
+            </div><!-- /header -->
+            
+            <div role="main" class="ui-content">
+            	<div>From:</div>
+                <div class="view-next-ride-from"></div>
+                <div>To:</div>
+                <div class="view-next-ride-to"></div>
+                <div>Time:</div>
+                <div class="view-next-ride-time"></div>
+            </div><!-- /content -->
+            
+        </div><!-- /page -->
+
+        <!-- Start of view-ride -->
+        <div data-role="page" id="view-ride">
+            
+            <div data-role="header">
+                <a href="#search-ride" class="ui-btn-left" data-role="button" data-icon="back" data-iconpos="notext"></a>
+                <h1>Ride Details</h1>
+            </div><!-- /header -->
+            
+            <div role="main" class="ui-content">
+                <div>From:</div>
+                <div class="view-ride-from"></div>
+                <div>To:</div>
+                <div class="view-ride-to"></div>
+                <div>Time:</div>
+                <div class="view-ride-time"></div>
+            </div><!-- /content -->
+            
         </div><!-- /page -->
     </body>
 </html>
