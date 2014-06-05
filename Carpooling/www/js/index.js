@@ -33,6 +33,14 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
+    	
+    	var id = isCache('id');
+		var pass = isCache('pass');
+		if (id && pass){
+			console.log('Existe id y pass');
+			$.mobile.changePage($('#dashboard'), {transition: 'none'});
+		}
+    	
         StatusBar.overlaysWebView(false);
                 
         $(document).on('pageinit', '#dashboard', function(){ 
@@ -244,4 +252,54 @@ function clearAllRides() {
 	var allRidesList = $('#list-all-rides');
 
 	allRidesList.html('');
+}
+
+
+/*funciones para persitencia de datos*/
+
+//guarda un par key - value
+function setCache(key, value) {
+  window.localStorage.setItem(key, JSON.stringify(value));
+}
+
+//obtiene el valor de key
+function getCache(key) {
+  return JSON.parse(window.localStorage.getItem(key));
+}
+
+//true si key existe, false en otro caso
+function isCache(key) {
+  return window.localStorage.getItem(key) !== null && window.localStorage.getItem(key) !== undefined;
+}
+
+//elimina key 
+function removeCache(key) {
+  window.localStorage.removeItem(key);
+}
+
+function validaDatos(){
+	var id = $('#id').val();
+	var pass = $('#pass').val();
+	//si el usuario ingreso datos de login
+	if((id != null && id != undefined && id != "") && (pass != null && pass != undefined && pass != "")){ 
+		if(isCache('id') && isCache(pass)){
+			//si ya existen id y pass en la memoria pero se debe volver a iniciar sesion
+			var storedId = getCache('id');
+			var storedPass = getCache('pass');
+			if((id == storedID) && (pass == storedPass)){
+				//login correcto
+				$.mobile.changePage($('#dashboard'), {transition: 'slide'});
+			}else{
+				//login incorrecto
+				console.log("Verifica tu id y contraseña");
+			}
+		}else{
+			//si no existen id y pass en la memoria
+			setCache("id", id);
+			setCache("pass", pass);
+			$.mobile.changePage($('#dashboard'), {transition: 'slide'});
+		}		
+	}else{
+		console.log("Ingresa tu id y contraseña");
+	}
 }
