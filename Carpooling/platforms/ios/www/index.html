@@ -7,6 +7,9 @@
         
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <link rel="stylesheet" href="jquery/jquery.mobile-1.4.2.min.css" />
+
+        <link rel="stylesheet" href="css/themes/carpooling.css" />
+        <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
         
         <script src="jquery/jquery-2.1.1.min.js"></script>
         <script src="jquery/jquery.mobile-1.4.2.min.js"></script>
@@ -18,7 +21,7 @@
             </script>
         
     </head>
-    <body>
+    <body class="ui-nodisc-icon ui-alt-icon">
         
         <!-- Start of login -->
         <div data-role="page" id="login">
@@ -54,7 +57,6 @@
             <div role="main" class="ui-content">
                 <ul data-role="listview" id="list-my-rides" data-inset="true" data-divider-theme="a"></ul>
                 <ul data-role="listview" id="list-next-rides" data-inset="true" data-divider-theme="a"></ul>
-                <p><a href="#login" data-transition="slide">Back to login</a></p>
             </div><!-- /content -->
             
         </div><!-- /page -->
@@ -108,12 +110,15 @@
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
-                <div>From:</div>
+                <div class="view-my-ride-name"></div>
+                <div class="view-my-ride-date"></div>
+                <div class="view-my-ride-time"></div>
+                <div>De:</div>
             	<div class="view-my-ride-from"></div>
-                <div>To:</div>
+                <div>A:</div>
             	<div class="view-my-ride-to"></div>
-                <div>Time:</div>
-            	<div class="view-my-ride-time"></div>
+            	<div class="view-my-ride-seats"></div>
+                <div class="view-my-ride-notes"></div>
             </div><!-- /content -->
             
         </div><!-- /page -->

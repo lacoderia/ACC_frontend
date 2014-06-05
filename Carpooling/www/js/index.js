@@ -56,9 +56,14 @@ var app = {
 			}
 			
 			if(ride != null) {
+                $('#view-my-ride .view-my-ride-name').html(ride.name);
+                $('#view-my-ride .view-my-ride-date').html(ride.date);
+                $('#view-my-ride .view-my-ride-time').html(ride.time);
 				$('#view-my-ride .view-my-ride-from').html(ride.from);
 				$('#view-my-ride .view-my-ride-to').html(ride.to);
-				$('#view-my-ride .view-my-ride-time').html(ride.time);
+                $('#view-my-ride .view-my-ride-seats').html(ride.seats);
+                $('#view-my-ride .view-my-ride-notes').html(ride.notes);
+
 			} else {
 				$.mobile.changePage($('#dashboard'), {transition: 'slide'});
 				alert('There was an error retrieving the ride details.');
@@ -153,17 +158,25 @@ function getDashboard() {
 	myRides = [
 		{
 			'id': 1,
+            'name': 'Juan Camilo Pinzón',
 			'from': 'Mi casa', 
 			'to': 'Tu casa',
-			'time': '12:00'
+            'date': '12 Abril',
+			'time': '12:00',
+            'seats': 2,
+            'notes': 'Nos vemos en la puerta de acceso al estacionamiento C, segundo nivel'
 		}
 	];
 	nextRides = [
 		{
-			'id': 2,
-			'from': 'Mi casa', 
-			'to': 'Tu casa',
-			'time': '8:00'
+            'id': 2,
+            'name': 'Juan Camilo Pinzón',
+            'from': 'Mi casa',
+            'to': 'Tu casa',
+            'date': '12 Abril',
+            'time': '12:00',
+            'seats': 2,
+            'notes': 'Nos vemos en la puerta de acceso al estacionamiento C, segundo nivel'
 		}
 	];
 }
@@ -205,22 +218,34 @@ function getAllRides() {
 	showLoader();
 	allRides = [
 		{
-			'id': 1,
-			'from': 'Mi casa', 
-			'to': 'Tu casa',
-			'time': '12:00'
+            'id': 1,
+            'name': 'Juan Camilo Pinzón',
+            'from': 'Mi casa',
+            'to': 'Tu casa',
+            'date': '12 Abril',
+            'time': '12:00',
+            'seats': 2,
+            'notes': 'Nos vemos en la puerta de acceso al estacionamiento C, segundo nivel'
 		},
 		{
-			'id': 2,
-			'from': 'Mi casa', 
-			'to': 'Tu casa',
-			'time': '21:00'
+            'id': 2,
+            'name': 'Diego Miramontes',
+            'from': 'Diego',
+            'to': 'Owen',
+            'date': '12 Abril',
+            'time': '12:00',
+            'seats': 2,
+            'notes': 'Nos vemos en la puerta de acceso al estacionamiento C, segundo nivel'
 		},
 		{
-			'id': 3,
-			'from': 'Mi casa', 
-			'to': 'Tu casa',
-			'time': '2:00'
+            'id': 3,
+            'name': 'Owen',
+            'from': 'Owen',
+            'to': 'Satélite',
+            'date': '12 Abril',
+            'time': '12:00',
+            'seats': 2,
+            'notes': 'Nos vemos en la puerta de acceso al estacionamiento C, segundo nivel'
 		}
 	];
 }

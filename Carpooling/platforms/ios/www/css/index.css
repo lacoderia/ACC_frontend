@@ -112,3 +112,13 @@ h1 {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
+
+/** View my ride **/
+
+.view-my-ride {
+    text-align: center;
+}
+
+.view-my-ride-name {
+    font-weight: bold;
+}
