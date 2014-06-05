@@ -27,14 +27,47 @@
         <div data-role="page" id="login">
             
             <div data-role="header">
-                <h1>Login</h1>
+                <h1></h1>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
-                <p>This is the login page.</p>
-                <p><a href="#dashboard" data-transition="slide">Log me in</a></p>
+                <input placeholder="Identificaci&oacute;n" type="text" id="id" />
+                <input placeholder="Contrase&ntilde;a" type="password" id="pass" />
+                <img src="" />
+                <br/>
+                <button onclick="validaDatos()" type="button">Iniciar Sesi&oacute;n</button>
+                <br/>
+                <a href="#registro" data-transition="slide" >Quiero registrarme</a>
+                <br/>
+                <a>�Olvidaste tu contrase&ntilde;a?</a>
             </div><!-- /content -->
             
+            <div data-role="footer">
+                <h4></h4>
+            </div><!-- /footer -->
+        </div><!-- /page -->
+        
+        <!-- Start of registro -->
+        <div data-role="page" id="registro">
+            
+            <div data-role="header">
+                <h1>Registro</h1>
+            </div><!-- /header -->
+            
+            <div role="main" class="ui-content">
+                <input type="text" name="convenio" placeholder="No. de convenio" />
+                <input type="text" name="nombre" placeholder="Nombre completo"/>
+                <input type="email" name="email" placeholder="Correo electr&oacute;nico"/>
+                <input type="text" name="placas" placeholder="N&uacute;mero de placas"/>
+                <input type="text" name="password" placeholder="Contrase&ntilde;a"/>
+                <input type="text" name="confirma_password" placeholder="Confirmar contrase�a"/>
+                <button type="button">Registrarme</button>
+                <p><a href="#login">Back</a></p>
+            </div><!-- /content -->
+            
+            <div data-role="footer">
+                <h4></h4>
+            </div><!-- /footer -->
         </div><!-- /page -->
         
         <!-- Start of dashboard -->
@@ -158,7 +191,6 @@
                 <div>Time:</div>
                 <div class="view-ride-time"></div>
             </div><!-- /content -->
-            
         </div><!-- /page -->
     </body>
 </html>
