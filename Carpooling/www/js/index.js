@@ -64,13 +64,27 @@ var app = {
 			}
 			
 			if(ride != null) {
-                $('#view-my-ride .view-my-ride-name').html(ride.name);
-                $('#view-my-ride .view-my-ride-date').html(ride.date);
-                $('#view-my-ride .view-my-ride-time').html(ride.time);
-				$('#view-my-ride .view-my-ride-from').html(ride.from);
-				$('#view-my-ride .view-my-ride-to').html(ride.to);
-                $('#view-my-ride .view-my-ride-seats').html(ride.seats);
-                $('#view-my-ride .view-my-ride-notes').html(ride.notes);
+                $('#view-my-ride .name').html(ride.name);
+                $('#view-my-ride .date').html(ride.date);
+                $('#view-my-ride .time').html(ride.time);
+				$('#view-my-ride .from').html(ride.from);
+				$('#view-my-ride .to').html(ride.to);
+
+                var seats = '';
+                var availableSeats = ride.availableSeats;
+                var takenSeats = ride.takenSeats;
+
+                for(var i=0; i<availableSeats; i++) {
+                    if(i<takenSeats) {
+                        seats += '<img src="img/person.png"/>';
+                    } else {
+                        seats += '<img src="img/person_grey.png"/>';
+                    }
+                }
+
+                $('#view-my-ride .seats').html(seats);
+
+                $('#view-my-ride .notes').html(ride.notes);
 
 			} else {
 				$.mobile.changePage($('#dashboard'), {transition: 'slide'});
@@ -89,9 +103,27 @@ var app = {
 			}
 			
 			if(ride != null) {
-				$('#view-next-ride .view-next-ride-from').html(ride.from);
-				$('#view-next-ride .view-next-ride-to').html(ride.to);
-				$('#view-next-ride .view-next-ride-time').html(ride.time);
+                $('#view-next-ride .name').html(ride.name);
+                $('#view-next-ride .date').html(ride.date);
+                $('#view-next-ride .time').html(ride.time);
+                $('#view-next-ride .from').html(ride.from);
+                $('#view-next-ride .to').html(ride.to);
+
+                var seats = '';
+                var availableSeats = ride.availableSeats;
+                var takenSeats = ride.takenSeats;
+
+                for(var i=0; i<availableSeats; i++) {
+                    if(i<takenSeats) {
+                        seats += '<img src="img/person.png"/>';
+                    } else {
+                        seats += '<img src="img/person_grey.png"/>';
+                    }
+                }
+
+                $('#view-my-ride .seats').html(seats);
+
+                $('#view-next-ride .notes').html(ride.notes);
 			} else {
 				$.mobile.changePage($('#dashboard'), {transition: 'slide'});
 				alert('There was an error retrieving the ride details.');
@@ -109,9 +141,27 @@ var app = {
 			}
 			
 			if(ride != null) {
-				$('#view-ride .view-ride-from').html(ride.from);
-				$('#view-ride .view-ride-to').html(ride.to);
-				$('#view-ride .view-ride-time').html(ride.time);
+                $('#view-ride .name').html(ride.name);
+                $('#view-ride .date').html(ride.date);
+                $('#view-ride .time').html(ride.time);
+                $('#view-ride .from').html(ride.from);
+                $('#view-ride .to').html(ride.to);
+
+                var seats = '';
+                var availableSeats = ride.availableSeats;
+                var takenSeats = ride.takenSeats;
+
+                for(var i=0; i<availableSeats; i++) {
+                    if(i<takenSeats) {
+                        seats += '<img src="img/person.png"/>';
+                    } else {
+                        seats += '<img src="img/person_grey.png"/>';
+                    }
+                }
+
+                $('#view-my-ride .seats').html(seats);
+
+                $('#view-ride .notes').html(ride.notes);
 			} else {
 				$.mobile.changePage($('#dashboard'), {transition: 'slide'});
 				alert('There was an error retrieving the ride details.');
@@ -140,10 +190,11 @@ var app = {
 		});
 		
 		$('#btn-add-ride').click(function() {
-			myRides.push({'from':'New Ride', 'to':'Mi casa'});
+			//myRides.push({'from':'New Ride', 'to':'Mi casa'});
 			updateDashboard();
 		    $.mobile.changePage($('#dashboard'), {transition: 'slide', reverse: 'true'}); 
 		});
+
 		
     }
 };
@@ -158,34 +209,58 @@ function showLoader() {
 }
 
 function hideLoader() {
-	$.mobile.loading('hide');
+	//$.mobile.loading('hide');
 }
 
 function getDashboard() {
 	showLoader();
 	myRides = [
-		{
-			'id': 1,
+        {
+            'id': 1,
             'name': 'Juan Camilo Pinzón',
-			'from': 'Mi casa', 
-			'to': 'Tu casa',
-            'date': '12 Abril',
-			'time': '12:00',
-            'seats': 2,
-            'notes': 'Nos vemos en la puerta de acceso al estacionamiento C, segundo nivel'
-		}
+            'from': 'Calle 20',
+            'to': 'Bocayá',
+            'date': '6 Junio',
+            'time': '18:00',
+            'availableSeats': 4,
+            'takenSeats': 1,
+            'notes': 'Camioneta negra afuera de la oficina'
+        },
+        {
+            'id': 2,
+            'name': 'Diego Miramontes',
+            'from': 'Calle 40',
+            'to': 'Av Carrera',
+            'date': '6 Junio',
+            'time': '19:00',
+            'availableSeats': 4,
+            'takenSeats': 2,
+            'notes': 'No hago paradas'
+        }
 	];
 	nextRides = [
-		{
-            'id': 2,
-            'name': 'Juan Camilo Pinzón',
-            'from': 'Mi casa',
-            'to': 'Tu casa',
-            'date': '12 Abril',
-            'time': '12:00',
-            'seats': 2,
+        {
+            'id': 3,
+            'name': 'Ricardo Rosas',
+            'from': 'Las Américas',
+            'to': 'Ciudad de Calí',
+            'date': '7 Junio',
+            'time': '10:00',
+            'availableSeats': 4,
+            'takenSeats': 2,
             'notes': 'Nos vemos en la puerta de acceso al estacionamiento C, segundo nivel'
-		}
+        },
+        {
+            'id': 4,
+            'name': 'Juan Camilo Pinzón',
+            'from': 'Av Carrera',
+            'to': 'Calle 49',
+            'date': '7 Junio',
+            'time': '21:00',
+            'availableSeats': 4,
+            'takenSeats': 3,
+            'notes': 'No se permite fumar'
+        }
 	];
 }
 
@@ -195,7 +270,7 @@ function updateDashboard() {
 	
 	myRidesList.append($('<li data-role="list-divider" >Mis viajes publicados</li>'));
 	for(var i=0; i<myRides.length; i++) {
-		html = '<li ride-id="' + myRides[i].id + '"><a>' + myRides[i].from + '</a></li>';
+		html = '<li class="ui-nodisc-icon" ride-id="' + myRides[i].id + '"><a>' + myRides[i].from + ' - ' + myRides[i].to + '</a></li>';
 		myRidesList.append($(html));
 	}
 	
@@ -203,15 +278,15 @@ function updateDashboard() {
 	
 	var nextRidesList = $('#list-next-rides');
 	
-	nextRidesList.append($('<li data-role="list-divider" >Viajes a los que apliqu&eacute;</li>'));
+	nextRidesList.append($('<li data-role="list-divider" >Viajes a los que apliqué</li>'));
 	for(var i=0; i<nextRides.length; i++) {
-		html = '<li ride-id="' + nextRides[i].id + '"><a>' + nextRides[i].from + '</a></li>';
+		html = '<li class="ui-nodisc-icon" ride-id="' + nextRides[i].id + '"><a>' + nextRides[i].from + ' - ' + nextRides[i].to + '</a></li>';
 		nextRidesList.append($(html));
 	}
 	
 	nextRidesList.listview('refresh');
-	
-	setTimeout(function(){hideLoader();}, 2000);
+
+    hideLoader();
 }
 
 function clearDashboard() {
@@ -228,33 +303,47 @@ function getAllRides() {
 		{
             'id': 1,
             'name': 'Juan Camilo Pinzón',
-            'from': 'Mi casa',
-            'to': 'Tu casa',
-            'date': '12 Abril',
-            'time': '12:00',
-            'seats': 2,
-            'notes': 'Nos vemos en la puerta de acceso al estacionamiento C, segundo nivel'
+            'from': 'Calle 20',
+            'to': 'Bocayá',
+            'date': '6 Junio',
+            'time': '18:00',
+            'availableSeats': 4,
+            'takenSeats': 3,
+            'notes': 'Camioneta negra afuera de la oficina'
 		},
 		{
             'id': 2,
             'name': 'Diego Miramontes',
-            'from': 'Diego',
-            'to': 'Owen',
-            'date': '12 Abril',
-            'time': '12:00',
-            'seats': 2,
-            'notes': 'Nos vemos en la puerta de acceso al estacionamiento C, segundo nivel'
+            'from': 'Calle 40',
+            'to': 'Av Carrera',
+            'date': '6 Junio',
+            'time': '19:00',
+            'availableSeats': 4,
+            'takenSeats': 2,
+            'notes': 'No hago paradas'
 		},
 		{
             'id': 3,
-            'name': 'Owen',
-            'from': 'Owen',
-            'to': 'Satélite',
-            'date': '12 Abril',
-            'time': '12:00',
-            'seats': 2,
+            'name': 'Ricardo Rosas',
+            'from': 'Las Américas',
+            'to': 'Ciudad de Calí',
+            'date': '7 Junio',
+            'time': '10:00',
+            'availableSeats': 4,
+            'takenSeats': 4,
             'notes': 'Nos vemos en la puerta de acceso al estacionamiento C, segundo nivel'
-		}
+		},
+        {
+            'id': 4,
+            'name': 'Juan Camilo Pinzón',
+            'from': 'Av Carrera',
+            'to': 'Calle 49',
+            'date': '7 Junio',
+            'time': '21:00',
+            'availableSeats': 4,
+            'takenSeats': 1,
+            'notes': 'No se permite fumar'
+        }
 	];
 }
 
@@ -264,7 +353,7 @@ function updateAllRides() {
 	
 	allRidesList.append($('<li data-role="list-divider" >Todos los viajes</li>'));
 	for(var i=0; i<allRides.length; i++) {
-		html = '<li ride-id="' + allRides[i].id + '"><a>' + allRides[i].from + '</a></li>';
+		html = '<li ride-id="' + allRides[i].id + '"><a>' + allRides[i].from + ' - ' + allRides[i].to + '</a></li>';
 		allRidesList.append($(html));
 	}
 	
@@ -316,7 +405,7 @@ function validaDatos(){
 				$.mobile.changePage($('#dashboard'), {transition: 'slide'});
 			}else{
 				//login incorrecto
-				console.log("Verifica tu id y contrase�a");
+				console.log("Verifica tu id y contrase�a");
 			}
 		}else{
 			//si no existen id y pass en la memoria
@@ -325,6 +414,18 @@ function validaDatos(){
 			$.mobile.changePage($('#dashboard'), {transition: 'slide'});
 		}		
 	}else{
-		console.log("Ingresa tu id y contrase�a");
+		console.log("Ingresa tu id y contrase�a");
 	}
+}
+
+function addRide() {
+    //myRides.push({'from':'New Ride', 'to':'Mi casa'});
+    updateDashboard();
+    $.mobile.changePage($('#dashboard'), {transition: 'slide', reverse: 'true'});
+}
+
+function acceptRide() {
+    //myRides.push({'from':'New Ride', 'to':'Mi casa'});
+    updateDashboard();
+    $.mobile.changePage($('#dashboard'), {transition: 'slide', reverse: 'true'});
 }
