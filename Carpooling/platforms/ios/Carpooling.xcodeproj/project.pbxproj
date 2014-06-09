@@ -40,6 +40,7 @@
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
 		C771C32E2A684B58A7CEC485 /* CDVLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FE8634E86914052BB836F6E /* CDVLogger.m */; };
 		833B6A0F588A4EBF8EECB9B5 /* CDVStatusBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 72611AD43DD342649883A790 /* CDVStatusBar.m */; };
+		ECF60AED532D473E99A9D302 /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CF0DE731DB484694A0E9A9 /* CDVDevice.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +109,8 @@
 		4C458494274B409DA9AD8746 /* CDVLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVLogger.h"; path = "org.apache.cordova.console/CDVLogger.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		72611AD43DD342649883A790 /* CDVStatusBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVStatusBar.m"; path = "org.apache.cordova.statusbar/CDVStatusBar.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		87382680235146AB88622CCF /* CDVStatusBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVStatusBar.h"; path = "org.apache.cordova.statusbar/CDVStatusBar.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		60CF0DE731DB484694A0E9A9 /* CDVDevice.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVDevice.m"; path = "Plugins\org.apache.cordova.device\CDVDevice.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		3AED830F45C6474584603676 /* CDVDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVDevice.h"; path = "Plugins\org.apache.cordova.device\CDVDevice.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,6 +235,8 @@
 				4C458494274B409DA9AD8746 /* CDVLogger.h */,
 				72611AD43DD342649883A790 /* CDVStatusBar.m */,
 				87382680235146AB88622CCF /* CDVStatusBar.h */,
+				60CF0DE731DB484694A0E9A9 /* CDVDevice.m */,
+				3AED830F45C6474584603676 /* CDVDevice.h */,
 			);
 			name = Plugins;
 			path = "Carpooling/Plugins";
@@ -428,6 +433,7 @@
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				C771C32E2A684B58A7CEC485 /* CDVLogger.m in Sources */,
 				833B6A0F588A4EBF8EECB9B5 /* CDVStatusBar.m in Sources */,
+				ECF60AED532D473E99A9D302 /* CDVDevice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

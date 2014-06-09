@@ -21,6 +21,7 @@ C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\assets\www\jquery \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\assets\www\js \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\assets\www\phonegap.js \
+C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\assets\www\plugins \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\assets\www\css\index.css \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\assets\www\img\logo.png \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\assets\www\jquery\demos \
@@ -744,4 +745,7 @@ C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\assets\www\jquery\images\icons-svg\video-black.svg \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\assets\www\jquery\images\icons-svg\video-white.svg \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\assets\www\js\index.js \
+C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\assets\www\plugins\org.apache.cordova.device \
+C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\assets\www\plugins\org.apache.cordova.device\www \
+C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\assets\www\plugins\org.apache.cordova.device\www\device.js \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\ant-build\AndroidManifest.xml \

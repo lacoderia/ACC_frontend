@@ -38,11 +38,13 @@ var app = {
 		var pass = isCache('pass');
 		if (id && pass){
 			console.log('Existe id y pass');
-			$.mobile.changePage($('#dashboard'), {transition: 'none'});
+			//$.mobile.changePage($('#dashboard'), {transition: 'none'});
 		}
-    	
-        StatusBar.overlaysWebView(false);
-                
+		
+        if(device.platform=="iPhone"){
+        	StatusBar.overlaysWebView(false);
+        }
+             
         $(document).on('pageinit', '#dashboard', function(){ 
 			getDashboard();
 			updateDashboard();
@@ -54,6 +56,7 @@ var app = {
 		});
 		
 		$(document).on('pagebeforeshow', "#view-my-ride", function (event, data) {
+			
     		var rideId = sessionStorage.rideId;
     		var ride = null;
     		
@@ -91,8 +94,9 @@ var app = {
 				alert('There was an error retrieving the ride details.');
 			}
 		});
-
+		
 		$(document).on('pagebeforeshow', "#view-next-ride", function (event, data) {
+			
     		var rideId = sessionStorage.rideId;
     		var ride = null;
     		
@@ -395,7 +399,7 @@ function validaDatos(){
 	var id = $('#id').val();
 	var pass = $('#pass').val();
 	//si el usuario ingreso datos de login
-	if((id != null && id != undefined && id != "") && (pass != null && pass != undefined && pass != "")){ 
+	/*if((id != null && id != undefined && id != "") && (pass != null && pass != undefined && pass != "")){ 
 		if(isCache('id') && isCache(pass)){
 			//si ya existen id y pass en la memoria pero se debe volver a iniciar sesion
 			var storedId = getCache('id');
@@ -415,7 +419,7 @@ function validaDatos(){
 		}		
 	}else{
 		console.log("Ingresa tu id y contrase�a");
-	}
+	}*/
 }
 
 function addRide() {
