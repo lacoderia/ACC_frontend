@@ -418,7 +418,7 @@ function validaDatos(){
 			$.mobile.changePage($('#dashboard'), {transition: 'slide'});
 		}		
 	}else{
-		console.log("Ingresa tu id y contraseï¿½a");
+		console.log("Ingresa tu id y contraseña");
 	}*/
 }
 
@@ -433,3 +433,4 @@ function acceptRide() {
     updateDashboard();
     $.mobile.changePage($('#dashboard'), {transition: 'slide', reverse: 'true'});
 }
+
