@@ -47,8 +47,8 @@
             
             <div role="main" class="ui-content">
             	<div class="menu-principal">
-            		<a href=""><img src="img/Botones/desvare.png" /></a>
-	            	<a href=""><img src="img/Botones/grua.png" /></a>
+            		<a href="#login"><img src="img/Botones/desvare.png" /></a>
+	            	<a href="#login"><img src="img/Botones/grua.png" /></a>
 	            	<a href="#emergencias"><img src="img/Botones/emergencias.png" /></a>
 	            	<a href=""><img src="img/Botones/acc.png" /></a>
 	            	<a href="#descuentos"><img src="img/Botones/descuentos.png" /></a>
@@ -60,7 +60,7 @@
             </div><!-- /content -->
             
             <div class="footer">
-			  <a><img src="img/Botones/menu.png"></a>
+			  <a href="#menu" data-transition="slide-to-right" ><img src="img/Botones/menu.png"></a>
 			  <a><img src="img/Botones/share.png"></a>
 			</div>
             
@@ -81,8 +81,6 @@
                 <a href="#dashboard" data-role="button" data-transition="slide">Iniciar Sesión</a>
                 <br/>
                 <a href="#dashboard" data-role="button" data-transition="slide">Continuar como invitado</a>
-                <br/>
-                <a href="#registro" data-transition="slide">Quiero registrarme</a>
                 <br/>
                 <a>¿Olvidaste tu contraseña?</a>
             </div><!-- /content -->
@@ -156,6 +154,51 @@
             </div><!-- /content -->
 
         </div><!-- /gasolineras -->
+        
+        <!-- Start of menu -->
+        <div data-role="page" id="menu">
+            
+            <div data-role="header">
+                <h1></h1>
+            </div><!-- /header -->
+            
+            <div role="main" class="ui-content">
+            	<ul>
+            		<li><a>Principal</a></li>
+            		<li><a href="#mi-cuenta" data-transition="slide" >Mi cuenta</a></li>
+            		<li><a>Geocerca</a></li>
+            		<li><a>Descuentos</a></li>
+            		<li><a>Configuración</a></li>
+            		<li><a>Tutorial</a></li>
+            	</ul>
+            </div><!-- /content -->
+
+        </div><!-- /menu -->
+        
+        <!-- Start of mi-cuenta -->
+        <div data-role="page" id="mi-cuenta">
+            
+            <div data-role="header">
+                <h1></h1>
+            </div><!-- /header -->
+            
+            <div role="main" class="ui-content">
+            	<h2>Datos personales</h2>
+            	<p>No. Socio: 123456</p>
+            	<p>Nombre: Francisco Sagarninaga Santos</p>
+            	<p>Vence: 2014/12/31</p>
+            	<h3>Vehiculos</h3>
+            	<div>
+            		<img />
+            		<p>Placa: BLH149</p>
+            		<p>2014/04/30</p>
+            		<p>2014/12/29</p>
+            	</div>
+            	
+            	
+            </div><!-- /content -->
+
+        </div><!-- /mi-cuenta -->
         
     </body>
 </html>

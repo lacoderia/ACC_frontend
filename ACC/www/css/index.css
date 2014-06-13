@@ -116,7 +116,7 @@ h1 {
 
 
 .menu-principal{
-	width: 60%;
+	width: 85%;
 	background: #eee;
 	padding: 0;
 	overflow: hidden;
@@ -125,11 +125,11 @@ h1 {
 
 .menu-principal a {
 	float: left;
-	margin: 3px;
+	margin: 2px;
 }
 
 .menu-principal a img {
-	margin: 3px;
+	margin: 2px;
 }
 
 .footer a {
@@ -144,3 +144,40 @@ h1 {
 	background: rgba(2,2,2,.5);
 }
 
+.slide-to-right.in {
+    -webkit-transform: translateX(0);
+    -webkit-animation-name: slideinfromleft;
+}
+
+.slide-to-right.out {
+    -webkit-transform: translateX(-100%);
+    -webkit-animation-name: slideouttoright;
+}
+
+@-webkit-keyframes slideinfromleft {
+    from { -webkit-transform: translateX(-100%); }
+    to { -webkit-transform: translateX(0); }
+}
+@-webkit-keyframes slideouttoright {
+    from { -webkit-transform: translateX(0); }
+    to { -webkit-transform: translateX(100%); }
+}
+
+.slide-to-right.in.reverse {
+    -webkit-transform: translateX(0);
+    -webkit-animation-name: slideinfromright;
+}
+
+.slide-to-right.out.reverse {
+    -webkit-transform: translateX(-100%);
+    -webkit-animation-name: slideouttoleft;
+}
+
+@-webkit-keyframes slideinfromright {
+    from { -webkit-transform: translateX(100%); }
+    to { -webkit-transform: translateX(0); }
+}
+@-webkit-keyframes slideouttoleft {
+    from { -webkit-transform: translateX(0); }
+    to { -webkit-transform: translateX(-100%); }
+}
