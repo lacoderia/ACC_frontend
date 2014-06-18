@@ -45,5 +45,27 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');*/
 
         console.log('Received Event: ' + id);
+        navigator.geolocation.getCurrentPosition(loadMap);
+        
     }
 };
+
+function loadMap(position){
+	var longitud = position.coords.longitude;
+	var latitud = position.coords.latitude;
+	var center = new google.maps.LatLng(latitud, longitud);
+	
+	var mapOptions = {
+			center: center,
+			zoom: 8,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+	
+	console.log("MAPA");
+	var map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+	
+}
+
+function onError(error) {
+    console.log('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+}

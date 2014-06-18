@@ -132,18 +132,6 @@ h1 {
 	margin: 2px;
 }
 
-.footer a {
-	margin: 10px;
-}
-
-.footer a:last-child {
-	float: right;
-}
-
-.header{
-	background: rgba(2,2,2,.5);
-}
-
 .slide-to-right.in {
     -webkit-transform: translateX(0);
     -webkit-animation-name: slideinfromleft;
@@ -158,6 +146,7 @@ h1 {
     from { -webkit-transform: translateX(-100%); }
     to { -webkit-transform: translateX(0); }
 }
+
 @-webkit-keyframes slideouttoright {
     from { -webkit-transform: translateX(0); }
     to { -webkit-transform: translateX(100%); }
@@ -177,7 +166,57 @@ h1 {
     from { -webkit-transform: translateX(100%); }
     to { -webkit-transform: translateX(0); }
 }
+
 @-webkit-keyframes slideouttoleft {
     from { -webkit-transform: translateX(0); }
     to { -webkit-transform: translateX(-100%); }
+}
+
+.header{
+	background: rgba(100,100,100);
+}
+
+body .page{
+	/* background-image: url("../img/mapa.png");
+	background-repeat: no-repeat;
+	background-size: cover; */
+}
+
+.footer a {
+	margin: 10px;
+}
+
+.footer a:last-child {
+	float: right;
+}
+
+.menu{
+	background: #008;
+	list-style-type: none;
+	padding: 10px;
+}
+
+.menu li{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	text-decoration: none;
+}
+
+.menu li a{
+	color: #FFF;
+	text-decoration: none;
+}
+
+.menu li a:visited{
+	color: #FFF;
+}
+
+.clima p{
+	bakcground: #AAA;
+	border-radius: 5px;
+}
+
+.velocidad p{
+	bakcground: #AAA;
+	border-radius: 5px;
 }
