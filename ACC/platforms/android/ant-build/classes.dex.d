@@ -13,4 +13,8 @@ C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\ACC\platforms\android\ant-bu
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\ACC\platforms\android\ant-build\classes\mx\coderia\ACC\R$string.class \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\ACC\platforms\android\ant-build\classes\mx\coderia\ACC\R$xml.class \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\ACC\platforms\android\ant-build\classes\mx\coderia\ACC\R.class \
+C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\ACC\platforms\android\ant-build\classes\org\apache\cordova\devicemotion\AccelListener$1.class \
+C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\ACC\platforms\android\ant-build\classes\org\apache\cordova\devicemotion\AccelListener.class \
+C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\ACC\platforms\android\ant-build\classes\org\apache\cordova\deviceorientation\CompassListener$1.class \
+C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\ACC\platforms\android\ant-build\classes\org\apache\cordova\deviceorientation\CompassListener.class \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\ACC\platforms\android\ant-build\dexedLibs\classes-5747855e4b79191c3b4dbbdf10db5cc0.jar \
