@@ -5,11 +5,7 @@ Carpooling/platforms/android/ant-build/build.prop
 *.prop
 *.apk
 *.ap_
-ACC/platforms
-ACC/.cordova
-ACC/hooks
-ACC/merges
-ACC/plugins
+ACC/platforms/*
 *.apk
 *.ap_
 *.d

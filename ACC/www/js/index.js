@@ -45,8 +45,6 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');*/
 
         console.log('Received Event: ' + id);
-        console.log("POSICION");
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
         //navigator.geolocation.getCurrentPosition(loadMap);
         
     }
@@ -97,24 +95,10 @@ function initializeMap(mapOptions) {
 		mapTypeId : google.maps.MapTypeId.ROADMAP
 	};
 	map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-	console.log(map);
+	
+	console.log(map.getBounds());
 	console.log(document.getElementById("map_canvas"));
-	updateCurrentLocationMarker();
-}
-
-function updateCurrentLocationMarker() {
-	var myLatlng = new google.maps.LatLng(currentLocation.coords.latitude, currentLocation.coords.longitude);
-
-	if (currentLocationMarker) {
-		currentLocationMarker.setMap(null);
-	} else {
-		currentLocationMarker = new google.maps.Marker({
-			position : myLatlng,
-			animation : google.maps.Animation.DROP,
-			title : "You!",
-			map : map
-		});
-	}
+	
 }
 
 function onSuccess(position) {
@@ -126,4 +110,8 @@ function onSuccess(position) {
 
 function onError(error) {
 	alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+}
+
+function init(){
+	navigator.geolocation.getCurrentPosition(onSuccess, onError);
 }

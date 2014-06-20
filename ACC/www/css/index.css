@@ -220,3 +220,8 @@ body .page{
 	bakcground: #AAA;
 	border-radius: 5px;
 }
+
+#map_canvas{
+	width:250px; 
+	heigth:300px;
+}
