@@ -33,22 +33,20 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-    	
-    	var id = isCache('id');
-		var pass = isCache('pass');
-		if (id && pass){
-			console.log('Existe id y pass');
-			$.mobile.changePage($('#dashboard'), {transition: 'none'});
-		}
 
-        var iOS7 = window.device
+        /*var iOS7 = window.device
             && window.device.platform
             && window.device.platform.toLowerCase() == "ios"
             && parseFloat(window.device.version) >= 7.0;
 
         if (iOS7) {
-            StatusBar.overlaysWebView(false);
-        }
+            StatusBar.hide();
+        }*/
+
+        setTimeout(function() {
+            navigator.splashscreen.hide();
+            StatusBar.hide();
+        }, 2000);
 
         var imgLoad = imagesLoaded('#splash_container');
 
@@ -56,7 +54,7 @@ var app = {
             $('#splash_container img').show();
             var i = 0;
             var animation = setInterval(function(){
-                if (i <= 5) {
+                if (i <= 4) {
                     $('#splash_container img[splash_frame="' + i + '"]').hide();
                     i++;
                 } else {
@@ -64,22 +62,6 @@ var app = {
                     $.mobile.changePage($('#login'), {transition: 'slide'});
                 }
             }, 1000);
-        });
-
-		$(document).on('click', '.rides-list li', function(event, ui) {
-			if(!$(this).attr('data-role')) {
-				sessionStorage.rideId = $(this).attr('ride-id');
-                sessionStorage.previousPage = 'dashboard'
-				$.mobile.changePage($('#view-ride'), {transition: 'slide'});
-			}
-		});
-
-        $(document).on('click', '.search-rides-list li', function(event, ui) {
-            if(!$(this).attr('data-role')) {
-                sessionStorage.rideId = $(this).attr('ride-id');
-                sessionStorage.previousPage = 'search-ride'
-                $.mobile.changePage($('#view-ride'), {transition: 'slide'});
-            }
         });
 
         $('.acc-btn-back').click(function() {
@@ -95,6 +77,23 @@ var app = {
     }
 };
 
+$(document).on('pagebeforeshow', "#sign-in", function (event, data) {
+    clearSignIn();
+    getAgreements();
+
+    $("#sign-in-form").validate({
+        errorPlacement: function(error, element) {
+            error.insertAfter($(element).parent());
+        }
+    });
+});
+
+$(document).on('pagecreate', '#profile', function(){
+    var user = JSON.parse(sessionStorage.user);
+    $('#profile-name').html(user.name);
+    //$('#profile-picture').attr('src', user.picture);
+});
+
 $(document).on('pagecreate', '#dashboard', function(){
     getDashboard();
 });
@@ -104,14 +103,12 @@ $(document).on('pagebeforeshow', '#search-ride', function(){
 });
 
 $(document).on("pageshow", "#add-ride", function() {
+    clearAddRide();
+
     $("#add-ride-form").validate({
 
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "favcolor") {
-                error.insertAfter($(element).parent());
-            } else {
-                error.insertAfter(element);
-            }
+            error.insertAfter($(element).parent());
         }
 
     });
@@ -128,27 +125,6 @@ $(document).on('pagebeforeshow', "#view-ride", function (event, data) {
     }
 });
 
-$(document).on('pagecontainertransition', function(){
-    correctHeight();
-});
-
-$(document).on('resize', function(){
-    correctHeight();
-});
-
-$(document).on('orientationchange', function(){
-    correctHeight();
-});
-
-function correctHeight() {
-    var screen = $.mobile.getScreenHeight(),
-        header = $(".ui-header").hasClass("ui-header-fixed") ? $(".ui-header").outerHeight() - 1 : $(".ui-header").outerHeight(),
-        footer = $(".ui-footer").hasClass("ui-footer-fixed") ? $(".ui-footer").outerHeight() - 1 : $(".ui-footer").outerHeight(),
-        contentCurrent = $(".ui-content").outerHeight() - $(".ui-content").height(),
-        content = screen - header - footer - contentCurrent;
-    $(".ui-content").height(content);
-}
-
 jQuery.extend(jQuery.validator.messages, {
     required: "Este campo es requerido.",
     email: "Ingresa un email válido.",
@@ -162,16 +138,12 @@ jQuery.extend(jQuery.validator.messages, {
     min: jQuery.validator.format("Ingresa un valor mayor o igual a {0}.")
 });
 
-
-var myUserId = 1;
-var myAgreementId = 1;
-
-
 var myRides = new Array();
 var nextRides = new Array();
 var allRides = new Array();
 
 var months = new Array("Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic");
+var days = new Array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
 
 function showLoader() {
     $('.overlay').show();
@@ -185,31 +157,139 @@ function hideLoader() {
 
 // Funciones de Login
 
-function validaDatos(){
-    var id = $('#id').val();
-    var pass = $('#pass').val();
-    //si el usuario ingreso datos de login
-    if((id != null && id != undefined && id != "") && (pass != null && pass != undefined && pass != "")){
-        if(isCache('id') && isCache(pass)){
-            //si ya existen id y pass en la memoria pero se debe volver a iniciar sesion
-            var storedId = getCache('id');
-            var storedPass = getCache('pass');
-            if((id == storedID) && (pass == storedPass)){
-                //login correcto
-                $.mobile.changePage($('#dashboard'), {transition: 'slide'});
-            }else{
-                //login incorrecto
-                console.log("Verifica tu id y contraseña");
+function logIn() {
+    /*var data = {
+        "document_type": $('#login-tipo-identificacion').val(),
+        "document_id": $('#login-identificacion').val(),
+        "password": $('#login-password').val()
+    };
+
+    showLoader();
+    $.ajax({
+        type: "POST",
+        url: "http://166.78.117.195/users/sign_in",
+        data: data,
+        dataType: "json",
+        success: function(response) {
+            if (response.success == true) {
+                hideLoader();
+
+                sessionStorage.user = JSON.stringify({
+                    token: response.auth_token,
+                    id: 1,
+                    agreement_id: 1,
+                    name: 'Ricardo Rosas',
+                    picture: 'algo.jpg'
+                });
+
+                $.mobile.changePage($('#dashboard'), {transition: 'none'});
+            } else {
+                hideLoader();
+                alert('login incorrecto');
             }
-        }else{
-            //si no existen id y pass en la memoria
-            setCache("id", id);
-            setCache("pass", pass);
-            $.mobile.changePage($('#dashboard'), {transition: 'slide'});
+        },
+        error: function(error) {
+            hideLoader();
+            alert('ERROR');
         }
-    }else{
-        console.log("Ingresa tu id y contraseña");
+    });*/
+
+    sessionStorage.user = JSON.stringify({
+        token: '',
+        id: 1,
+        agreement_id: 1,
+        name: 'Ricardo Rosas',
+        picture: 'algo.jpg'
+    });
+
+    $.mobile.changePage($('#dashboard'), {transition: 'none'});
+}
+
+// Funciones de Sign-In
+
+function clearSignIn() {
+    $('#sign-in-agreement').val('');
+    $('#sign-in-first-name').val('');
+    $('#sign-in-last-name').val('');
+    $('#sign-in-email').val('');
+    $('#sign-in-licence-plates').val('');
+    $('#sign-in-password').val('');
+    $('#sign-in-password-confirmation').val('');
+}
+
+function getAgreements() {
+    showLoader();
+
+    $.ajax({
+        type: "GET",
+        url: "http://166.78.117.195/agreements.json?min=true",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(response) {
+            var agreements = response;
+
+            for (var i=0; i<agreements.length; i++){
+                $('#sign-in-agreement').append('<option value="' + agreements[i].id + '">' + agreements[i].name + '</option>');
+            }
+            hideLoader();
+        },
+        error: function(error) {
+            hideLoader();
+            alert('There was an error retrieving the agreements.');
+        }
+    });
+}
+
+function signIn() {
+    if ($("#sign-in-form").valid()){
+        var data = {
+
+        };
+
+        showLoader();
+        $.ajax({
+            type: "POST",
+            url: "http://166.78.117.195/XXXXX.json",
+            data: data,
+            dataType: "json",
+            success: function(response) {
+                if (response.id) {
+                    hideLoader();
+                    alert('');
+                } else {
+                    hideLoader();
+                    alert('');
+                }
+            },
+            error: function(error) {
+                hideLoader();
+                alert('');
+            }
+        });
     }
+}
+
+// Funciones de Profile
+
+function getPicture() {
+    navigator.camera.getPicture(
+        function(imageData) {
+            var image = document.getElementById('profile-picture');
+            image.src = "data:image/jpeg;base64," + imageData;
+        },
+        function() {
+
+        },
+        {
+            quality: 50,
+            sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+            encodingType: navigator.camera.EncodingType.PNG,
+            mediaType: navigator.camera.MediaType.PICTURE,
+            destinationType: navigator.camera.DestinationType.DATA_URL,
+            targetWidth: 200,
+            targetHeight: 200
+        }
+    );
 }
 
 // Funciones de Dashboard
@@ -217,9 +297,10 @@ function validaDatos(){
 function getDashboard() {
 	showLoader();
 
+    var user = JSON.parse(sessionStorage.user);
     $.ajax({
         type: "GET",
-        url: "http://166.78.117.195/carpool/index.json?user_id=" + myUserId,
+        url: "http://166.78.117.195/carpool/index.json?user_id=" + user.id,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(response) {
@@ -250,19 +331,49 @@ function updateDashboard() {
     var myRidesList = $('#list-my-rides');
 
     myRidesList.append($('<li data-role="list-divider" >Mis viajes publicados</li>'));
-    for(var i=0; i<myRides.length; i++) {
-        html = '<li class="ui-nodisc-icon" ride-id="' + myRides[i].id + '"><a>' + myRides[i].origin + ' - ' + myRides[i].destination + '</a></li>';
-        myRidesList.append($(html));
+
+    if (myRides.length > 0) {
+        var dateText = '';
+
+        for(var i=0; i<myRides.length; i++) {
+            var date = createDateFromMysql(myRides[i].ride_when);
+            var myRideDateText = days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()];
+
+            if (myRideDateText != dateText) {
+                myRidesList.append($('<li data-role="list-divider" class="date-divider">' + myRideDateText + '</li>'));
+                dateText = myRideDateText;
+            }
+
+            var html = '<li class="ui-nodisc-icon"><a onclick="showRideDetail(' + myRides[i].id + ', \'dashboard\')">' + myRides[i].origin + ' - ' + myRides[i].destination + '</a></li>';
+            myRidesList.append($(html));
+        }
+    } else {
+        myRidesList.append($('<li>No hay viajes disponibles</li>'));
     }
 
     myRidesList.listview('refresh');
 
     var nextRidesList = $('#list-next-rides');
 
-    nextRidesList.append($('<li data-role="list-divider" >Viajes a los que apliqué</li>'));
-    for(var i=0; i<nextRides.length; i++) {
-        html = '<li class="ui-nodisc-icon" ride-id="' + nextRides[i].id + '"><a>' + nextRides[i].origin + ' - ' + nextRides[i].destination + '</a></li>';
-        nextRidesList.append($(html));
+    nextRidesList.append($('<li data-role="list-divider">Mis viajes reservados</li>'));
+
+    if (nextRides.length > 0) {
+        var dateText = '';
+
+        for(var i=0; i<nextRides.length; i++) {
+            var date = createDateFromMysql(nextRides[i].ride_when);
+            var nextRideDateText = days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()];
+
+            if (nextRideDateText != dateText) {
+                nextRidesList.append($('<li data-role="list-divider" class="date-divider">' + nextRideDateText + '</li>'));
+                dateText = nextRideDateText;
+            }
+
+            var html = '<li class="ui-nodisc-icon"><a onclick="showRideDetail(' + nextRides[i].id + ', \'dashboard\')">' + nextRides[i].origin + ' - ' + nextRides[i].destination + '</a></li>';
+            nextRidesList.append($(html));
+        }
+    } else {
+        nextRidesList.append($('<li>No hay viajes disponibles</li>'));
     }
 
     nextRidesList.listview('refresh');
@@ -272,35 +383,18 @@ function updateDashboard() {
 
 function getAllRides() {
     showLoader();
+    $('#search-ride .ui-content').hide();
 
+    var user = JSON.parse(sessionStorage.user);
     $.ajax({
         type: "GET",
-        url: "http://166.78.117.195/rides/available.json?user_id=" + myUserId,
+        url: "http://166.78.117.195/rides/available.json?user_id=" + user.id,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(response) {
-            clearAllRides();
-            var allRidesList = $('#list-all-rides');
-            allRidesList.append($('<li data-role="list-divider" >Todos los viajes</li>'));
-
-            if(response.rides) {
-                allRides = response.rides;
-
-                if (allRides.length) {
-                    for(var i=0; i<allRides.length; i++) {
-                        var html = '<li class="ui-nodisc-icon" ride-id="' + allRides[i].id + '"><a>' + allRides[i].origin + ' - ' + allRides[i].destination + '</a></li>';
-                        allRidesList.append($(html));
-                    }
-                } else {
-                    allRidesList.append($('<li></li>'));
-
-                }
-            } else {
-                allRidesList.append($('<li></li>'));
-            }
-
-            allRidesList.listview('refresh');
-
+            allRides = response.rides;
+            updateAllRides();
+            $('#search-ride .ui-content').show();
             hideLoader();
         },
         error: function(error) {
@@ -316,10 +410,48 @@ function clearAllRides() {
 	allRidesList.html('');
 }
 
+function updateAllRides(){
+    clearAllRides();
+    var allRidesList = $('#list-all-rides');
+    allRidesList.append($('<li data-role="list-divider" >Viajes disponibles</li>'));
+
+    if (allRides.length > 0) {
+        var dateText = '';
+
+        for(var i=0; i<allRides.length; i++) {
+            var date = createDateFromMysql(allRides[i].ride_when);
+            var rideDateText = days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()];
+
+            if (rideDateText != dateText) {
+                allRidesList.append($('<li data-role="list-divider" class="date-divider">' + rideDateText + '</li>'));
+                dateText = rideDateText;
+            }
+
+            var html = '<li class="ui-nodisc-icon"><a onclick="showRideDetail(' + allRides[i].id + ', \'search-ride\')">' + allRides[i].origin + ' - ' + allRides[i].destination + '</a></li>';
+            allRidesList.append($(html));
+        }
+    } else {
+        allRidesList.append($('<li>No hay viajes disponibles</li>'));
+    }
+
+    allRidesList.listview('refresh');
+}
+
 // Funciones de Detalle de viaje
+
+function showRideDetail(rideId, previousPage) {
+    sessionStorage.rideId = rideId;
+    sessionStorage.previousPage = previousPage;
+    $.mobile.changePage($('#view-ride'), {transition: 'slide'});
+}
 
 function getRideDetail(rideId) {
     showLoader();
+    $('#view-ride .ui-content').hide();
+    $('#btn-accept-ride').hide();
+    $('#btn-accept-ride').addClass('ui-disabled');
+
+    var user = JSON.parse(sessionStorage.user);
     $.ajax({
         type: "GET",
         url: "http://166.78.117.195/rides/" + rideId + "/detail.json",
@@ -329,7 +461,6 @@ function getRideDetail(rideId) {
             clearViewRide();
             if(response.id) {
                 var ride = response;
-                console.log(response);
                 $('#view-ride .name').html(ride.owner.first_name + ' ' + ride.owner.last_name);
 
                 var date = createDateFromMysql(ride.ride_when);
@@ -346,20 +477,42 @@ function getRideDetail(rideId) {
 
                 for(var i=0; i<availableSeats; i++) {
                     if(i<takenSeats) {
-                        seats += '<img src="img/person.png"/>';
+                        if (ride.users[i].picture) {
+                            $('#view-ride .container-passengers').append($('<div class="seat"><div class="picture-container"><img src="' + ride.users[i].picture + '"/></div><div>' + ride.users[i].first_name + '</div></div>'));
+                        } else {
+                            $('#view-ride .container-passengers').append($('<div class="seat"><div class="picture-container"><img src="img/profile/example.jpg"/></div><div>' + ride.users[i].first_name + '</div></div>'));
+                        }
                     } else {
-                        seats += '<img src="img/person_grey.png"/>';
+                        $('#view-ride .container-passengers').append($('<div class="seat"><div class="picture-container"><img src="img/person_grey.png"/></div><div>Disponible</div></div>'));
                     }
                 }
 
-                $('#view-ride .seats').html(seats);
+                $('#view-ride .picture-container img').each(function() {
+                    var image = $(this);
+                    $("<img/>")
+                        .attr("src", image.attr('src'))
+                        .load(function () {
+                            if(this.width > this.height) {
+                                image.css('height', '40px');
+                            } else {
+                                image.css('width', '40px');
+                            }
+                        })
+                        .error(function () {
+                            image.css('height', '40px');
+                            image.css('width', '40px');
+                        });
+                });
+
+
+
                 $('#view-ride .cost').html('$' + ride.cost.toFixed(2));
                 $('#view-ride .notes').html(ride.notes);
 
                 var showAcceptRideButton = true;
 
                 // El usuario es el creador del viaje
-                if (myUserId == ride.owner.id) {
+                if (user.id == ride.owner.id) {
                     showAcceptRideButton = false;
                 } else {
                     // El viaje va lleno
@@ -368,7 +521,7 @@ function getRideDetail(rideId) {
                     } else {
                         // El usuario ya aceptó el viaje
                         for (var i=0; i < ride.users.length; i++) {
-                            if (ride.users[i].id == myUserId) {
+                            if (ride.users[i].id == user.id) {
                                 showAcceptRideButton = false;
                             }
                         }
@@ -376,8 +529,10 @@ function getRideDetail(rideId) {
                 }
 
                 if (showAcceptRideButton) {
+                    $('#btn-accept-ride').removeClass('ui-disabled');
                     $('#btn-accept-ride').show();
                 }
+                $('#view-ride .ui-content').show();
                 hideLoader();
             } else {
                 $.mobile.changePage($('#dashboard'), {transition: 'slide'});
@@ -399,19 +554,29 @@ function clearViewRide() {
     $('#view-ride .time').html('');
     $('#view-ride .origin').html('');
     $('#view-ride .destination').html('');
-    $('#view-ride .seats').html('');
+    $('#view-ride .passengers').html('');
     $('#view-ride .notes').html('');
 }
 
 //Funciones de Añadir viaje
 
+function clearAddRide() {
+    $('#add-ride-origin').val('');
+    $('#add-ride-destination').val('');
+    $('#add-ride-datetime').val('');
+    $('#add-ride-seats').val('');
+    $('#add-ride-cost').val('');
+    $('#add-ride-notes').val('');
+}
+
 function addRide() {
 
     if ($("#add-ride-form").valid()){
+        var user = JSON.parse(sessionStorage.user);
         var ride = {
             "ride": {
-                "agreement_id": myAgreementId,
-                "user_id": myUserId,
+                "agreement_id": user.agreement_id,
+                "user_id": user.id,
                 "ride_when": $('#add-ride-datetime').val(),
                 "cost": $('#add-ride-cost').val(),
                 "seats": $('#add-ride-seats').val(),
@@ -431,6 +596,16 @@ function addRide() {
                 if (response.id) {
                     // agregamos el viaje al arreglo de viajes
                     myRides.push(response);
+
+                    // ordenamos el arreglo de viajes por fecha
+                    myRides.sort(function(a, b) {
+                        if (a.ride_when.toLowerCase() < b.ride_when.toLowerCase())
+                            return -1;
+                        if (a.ride_when.toLowerCase() > b.ride_when.toLowerCase())
+                            return 1;
+                        return 0;
+                    });
+
                     updateDashboard();
                     hideLoader();
                     alert('El viaje se agregó con éxito');
@@ -450,8 +625,59 @@ function addRide() {
 }
 
 function acceptRide() {
+    showLoader();
+    $('#btn-accept-ride').addClass('ui-disabled');
+
+    var rideId = sessionStorage.rideId;
+    var user = JSON.parse(sessionStorage.user);
+
+    var data = {
+        "user_id": user.id
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "http://166.78.117.195/rides/" + rideId + "/book.json",
+        data: data,
+        dataType: "json",
+        success: function(response) {
+            if (response.success == true) {
+                // eliminamos el viaje de la lista de viajes disponibles
+                for (var i=0; i<allRides.length; i++) {
+                    if (allRides[i].id == response.ride.id){
+                        allRides.splice(i, 1);
+                    }
+                }
+
+                // agregamos el viaje al arreglo de viajes a los que se subirá el usuario y luego lo reordenamos por fecha
+                nextRides.push(response.ride);
+
+                nextRides.sort(function(a, b) {
+                    if (a.ride_when.toLowerCase() < b.ride_when.toLowerCase())
+                        return -1;
+                    if (a.ride_when.toLowerCase() > b.ride_when.toLowerCase())
+                        return 1;
+                    return 0;
+                });
+
+                updateDashboard();
+                updateAllRides();
+            }
+
+            $('#btn-accept-ride').removeClass('ui-disabled');
+            hideLoader();
+            alert(response.message);
+        },
+        error: function(error) {
+            $('#btn-accept-ride').removeClass('ui-disabled');
+            hideLoader();
+            alert('El viaje no se pudo reservar');
+        }
+    });
+
+
     updateDashboard();
-    $.mobile.changePage($('#dashboard'), {transition: 'slide', reverse: 'true'});
+    $.mobile.changePage($('#view-ride'), {transition: 'slide', reverse: 'true'});
 }
 
 
