@@ -34,13 +34,14 @@
         <script type="text/javascript" src="phonegap.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
-        
-        
+
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
         <script type="text/javascript">
             app.initialize();
         </script>
     </head>
-    <body onload="init()">
+    <body>
     	<!-- Start of dashboard -->
         <div data-role="page" class="page" id="dashboard">
             
@@ -127,8 +128,7 @@
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
-            	<div id="map_canvas">Aqui va el mapa</div>
-            	
+                <div id="map_canvas"></div>
             </div><!-- /content -->
 
         </div><!-- /trafico -->

@@ -77,11 +77,11 @@ var app = {
     }
 };
 
-$(document).on('pagebeforeshow', "#sign-in", function (event, data) {
-    clearSignIn();
+$(document).on('pagebeforeshow', "#sign-up", function (event, data) {
+    clearSignUp();
     getAgreements();
 
-    $("#sign-in-form").validate({
+    $("#sign-up-form").validate({
         errorPlacement: function(error, element) {
             error.insertAfter($(element).parent());
         }
@@ -89,13 +89,14 @@ $(document).on('pagebeforeshow', "#sign-in", function (event, data) {
 });
 
 $(document).on('pagecreate', '#profile', function(){
-    var user = JSON.parse(sessionStorage.user);
+    var user = JSON.parse(localStorage.user);
     $('#profile-name').html(user.name);
     //$('#profile-picture').attr('src', user.picture);
 });
 
 $(document).on('pagecreate', '#dashboard', function(){
     getDashboard();
+
 });
 
 $(document).on('pagebeforeshow', '#search-ride', function(){
@@ -158,63 +159,86 @@ function hideLoader() {
 // Funciones de Login
 
 function logIn() {
-    /*var data = {
+
+
+    //$('#popupBasic').popup('open', {transition: 'pop'});
+
+    var data = {
         "document_type": $('#login-tipo-identificacion').val(),
         "document_id": $('#login-identificacion').val(),
         "password": $('#login-password').val()
     };
 
+    /*var data = {
+        "document_type": 'CC',
+        "document_id": '88167911',
+        "password": '12345678'
+    };*/
+
     showLoader();
+
     $.ajax({
         type: "POST",
-        url: "http://166.78.117.195/users/sign_in",
+        url: "http://166.78.117.195/login",
         data: data,
         dataType: "json",
         success: function(response) {
             if (response.success == true) {
                 hideLoader();
-
-                sessionStorage.user = JSON.stringify({
-                    token: response.auth_token,
-                    id: 1,
-                    agreement_id: 1,
-                    name: 'Ricardo Rosas',
-                    picture: 'algo.jpg'
-                });
-
+                if(typeof(Storage)!=="undefined") {
+                    localStorage.user = JSON.stringify(response.user);
+                }
+                console.log(localStorage.user);
                 $.mobile.changePage($('#dashboard'), {transition: 'none'});
-            } else {
-                hideLoader();
-                alert('login incorrecto');
             }
         },
         error: function(error) {
+            if (error.status == '401') {
+                alert('Los datos introducidos son incorrectos');
+            } else {
+                alert('Ocurrió un error durante el inicio de sesión, intenta nuevamente');
+            }
             hideLoader();
-            alert('ERROR');
         }
-    });*/
-
-    sessionStorage.user = JSON.stringify({
-        token: '',
-        id: 1,
-        agreement_id: 1,
-        name: 'Ricardo Rosas',
-        picture: 'algo.jpg'
     });
-
-    $.mobile.changePage($('#dashboard'), {transition: 'none'});
 }
 
-// Funciones de Sign-In
+function logOut() {
+    showLoader();
 
-function clearSignIn() {
-    $('#sign-in-agreement').val('');
-    $('#sign-in-first-name').val('');
-    $('#sign-in-last-name').val('');
-    $('#sign-in-email').val('');
-    $('#sign-in-licence-plates').val('');
-    $('#sign-in-password').val('');
-    $('#sign-in-password-confirmation').val('');
+    var user = JSON.parse(localStorage.user);
+    var data = {
+        "auth_token": user.authentication_token
+    };
+    $.ajax({
+        type: "POST",
+        url: "http://166.78.117.195/logout",
+        data: data,
+        dataType: "json",
+        success: function(response) {
+            if (response.success == true) {
+                hideLoader();
+                delete localStorage.user;
+                $.mobile.changePage($('#login'), {transition: 'none'});
+            }
+        },
+        error: function(error) {
+            alert('Ocurrió un error al intentar cerrar la sesión');
+            hideLoader();
+        }
+    });
+}
+
+// Funciones de Sign-up
+
+function clearSignUp() {
+    $('#sign-up-agreement').val('');
+    $('#sign-up-first-name').val('');
+    $('#sign-up-last-name').val('');
+    $('#sign-up-email').val('');
+    $('#sign-up-licence-plates').val('');
+    $('#sign-up-password').val('');
+    $('#sign-up-password-confirmation').val('');
 }
 
 function getAgreements() {
@@ -229,7 +253,7 @@ function getAgreements() {
             var agreements = response;
 
             for (var i=0; i<agreements.length; i++){
-                $('#sign-in-agreement').append('<option value="' + agreements[i].id + '">' + agreements[i].name + '</option>');
+                $('#sign-up-agreement').append('<option value="' + agreements[i].id + '">' + agreements[i].name + '</option>');
             }
             hideLoader();
         },
@@ -240,8 +264,8 @@ function getAgreements() {
     });
 }
 
-function signIn() {
-    if ($("#sign-in-form").valid()){
+function signUp() {
+    if ($("#sign-up-form").valid()){
         var data = {
 
         };
@@ -297,7 +321,7 @@ function getPicture() {
 function getDashboard() {
 	showLoader();
 
-    var user = JSON.parse(sessionStorage.user);
+    var user = JSON.parse(localStorage.user);
     $.ajax({
         type: "GET",
         url: "http://166.78.117.195/carpool/index.json?user_id=" + user.id,
@@ -337,7 +361,7 @@ function updateDashboard() {
 
         for(var i=0; i<myRides.length; i++) {
             var date = createDateFromMysql(myRides[i].ride_when);
-            var myRideDateText = days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()];
+            var myRideDateText = days[date.getDay()-1] + ' ' + date.getDate() + ' ' + months[date.getMonth()];
 
             if (myRideDateText != dateText) {
                 myRidesList.append($('<li data-role="list-divider" class="date-divider">' + myRideDateText + '</li>'));
@@ -362,7 +386,7 @@ function updateDashboard() {
 
         for(var i=0; i<nextRides.length; i++) {
             var date = createDateFromMysql(nextRides[i].ride_when);
-            var nextRideDateText = days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()];
+            var nextRideDateText = days[date.getDay()-1] + ' ' + date.getDate() + ' ' + months[date.getMonth()];
 
             if (nextRideDateText != dateText) {
                 nextRidesList.append($('<li data-role="list-divider" class="date-divider">' + nextRideDateText + '</li>'));
@@ -385,7 +409,7 @@ function getAllRides() {
     showLoader();
     $('#search-ride .ui-content').hide();
 
-    var user = JSON.parse(sessionStorage.user);
+    var user = JSON.parse(localStorage.user);
     $.ajax({
         type: "GET",
         url: "http://166.78.117.195/rides/available.json?user_id=" + user.id,
@@ -420,7 +444,7 @@ function updateAllRides(){
 
         for(var i=0; i<allRides.length; i++) {
             var date = createDateFromMysql(allRides[i].ride_when);
-            var rideDateText = days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()];
+            var rideDateText = days[date.getDay()-1] + ' ' + date.getDate() + ' ' + months[date.getMonth()];
 
             if (rideDateText != dateText) {
                 allRidesList.append($('<li data-role="list-divider" class="date-divider">' + rideDateText + '</li>'));
@@ -440,8 +464,11 @@ function updateAllRides(){
 // Funciones de Detalle de viaje
 
 function showRideDetail(rideId, previousPage) {
-    sessionStorage.rideId = rideId;
-    sessionStorage.previousPage = previousPage;
+    clearViewRide();
+    if(typeof(Storage)!=="undefined") {
+        sessionStorage.rideId = rideId;
+        sessionStorage.previousPage = previousPage;
+    }
     $.mobile.changePage($('#view-ride'), {transition: 'slide'});
 }
 
@@ -451,14 +478,13 @@ function getRideDetail(rideId) {
     $('#btn-accept-ride').hide();
     $('#btn-accept-ride').addClass('ui-disabled');
 
-    var user = JSON.parse(sessionStorage.user);
+    var user = JSON.parse(localStorage.user);
     $.ajax({
         type: "GET",
         url: "http://166.78.117.195/rides/" + rideId + "/detail.json",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(response) {
-            clearViewRide();
             if(response.id) {
                 var ride = response;
                 $('#view-ride .name').html(ride.owner.first_name + ' ' + ride.owner.last_name);
@@ -471,19 +497,19 @@ function getRideDetail(rideId) {
                 $('#view-ride .origin').html(ride.origin);
                 $('#view-ride .destination').html(ride.destination);
 
-                var seats = '';
                 var availableSeats = ride.seats;
                 var takenSeats = ride.users.length;
 
                 for(var i=0; i<availableSeats; i++) {
+                    console.log(ride.users[i]);
                     if(i<takenSeats) {
                         if (ride.users[i].picture) {
-                            $('#view-ride .container-passengers').append($('<div class="seat"><div class="picture-container"><img src="' + ride.users[i].picture + '"/></div><div>' + ride.users[i].first_name + '</div></div>'));
+                            $('#view-ride .passengers').append($('<div class="seat"><div class="picture-container"><img src="' + ride.users[i].picture + '"/></div><div>' + ride.users[i].email + '</div></div>'));
                         } else {
-                            $('#view-ride .container-passengers').append($('<div class="seat"><div class="picture-container"><img src="img/profile/example.jpg"/></div><div>' + ride.users[i].first_name + '</div></div>'));
+                            $('#view-ride .passengers').append($('<div class="seat"><div class="picture-container"><img src="img/profile/example.jpg"/></div><div>' + ride.users[i].email + '</div></div>'));
                         }
                     } else {
-                        $('#view-ride .container-passengers').append($('<div class="seat"><div class="picture-container"><img src="img/person_grey.png"/></div><div>Disponible</div></div>'));
+                        $('#view-ride .passengers').append($('<div class="seat"><div class="picture-container"><img src="img/person_grey.png"/></div><div>Disponible</div></div>'));
                     }
                 }
 
@@ -572,7 +598,7 @@ function clearAddRide() {
 function addRide() {
 
     if ($("#add-ride-form").valid()){
-        var user = JSON.parse(sessionStorage.user);
+        var user = JSON.parse(localStorage.user);
         var ride = {
             "ride": {
                 "agreement_id": user.agreement_id,
@@ -629,7 +655,7 @@ function acceptRide() {
     $('#btn-accept-ride').addClass('ui-disabled');
 
     var rideId = sessionStorage.rideId;
-    var user = JSON.parse(sessionStorage.user);
+    var user = JSON.parse(localStorage.user);
 
     var data = {
         "user_id": user.id
