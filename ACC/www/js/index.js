@@ -45,12 +45,14 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');*/
 
         console.log('Received Event: ' + id);
-        navigator.geolocation.getCurrentPosition(loadMap);
+        console.log("POSICION");
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        //navigator.geolocation.getCurrentPosition(loadMap);
         
     }
 };
 
-function loadMap(position){
+/*function loadMap(position){
 	var longitud = position.coords.longitude;
 	var latitud = position.coords.latitude;
 	var center = new google.maps.LatLng(latitud, longitud);
@@ -63,9 +65,65 @@ function loadMap(position){
 	
 	console.log("MAPA");
 	var map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+	console.log(map.getZoom());
+	console.log(map.getHeading());
+	console.log(map.getBounds());
 	
 }
 
 function onError(error) {
     console.log('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+}*/
+
+
+
+var map, mapOptions, currentLocation, currentLocationMarker;
+
+function loadMapScript() {
+	console.log("LOAD SCRIPT");
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.id = "googleMaps"
+	script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&callback=initializeMap";
+	document.body.appendChild(script);
+}
+
+function initializeMap(mapOptions) {
+	console.log("INITIALIZE");
+	var myLatlng = new google.maps.LatLng(currentLocation.coords.latitude, currentLocation.coords.longitude);
+	var mapOptions = {
+		center : myLatlng,
+		zoom : 18,
+		mapTypeId : google.maps.MapTypeId.ROADMAP
+	};
+	map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+	console.log(map);
+	console.log("map_canvas");
+	updateCurrentLocationMarker();
+}
+
+function updateCurrentLocationMarker() {
+	var myLatlng = new google.maps.LatLng(currentLocation.coords.latitude, currentLocation.coords.longitude);
+
+	if (currentLocationMarker) {
+		currentLocationMarker.setMap(null);
+	} else {
+		currentLocationMarker = new google.maps.Marker({
+			position : myLatlng,
+			animation : google.maps.Animation.DROP,
+			title : "You!",
+			map : map
+		});
+	}
+}
+
+function onSuccess(position) {
+	currentLocation = position;
+	if (!map) {
+		loadMapScript();
+	}
+}
+
+function onError(error) {
+	alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
 }
