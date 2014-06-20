@@ -5,4 +5,12 @@ Carpooling/platforms/android/ant-build/build.prop
 *.prop
 *.apk
 *.ap_
-ACC/platforms/android/CordovaLib/bin/acc-cordovalib.jar
+ACC/platforms
+ACC/.cordova
+ACC/hooks
+ACC/merges
+ACC/plugins
+*.apk
+*.ap_
+*.d
+*.dex
