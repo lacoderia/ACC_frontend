@@ -221,8 +221,11 @@ body .page{
 	border-radius: 5px;
 }
 
+.mapa{
+	margin: 0;
+}
+
 #map_canvas{
-	width:250px; 
-	height:300px;
-    background-color: red;
+	width: 320px; 
+	height: 350px;
 }

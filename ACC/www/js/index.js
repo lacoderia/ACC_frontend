@@ -38,21 +38,35 @@ var app = {
     }
 };
 
-function GoogleMap(){
 
-    this.initialize = function(){
-        var map = showMap();
-    }
+var map, mapOptions, currentLocation, currentLocationMarker;
 
-    var showMap = function(){
-        var mapOptions = {
-            zoom: 4,
-            center: new google.maps.LatLng(-33, 151),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
-
-        var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-
-        return map;
-    }
+function loadMapScript() {
+	console.log("LOAD SCRIPT");
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.id = "googleMaps"
+	script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&callback=initializeMap";
+	document.body.appendChild(script);
 }
+
+function initializeMap(mapOptions) {
+	console.log("INITIALIZE");
+	var myLatlng = new google.maps.LatLng(currentLocation.coords.latitude, currentLocation.coords.longitude);
+	var mapOptions = {
+		center : myLatlng,
+		zoom : 14,
+		enableHighAccuracy: true,
+		mapTypeId : google.maps.MapTypeId.ROADMAP
+	};
+	map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+	
+}
+
+function onSuccess(position) {
+	currentLocation = position;
+	if (!map) {
+		loadMapScript();
+	}
+}
+
