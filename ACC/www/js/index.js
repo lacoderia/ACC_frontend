@@ -98,7 +98,7 @@ function initializeMap(mapOptions) {
 	};
 	map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 	console.log(map);
-	console.log("map_canvas");
+	console.log(document.getElementById("map_canvas"));
 	updateCurrentLocationMarker();
 }
 
