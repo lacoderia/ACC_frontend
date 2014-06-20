@@ -33,8 +33,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        var map = new GoogleMap();
-        map.initialize();
+        
     }
 };
 
@@ -42,7 +41,7 @@ var app = {
 var map, mapOptions, currentLocation, currentLocationMarker;
 
 function loadMapScript() {
-	console.log("LOAD SCRIPT");
+	//console.log("LOAD SCRIPT");
 	var script = document.createElement("script");
 	script.type = "text/javascript";
 	script.id = "googleMaps"
@@ -51,7 +50,7 @@ function loadMapScript() {
 }
 
 function initializeMap(mapOptions) {
-	console.log("INITIALIZE");
+	//console.log("INITIALIZE");
 	var myLatlng = new google.maps.LatLng(currentLocation.coords.latitude, currentLocation.coords.longitude);
 	var mapOptions = {
 		center : myLatlng,
@@ -63,6 +62,10 @@ function initializeMap(mapOptions) {
 	
 }
 
+function onError(){
+	
+}
+
 function onSuccess(position) {
 	currentLocation = position;
 	if (!map) {
@@ -70,3 +73,6 @@ function onSuccess(position) {
 	}
 }
 
+function init(){
+	navigator.geolocation.getCurrentPosition(onSuccess, onError);
+}
