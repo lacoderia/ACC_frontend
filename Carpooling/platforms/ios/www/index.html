@@ -3,25 +3,53 @@
     <head>
         <title>Page Titles</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, target-densityDpi=device-dpi" />
+
 
         <link rel="stylesheet" href="jquery/jquery.mobile-1.4.2.min.css" />
         <link rel="stylesheet" href="css/themes/carpooling.css" />
         <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/icomoon-style.css" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
 
-        
         <script src="jquery/jquery-2.1.1.min.js"></script>
-        <script src="jquery/jquery.mobile-1.4.2.min.js"></script>
+        <script src="jquery/jquery-validation/jquery.validate.min.js"></script>
         
         <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/imagesloaded.min.js"></script>
+        <script type="text/javascript" src="js/iscroll.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
             app.initialize();
-            </script>
+        </script>
+
+        <script src="jquery/jquery.mobile-1.4.2.min.js"></script>
         
     </head>
     <body class="ui-alt-icon">
+        <div class="overlay" style="display: none"></div>
+        <div id="loader" style="display: none">
+            <img src="img/ajax-loader.gif"/>
+        </div>
+
+        <!-- Start of splash -->
+        <div data-role="page" id="splash">
+
+            <div role="main" class="ui-content">
+                <div id="splash_container">
+                    <img src="img/splash_0.png" splash_frame="0" style="display:none; z-index: 7"/>
+                    <img src="img/splash_1.png" splash_frame="1" style="display:none; z-index: 6"/>
+                    <img src="img/splash_2.png" splash_frame="2" style="display:none; z-index: 5"/>
+                    <img src="img/splash_3.png" splash_frame="3" style="display:none; z-index: 4"/>
+                    <img src="img/splash_4.png" splash_frame="4" style="display:none; z-index: 3"/>
+                    <img src="img/splash_5.png" splash_frame="5" style="display:none; z-index: 2"/>
+                    <!--img src="img/splash_6.png" splash_frame="6" style="display:none; z-index: 1"/>
+                    <img src="img/splash_7.png" splash_frame="7" style="display:none; z-index: 0"/-->
+                </div>
+
+            </div><!-- /content -->
+
+        </div><!-- /page -->
         
         <!-- Start of login -->
         <div data-role="page" id="login">
@@ -68,12 +96,13 @@
         <div data-role="page" id="dashboard">
             
             <div data-role="header">
-		        <h1>Mi Cuenta</h1>
-                <a href="#dashboard-menu" data-rel="popup" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-right ui-btn-icon-notext ui-btn-inline" data-transition="slidedown"></a>
+		        <h1>Inicio</h1>
+                <span id="acc-btn-menu" class="acc-btn-menu icon-menu"></span>
 
                 <div data-role="popup" id="dashboard-menu" data-theme="a">
                     <ul data-role="listview" data-inset="true" style="min-width:210px;">
-                        <li class="ui-nodisc-icon" data-icon="user" data-iconpos="left"><a href="#dashboard" data-transition="slide">Mi cuenta</a></li>
+                        <li class="ui-nodisc-icon" data-icon="home" data-iconpos="left"><a href="#dashboard" data-transition="slide">Inicio</a></li>
+                        <li class="ui-nodisc-icon" data-icon="user" data-iconpos="left"><a href="#profile" data-transition="slide">Mi perfil</a></li>
                         <li class="ui-nodisc-icon" data-icon="search" data-iconpos="left"><a href="#search-ride" data-transition="slide">Buscar viajes</a></li>
                         <li class="ui-nodisc-icon" data-icon="plus" data-iconpos="left"><a href="#add-ride" data-transition="slide">Añadir viaje</a></li>
                         <li class="ui-nodisc-icon" data-icon="power" data-iconpos="left"><a href="#login" data-transition="slide">Salir</a></li>
@@ -82,22 +111,36 @@
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
-                <ul data-role="listview" id="list-my-rides" data-inset="true" data-divider-theme="a"></ul>
-                <ul data-role="listview" id="list-next-rides" data-inset="true" data-divider-theme="a"></ul>
+                <p><ul data-role="listview" id="list-my-rides" class="rides-list" data-divider-theme="a"></ul></p>
+                <p><ul data-role="listview" id="list-next-rides" class="rides-list" data-divider-theme="a"></ul></p>
             </div><!-- /content -->
             
+        </div><!-- /page -->
+
+        <!-- Start of profile -->
+        <div data-role="page" id="profile">
+
+            <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left2" previous-page="dashboard"></span>
+                <h1></span>Mi perfil</h1>
+            </div><!-- /header -->
+
+            <div role="main" class="ui-content">
+
+            </div><!-- /content -->
+
         </div><!-- /page -->
 
         <!-- Start of search-ride -->
         <div data-role="page" id="search-ride">
             
             <div data-role="header">
-                <a href="#dashboard" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-left ui-btn-icon-notext ui-btn-inline" data-transition="slide" data-direction="reverse"></a>
+                <span class="acc-btn-back icon-arrow-left2" previous-page="dashboard"></span>
                 <h1>Buscar viajes</h1>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
-                <ul data-role="listview" id="list-all-rides" data-inset="true" data-divider-theme="a"></ul>
+                <ul data-role="listview" id="list-all-rides" class="search-rides-list" data-divider-theme="a"></ul>
             </div><!-- /content -->
             
         </div><!-- /page -->
@@ -106,111 +149,49 @@
         <div data-role="page" id="add-ride">
             
             <div data-role="header">
-                <a href="#dashboard" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-left ui-btn-icon-notext ui-btn-inline" data-transition="slide" data-direction="reverse"></a>
+                <span class="acc-btn-back icon-arrow-left2" previous-page="dashboard"></span>
 		        <h1>Añadir viaje</h1>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
-            	<div>
-                    <label for="add-ride-from">De:</label>
-                    <input type="text" id="add-ride-from"/>
-                </div>
-                <div>
-                    <label for="add-ride-to">A:</label>
-                    <input type="text" id="add-ride-to"/>
-                </div>
-                <div>
-                    <label for="add-ride-datetime">Fecha:</label>
-                    <input type="datetime" id="add-ride-datetime"/>
-                </div>
-                <div>
-                    <label for="add-ride-seats">Asientos disponibles:</label>
-                    <input type="number" name="seats" pattern="[0-9]*" id="add-ride-seats" value="">
-                </div>
-            	<div>
-                    <label for="add-ride-notes">Notas:</label>
-                    <textarea id="add-ride-notes"></textarea>
-                </div>
-                <p><a href="#dashboard" data-role="button" onclick="addRide()">Añadir</a></p>
-            </div><!-- /content -->
-            
-        </div><!-- /page -->
-        
-        <!-- Start of view-my-ride -->
-        <div data-role="page" id="view-my-ride">
-            
-            <div data-role="header">
-                <a href="#dashboard" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-left ui-btn-icon-notext ui-btn-inline" data-transition="slide" data-direction="reverse"></a>
-		        <h1>Detalle del viaje</h1>
-            </div><!-- /header -->
-            
-            <div role="main" class="ui-content">
-                <div class="row name"></div>
-                <div class="row container-when">
-                    <span><img src="img/clock.png"/></span>
-                    <span class="date"></span>
-                    <span class="time"></span>
-                </div>
-                <div class="row">
-                    <span>De:</span>
-                    <span class="from"></span>
-                </div>
-                <div class="row">
-                    <span>A:</span>
-                    <span class="to"></span>
-                </div>
-                <div class="row container-who">
-                    <span class="seats"></span>
-                </div>
-                <div class="row container-notes">
-                    <div><b>Notas:</b></div>
-                    <div class="notes"></div>
-                </div>
-            </div><!-- /content -->
-            
-        </div><!-- /page -->
-        
-        <!-- Start of view-next-ride -->
-        <div data-role="page" id="view-next-ride">
-            
-            <div data-role="header">
-                <a href="#dashboard" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-left ui-btn-icon-notext ui-btn-inline" data-transition="slide" data-direction="reverse"></a>
-		        <h1>Detalles del viaje</h1>
-            </div><!-- /header -->
-            
-            <div role="main" class="ui-content">
-                <div class="row name"></div>
-                <div class="row container-when">
-                    <span><img src="img/clock.png"/></span>
-                    <span class="date"></span>
-                    <span class="time"></span>
-                </div>
-                <div class="row">
-                    <span>De:</span>
-                    <span class="from"></span>
-                </div>
-                <div class="row">
-                    <span>A:</span>
-                    <span class="to"></span>
-                </div>
-                <div class="row container-who">
-                    <span><img src="img/person.png"/></span>
-                    <span class="seats"></span>
-                </div>
-                <div class="row container-notes">
-                    <div><b>Notas:</b></div>
-                    <div class="notes"></div>
-                </div>
-            </div><!-- /content -->
-            
-        </div><!-- /page -->
 
+                <form id="add-ride-form">
+                    <fieldset data-role="fieldcontain">
+                        <label for="add-ride-origin">De:</label>
+                        <input type="text" name="add-ride-origin" id="add-ride-origin" class="required">
+                    </fieldset>
+                    <fieldset data-role="fieldcontain">
+                        <label for="add-ride-destination">A:</label>
+                        <input type="text" name="add-ride-destination" id="add-ride-destination" class="required">
+                    </fieldset>
+                    <fieldset data-role="fieldcontain">
+                        <label for="add-ride-datetime">Fecha:</label>
+                        <input type="datetime-local" name="add-ride-datetime" id="add-ride-datetime" class="required">
+                    </fieldset>
+                    <fieldset data-role="fieldcontain">
+                        <label for="add-ride-seats">Asientos disponibles:</label>
+                        <input type="number" pattern="[0-9]*" name="add-ride-seats" id="add-ride-seats" class="required" min="1">
+                    </fieldset>
+                    <fieldset data-role="fieldcontain">
+                        <label for="add-ride-cost">Costo:</label>
+                        <input type="number" pattern="\d+(\.\d*)?" name="add-ride-cost" id="add-ride-cost" class="required">
+                    </fieldset>
+                    <fieldset data-role="fieldcontain">
+                        <label for="add-ride-notes">Notas:</label>
+                        <textarea name="add-ride-notes" id="add-ride-notes" class="required"></textarea>
+                    </fieldset>
+                </form>
+                <p><a data-role="button" onclick="addRide()">Añadir</a></p>
+            </div><!-- /content -->
+            
+        </div><!-- /page -->
+        
         <!-- Start of view-ride -->
         <div data-role="page" id="view-ride">
             
             <div data-role="header">
-                <a href="#search-ride" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-left ui-btn-icon-notext ui-btn-inline" data-transition="slide" data-direction="reverse"></a>
-                <h1>Detalles del viaje</h1>
+                <span id="bnt-back-view-ride" class="acc-btn-back icon-arrow-left2"></span>
+                <h1>Detalles</h1>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
@@ -222,21 +203,25 @@
                 </div>
                 <div class="row">
                     <span>De:</span>
-                    <span class="from"></span>
+                    <span class="origin"></span>
                 </div>
                 <div class="row">
                     <span>A:</span>
-                    <span class="to"></span>
+                    <span class="destination"></span>
                 </div>
                 <div class="row container-who">
-                    <span><img src="img/person.png"/></span>
                     <span class="seats"></span>
+                </div>
+                <div class="row">
+                    <span>Costo:</span>
+                    <span class="cost"></span>
                 </div>
                 <div class="row container-notes">
                     <div><b>Notas:</b></div>
                     <div class="notes"></div>
                 </div>
-                <p><a href="#dashboard" data-role="button" onclick="acceptRide()">Apartar lugar</a></p>
+
+                <p><a id="btn-accept-ride" data-role="button" onclick="acceptRide()" style="display:none">Apartar lugar</a></p>
             </div><!-- /content -->
         </div><!-- /page -->
     </body>

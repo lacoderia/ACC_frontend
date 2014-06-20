@@ -11,7 +11,7 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "org.apache.cordova.device": "0.2.9"
+    "org.apache.cordova.device": "0.2.11-dev"
 }
 // BOTTOM OF METADATA
 });

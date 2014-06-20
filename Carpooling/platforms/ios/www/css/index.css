@@ -31,47 +31,163 @@
     50% { opacity: 0.4; }
     to { opacity: 1.0; }
 }
+
+@font-face {
+    font-family: 'BreeRegular'; /*a name to be used later*/
+    src: url('fonts/Bree/BreeRegular.otf'); /*URL to font*/
+}
  
 .blink {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
 
-/** View my ride **/
+div[role="main"]{
+    background: url(../img/background_logo.png) #D9DCDE no-repeat right center fixed;
+    background-size: 184px 300px;
+}
 
-#view-my-ride, #view-next-ride, #view-ride {
+body {
+    font-family: 'BreeRegular';
+}
+
+::-webkit-input-placeholder {
+    font-family: 'BreeRegular';
+}
+
+:-ms-input-placeholder {
+    font-family: 'BreeRegular';
+}
+
+:-moz-placeholder {
+    font-family: 'BreeRegular';
+}
+
+::-moz-placeholder {
+    font-family: 'BreeRegular';
+}
+
+::-moz-placeholder {
+    font-family: 'BreeRegular';
+}
+
+.ui-btn {
+    font-family: 'BreeRegular';
+}
+
+.acc-btn-back {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-size: 20px;
+}
+
+.acc-btn-menu {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 20px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    background-color: rgba(0,0,0,0.5); /*dim the background*/
+}
+
+#loader {
+    display: inline-block;
+    width: 46px;
+    height: 46px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -23px;
+    margin-left: -23px;
+    z-index: 101;
+
+    text-align: center;
+    vertical-align: middle;
+
+    background-color: black;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#loader img {
+    width: 38px;
+    height: 38px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -19px;
+    margin-left: -19px;
+}
+
+label.error {
+    float: left;
+    color: red;
+    padding-top: .5em;
+    vertical-align: top;
+    font-weight:bold
+}
+
+/** Splash screen **/
+#splash_container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #003f71;
+}
+
+#splash_container img {
+    width: 100%;
+}
+
+/** View ride **/
+
+#view-ride {
     text-align: center;
 }
 
-#view-my-ride .row, #view-next-ride .row, #view-ride .row {
+#view-ride .row {
     margin-top: 20px;
     padding-left: 20px;
     padding-right: 20px;
 }
 
-#view-my-ride .row span, #view-next-ride .row span, #view-ride .row span {
+#view-ride .row span {
     display: inline-block;
     vertical-align: middle;
 }
 
-#view-my-ride .name, #view-next-ride .name, #view-ride .name {
+#view-ride .name {
     font-weight: bold;
     font-size: 20px;
     margin-top: 10px;
 }
 
-#view-my-ride .container-when img, #view-next-ride .container-when img, #view-ride .container-when img {
+#view-ride .container-when img {
+    width: 30px;
     margin-right: 10px;
 }
 
-#view-my-ride .container-who img, #view-next-ride .container-who img, #view-ride .container-who img {
+#view-ride .container-who img {
+    width: 30px;
     margin-right: 10px;
 }
 
-#view-my-ride .container-notes, #view-next-ride .container-notes, #view-ride .container-notes {
+#view-ride .container-notes {
     text-align: left;
 }
 
-#view-my-ride .notes, #view-next-ride .notes, #view-ride .notes {
+#view-ride .notes {
     color: #666;
 }
