@@ -222,10 +222,11 @@ body .page{
 }
 
 .mapa{
-	margin: 0;
+	margin: 0px;
+	padding: 0px;
 }
 
 #map_canvas{
-	width: 320px; 
-	height: 350px;
+	width: 300px; 
+	height: 400px;
 }

@@ -54,11 +54,18 @@ function initializeMap(mapOptions) {
 	var myLatlng = new google.maps.LatLng(currentLocation.coords.latitude, currentLocation.coords.longitude);
 	var mapOptions = {
 		center : myLatlng,
-		zoom : 14,
+		zoom : 16,
 		enableHighAccuracy: true,
 		mapTypeId : google.maps.MapTypeId.ROADMAP
 	};
+	
 	map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+	
+	var marker = new google.maps.Marker({
+	      position: myLatlng,
+	      map: map,
+	      title: 'Tu'
+	  });
 	
 }
 
