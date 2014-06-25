@@ -33,6 +33,7 @@
         
         <script type="text/javascript" src="phonegap.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/geolocationmarker-compiled.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
 
         <script type="text/javascript">
@@ -49,8 +50,8 @@
             
             <div role="main" class="ui-content">
             	<div class="menu-principal">
-            		<a href="#login" data-prefetch="true"><img src="img/Botones/desvare.png" /></a>
-	            	<a href="#login" data-prefetch="true"><img src="img/Botones/grua.png" /></a>
+            		<a href="" onclick="validarSesion('#solicitar-servicio')" data-prefetch="true"><img src="img/Botones/desvare.png" /></a>
+	            	<a href="" onclick="validarSesion('#solicitar-servicio')" data-prefetch="true"><img src="img/Botones/grua.png" /></a>
 	            	<a href="#emergencias" data-prefetch="true"><img src="img/Botones/emergencias.png" /></a>
 	            	<a href=""><img src="img/Botones/acc.png" /></a>
 	            	<a href="#descuentos" data-prefetch="true"><img src="img/Botones/descuentos.png" /></a>
@@ -80,9 +81,9 @@
                 <input placeholder="Contraseña" type="password" id="pass" />
                 <img src="" />
                 <br/>
-                <a href="#dashboard" data-prefetch="true" data-role="button" data-transition="slide">Iniciar Sesión</a>
+                <a href="#dashboard" onclick="iniciarSesion()" data-prefetch="true" data-role="button" data-transition="slide">Iniciar Sesión</a>
                 <br/>
-                <a href="#dashboard" data-prefetch="true" data-role="button" data-transition="slide">Continuar como invitado</a>
+                <a href="#dashboard" onclick="terminarSesion()" data-prefetch="true" data-role="button" data-transition="slide">Continuar como invitado</a>
                 <br/>
                 <a>¿Olvidaste tu contraseña?</a>
             </div><!-- /content -->
@@ -122,7 +123,7 @@
         <div data-role="page" id="trafico">
           
             <div data-role="header">
-                <h1></h1>
+                <p id="coords"></p>
             </div><!-- /header -->
             
             <div role="main" class="ui-content mapa">
@@ -239,6 +240,27 @@
             		<li><a>FG Autolavados</a></li>
             		<li><a>City Parking</a></li>
             	</ul>
+            </div><!-- /content -->
+
+        </div><!-- /lista-descuentos -->
+        
+        <!-- Start of solicitar-servicio -->
+        <div data-role="page" class="page" id="solicitar-servicio">
+            
+            <div data-role="header">
+                Solicitar Servicio
+            </div><!-- /header -->
+            
+            <div role="main" class="ui-content">
+            	Favor de proporcionar la siguiente información.
+            	<input type="text" placeholder="Nombre Completo" />
+            	<br/>
+            	<input type="text" placeholder="Telefono" />
+            	<br/>
+            	<input type="text" placeholder="Placas del vehículo" />
+            	<br/>
+            	<button type="button" onclick="enviar()">Enviar</button>
+            	<button type="button">Cancelar</button>
             </div><!-- /content -->
 
         </div><!-- /lista-descuentos -->
