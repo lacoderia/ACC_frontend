@@ -40,7 +40,7 @@
             app.initialize();
         </script>
     </head>
-    <body onload="init()">
+    <body>
     	<!-- Start of dashboard -->
         <div data-role="page" class="page" id="dashboard">
             
@@ -55,7 +55,7 @@
 	            	<a href="#emergencias" data-prefetch="true"><img src="img/Botones/emergencias.png" /></a>
 	            	<a href=""><img src="img/Botones/acc.png" /></a>
 	            	<a href="#descuentos" data-prefetch="true"><img src="img/Botones/descuentos.png" /></a>
-	            	<a href="#trafico" data-prefetch="true"><img src="img/Botones/trafico.png" /></a>
+	            	<a href="#trafico" onclick="initMap()" data-prefetch="true"><img src="img/Botones/trafico.png" /></a>
 	            	<a href="#parqueaderos" data-prefetch="true"><img src="img/Botones/parqueaderos.png" /></a>
 	            	<a href="#gasolineras" data-prefetch="true"><img src="img/Botones/gasolineras.png" /></a>
 	            	<a href=""><img src="img/Botones/diversion.png" /></a>

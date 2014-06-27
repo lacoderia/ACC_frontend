@@ -37,11 +37,9 @@ var app = {
     }
 };
 
-
 var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId;
 
 function loadMapScript() {
-	//console.log("LOAD SCRIPT");
 	var script = document.createElement("script");
 	script.type = "text/javascript";
 	script.id = "googleMaps"
@@ -50,7 +48,6 @@ function loadMapScript() {
 }
 
 function initializeMap(mapOptions) {
-	//console.log("INITIALIZE");
 	var myLatlng = new google.maps.LatLng(currentLocation.coords.latitude, currentLocation.coords.longitude);
 	var mapOptions = {
 		center : myLatlng,
@@ -58,7 +55,6 @@ function initializeMap(mapOptions) {
 		enableHighAccuracy: true,
 		mapTypeId : google.maps.MapTypeId.ROADMAP
 	};
-	//document.getElementById('coords').innerHTML = myLatlng.toString();
 	
 	map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 	
@@ -73,27 +69,16 @@ function initializeMap(mapOptions) {
 		};
 	
 	GeoMarker = new GeolocationMarker(map, markerOpts);
-	/*Marker = new google.maps.Marker({
-        position: myLatlng,
-        map: map});*/
-	/*GeoMarker.setMarkerOptions({visible: true, position: myLatlng, opacity: 1.0});
-	GeoMarker.setCircleOptions({fillColor: '#808080'});*/
-	//GeoMarker.setMinimumAccuracy(50);
-
-	google.maps.event.addListenerOnce(GeoMarker, 'position_changed', function() {
-		//alert("Position Changed");
-		document.getElementById('coords').innerHTML = myLatlng.toString();
-		map.setCenter(this.getPosition());
-		map.fitBounds(this.getBounds());
-	});
-	
-	google.maps.event.addListener(GeoMarker, 'geolocation_error', function(e) {
-		alert('There was an error obtaining your position. Message: ' + e.message);
-	});
-	
 	GeoMarker.setMap(map);
 	
-	//watchId = navigator.geolocation.watchPosition(centerMap); 
+	google.maps.event.trigger(map, 'resize');
+	
+	google.maps.event.addListener(GeoMarker, 'position_changed', function() {
+		GeoMarker.setCircleOptions({'visible':false});
+		map.panTo(GeoMarker.getPosition());
+		GeoMarker.setCircleOptions({'visible':true});
+	});
+
 }
 
 function onError(){
@@ -107,23 +92,9 @@ function onSuccess(position) {
 	}
 }
 
-function init(){
+function initMap(){
 	navigator.geolocation.getCurrentPosition(onSuccess, onError);
 }
-
-
-/*function centerMap(location)
-{
-	var myLatlng = new google.maps.LatLng(currentLocation.coords.latitude,currentLocation.coords.longitude);
-	map.setCenter(myLatlng);
-	map.setZoom(16);
-
-	//Marker.setPosition(myLatlng);
-	alert(myLatlng.toString());
-	document.getElementById('coords').innerHTML = myLatlng.toString(); 
-
-	//navigator.geolocation.clearWatch(watchId);
-}*/
 
 var sesion, pagina;
 function iniciarSesion(){
