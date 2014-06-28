@@ -40,12 +40,11 @@
             app.initialize();
         </script>
     </head>
-    <body>
+    <body onload="initHeaderAndFooter()">
     	<!-- Start of dashboard -->
-        <div data-role="page" class="page" id="dashboard">
+        <div data-role="page" id="dashboard">
             
             <div class="header" data-role="header">
-                Contenido del header
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
@@ -59,20 +58,18 @@
 	            	<a href="#parqueaderos" data-prefetch="true"><img src="img/Botones/parqueaderos.png" /></a>
 	            	<a href="#gasolineras" data-prefetch="true"><img src="img/Botones/gasolineras.png" /></a>
 	            	<a href=""><img src="img/Botones/diversion.png" /></a>
-            	</div>
-            	
-	            <div class="footer">
-				  <a href="#menu" data-transition="slide-to-right" data-prefetch="true"><img src="img/Botones/menu.png"></a>
-				  <a><img src="img/Botones/share.png"></a>
-				</div>
-            	
+            	</div>	
             </div><!-- /content -->
+            
+            <div class="footer">
+			</div>
+			
         </div><!-- /dashboard -->
         
         <!-- Start of login -->
         <div data-role="page" id="login">
             
-            <div data-role="header">
+            <div data-role="header" class="header">
                 <h1>ACC</h1>
             </div><!-- /header -->
             
@@ -91,9 +88,9 @@
         </div><!-- /login -->
         
         <!-- Start of emergencias -->
-        <div data-role="page" class="page" id="emergencias">
+        <div data-role="page" id="emergencias">
             
-            <div data-role="header">
+            <div data-role="header" class="header">
                 <h1></h1>
             </div><!-- /header -->
             
@@ -103,26 +100,32 @@
 	            	<a><img src="img/Botones/policia.png" /></a>
             	</div>
             </div><!-- /content -->
-
+            
+            <div class="footer">
+			</div>
+			
         </div><!-- /emergencias -->
         
         <!-- Start of descuentos -->
-        <div data-role="page" class="page" id="descuentos">
+        <div data-role="page" id="descuentos">
             
-            <div data-role="header">
+            <div data-role="header" class="header">
                 <h1></h1>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
             	
             </div><!-- /content -->
-
+            
+            <div class="footer">
+			</div>
+			
         </div><!-- /descuentos -->
         
         <!-- Start of trafico -->
         <div data-role="page" id="trafico">
           
-            <div data-role="header">
+            <div data-role="header" class="header">
                 <p id="coords"></p>
             </div><!-- /header -->
             
@@ -130,39 +133,48 @@
                 <div id="map_canvas"></div>
 
             </div><!-- /content -->
+            
+            <div class="footer">
+			</div>
 
         </div><!-- /trafico -->
         
         <!-- Start of parqueaderos -->
-        <div data-role="page" class="page" id="parqueaderos">
+        <div data-role="page" id="parqueaderos">
             
-            <div data-role="header">
+            <div data-role="header" class="header">
                 <h1></h1>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
             	
             </div><!-- /content -->
-
+            
+            <div class="footer">
+			</div>
+			
         </div><!-- /parqueaderos -->
         
         <!-- Start of gasolineras -->
-        <div data-role="page" class="page" id="gasolineras">
+        <div data-role="page" id="gasolineras">
             
-            <div data-role="header">
+            <div data-role="header" class="header">
                 <h1></h1>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
             	
             </div><!-- /content -->
-
+            
+            <div class="footer">
+			</div>
+			
         </div><!-- /gasolineras -->
         
         <!-- Start of menu -->
         <div data-role="page" id="menu">
             
-            <div data-role="header">
+            <div data-role="header" class="header">
                 <h1></h1>
             </div><!-- /header -->
             
@@ -190,7 +202,7 @@
         <!-- Start of mi-cuenta -->
         <div data-role="page" id="mi-cuenta">
             
-            <div data-role="header">
+            <div data-role="header" class="header">
                 <h1></h1>
             </div><!-- /header -->
             
@@ -213,21 +225,24 @@
         </div><!-- /mi-cuenta -->
         
         <!-- Start of geocerca -->
-        <div data-role="page" class="page" id="geocerca">
+        <div data-role="page" id="geocerca">
             
-            <div data-role="header">
+            <div data-role="header" class="header">
                 <h1></h1>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
             </div><!-- /content -->
-
+            
+            <div class="footer">
+			</div>
+			
         </div><!-- /geocerca -->
         
         <!-- Start of lista-descuentos -->
-        <div data-role="page" class="page" id="lista-descuentos">
+        <div data-role="page" id="lista-descuentos">
             
-            <div data-role="header">
+            <div data-role="header" class="header">
                 <h1></h1>
             </div><!-- /header -->
             
@@ -245,9 +260,9 @@
         </div><!-- /lista-descuentos -->
         
         <!-- Start of solicitar-servicio -->
-        <div data-role="page" class="page" id="solicitar-servicio">
+        <div data-role="page" id="solicitar-servicio">
             
-            <div data-role="header">
+            <div data-role="header" class="header">
                 Solicitar Servicio
             </div><!-- /header -->
             
