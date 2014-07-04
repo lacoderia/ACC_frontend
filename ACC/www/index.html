@@ -53,14 +53,14 @@
             
             <div role="main" class="ui-content">
             	Favor de proporcionar la siguiente información.
-            	<input type="text" placeholder="Nombre Completo" />
+            	<input type="text" placeholder="Nombre Completo" class="required" />
             	<br/>
-            	<input type="text" placeholder="Telefono" />
+            	<input type="text" placeholder="Telefono" class="required" />
             	<br/>
-            	<input type="text" placeholder="Placas del vehículo" />
+            	<input type="text" placeholder="Placas del vehículo" class="required" />
             	<br/>
             	<button type="button" onclick="enviar()">Enviar</button>
-            	<button type="button">Cancelar</button>
+            	<button type="button" onclick="hideSolicitarServicio()">Cancelar</button>
             </div><!-- /content -->
         </div><!-- /solicitar-servicio -->
         
@@ -94,8 +94,8 @@
                             <option value="CE">Cédula de Extranjería</option>
                             <option value="PS">Pasaporte</option>
                         </select>
-                        <input placeholder="Identificación" type="text" id="login-identificacion" />
-                        <input placeholder="Contraseña" type="password" id="login-password" />
+                        <input placeholder="Identificación" type="text" id="login-identificacion" class="required"/>
+                        <input placeholder="Contraseña" type="password" id="login-password" class="required"/>
                         <label class="checkbox-label-no-background"><input type="checkbox" name="login-remember-me" id="login-remember-me" data-mini="true">Recordarme</label>
                         <br/>
                         <a data-role="button" onclick="logIn()">Iniciar Sesión</a>

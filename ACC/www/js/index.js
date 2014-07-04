@@ -162,13 +162,17 @@ function showMenu() {
     $('#menu-principal').empty();
     $(menu).appendTo('#menu-principal');
     
+    $('.overlay').addClass("dismissable");
     $('.overlay').show();
     $('#menu-principal').show();
     
 }
 
 function hideMenu(){
-	$('.overlay').hide();
+	var dismissable = $('.overlay').hasClass("dismissable");
+	if(dismissable){
+		$('.overlay').hide();
+	}
     $('#menu-principal').hide();
 }
 
@@ -177,7 +181,6 @@ function showAlert(title, message){
 }
 
 function showAlert(title, message, buttons) {
-	
     var popUp = '<div data-role="popup" id="popupAlert" data-overlay-theme="none" data-theme="a" data-dismissible="true">' +
                     '<div data-role="header" data-theme="a">' +
                         '<h1>' + title + '</h1>' +
@@ -206,6 +209,7 @@ function showAlert(title, message, buttons) {
         transition: 'pop'
     });
     $('#popupAlert').popup('open');
+    $('.overlay').removeClass("dismissable");
 }
 
 function redirige(pagina){
@@ -224,6 +228,12 @@ function solicitarServicio() {
 	
 	$('.overlay').show();
     $('#solicitar-servicio').show();
+}
+
+function hideSolicitarServicio(){
+	$('.overlay').addClass("dismissable");
+	$('.overlay').hide();
+    $('#solicitar-servicio').hide();
 }
 
 function logIn(documentType, documentId, password) {
