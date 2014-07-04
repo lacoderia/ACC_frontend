@@ -44,6 +44,9 @@
         },
         "org.apache.cordova.geolocation": {
             "PACKAGE_NAME": "mx.coderia.ACC"
+        },
+        "org.apache.cordova.console": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
         }
     },
     "dependent_plugins": {}

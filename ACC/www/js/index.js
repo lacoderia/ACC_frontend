@@ -33,26 +33,111 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        var map = new GoogleMap();
-        map.initialize();
     }
 };
 
-function GoogleMap(){
-
-    this.initialize = function(){
-        var map = showMap();
+function initHeaderAndFooter(){
+	
+	var head = '<div id="nombre"><p>Bienvenido </p><p>Juan</p></div>';
+	head += '<div id="placa"><p>Pico y placa </p><p>1-3-5-7-9</p></div>';
+	
+	var elemArray = document.getElementsByClassName('header');
+    for(var i = 0; i < elemArray.length; i++){
+        var elem = elemArray[i];
+        elem.innerHTML = head;
     }
-
-    var showMap = function(){
-        var mapOptions = {
-            zoom: 4,
-            center: new google.maps.LatLng(-33, 151),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
-
-        var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-
-        return map;
+	
+	var foot = '<a href="#menu" data-transition="slide-to-right" data-prefetch="true"><img src="img/Botones/menu.png"></a><a><img src="img/Botones/share.png"></a>';
+	var elemArray = document.getElementsByClassName('footer');
+    for(var i = 0; i < elemArray.length; i++){
+    	var elem = elemArray[i];
+        elem.innerHTML = foot;
     }
+}
+
+var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId;
+
+function loadMapScript() {
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.id = "googleMaps"
+	script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&callback=initializeMap";
+	document.body.appendChild(script);
+}
+
+function initializeMap(mapOptions) {
+	
+	var myLatlng = new google.maps.LatLng(currentLocation.coords.latitude, currentLocation.coords.longitude);
+	var mapOptions = {
+		center : myLatlng,
+		zoom : 16,
+		enableHighAccuracy: true,
+		disableDefaultUI: true,
+		mapTypeId : google.maps.MapTypeId.ROADMAP
+	};
+	
+	map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+	
+	 var markerOpts = {
+		'icon': {
+		    'url': 'img/gpsloc.png',
+		    'size': new google.maps.Size(34, 34),
+		    'scaledSize': new google.maps.Size(17, 17),
+		    'origin': new google.maps.Point(0, 0),
+		    'anchor': new google.maps.Point(8, 8)
+		    }
+		};
+	
+	GeoMarker = new GeolocationMarker(map, markerOpts);
+	GeoMarker.setMap(map);
+	
+	google.maps.event.trigger(map, 'resize');
+	
+	google.maps.event.addListener(GeoMarker, 'position_changed', function() {
+		GeoMarker.setCircleOptions({'visible':false});
+		map.panTo(GeoMarker.getPosition());
+		GeoMarker.setCircleOptions({'visible':true});
+	});
+	
+}
+
+function onError(){
+	
+}
+
+function onSuccess(position) {
+	currentLocation = position;
+	if (!map) {
+		loadMapScript();
+	}
+}
+
+function initMap(){
+	navigator.geolocation.getCurrentPosition(onSuccess, onError);
+}
+
+var sesion, pagina;
+function iniciarSesion(){
+	sesion = true;
+	if(pagina){
+		console.log(pagina);
+		//$.mobile.changePage(pagina);
+	}
+}
+
+function terminarSesion(){
+	sesion = false;
+}
+
+function validarSesion(page){
+	pagina = page;
+	if(sesion == true){
+		$.mobile.changePage("#solicitar-servicio");
+	}else{
+		$.mobile.changePage("#login");
+	}
+}
+
+function enviar(){
+	console.log(currentLocation.coords.latitude +","+ currentLocation.coords.longitude);
 }
