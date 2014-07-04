@@ -54,10 +54,38 @@ body {
     font-family: 'BreeRegular';
 }
 
+/** Overwrite jquery mobile style **/
+
+/* Active checkbox icon */
+.ui-page-theme-a .ui-checkbox-on:after,
+html .ui-bar-a .ui-checkbox-on:after,
+html .ui-body-a .ui-checkbox-on:after,
+html body .ui-group-theme-a .ui-checkbox-on:after,
+.ui-btn.ui-checkbox-on.ui-btn-a:after {
+    background-color: transparent /*{a-active-background-color}*/;
+    border-color: #FFFFFF /*{a-active-border}*/;
+    color: #FFFFFF /*{a-active-color}*/;
+    text-shadow: none;
+}
+
+.ui-nosvg .ui-alt-icon.ui-icon-check:after,
+.ui-nosvg .ui-alt-icon .ui-icon-check:after,
+.ui-nosvg .ui-alt-icon.ui-btn.ui-checkbox-on:after,
+.ui-nosvg .ui-alt-icon .ui-btn.ui-checkbox-on:after {
+    background-image: none;
+}
+
+.ui-alt-icon.ui-icon-check:after,
+.ui-alt-icon .ui-icon-check:after,
+html .ui-alt-icon.ui-btn.ui-checkbox-on:after,
+html .ui-alt-icon .ui-btn.ui-checkbox-on:after {
+    background-image: none;
+}
+
 /** Full height fix **/
 
 /*set the content to be full-width and height except it doesn't overlap the header or footer*/
-#login .ui-content {
+#splash .ui-content, #login .ui-content {
     position : absolute;
     top      : 0;
     right    : 0;
@@ -65,17 +93,17 @@ body {
     left     : 0;
 }
 
-#login, #sign-in, #profile, #dashboard, #view-ride, #search-ride, #add-ride {
+#login, #sign-up, #forgot, #profile, #dashboard, #view-ride, #search-ride, #add-ride {
     height : 100%;
 }
 
 /*specify a height for the header so we can line-up the elements, the default is 40px*/
-#sign-in .ui-header, #profile .ui-header, #dashboard .ui-header, #view-ride .ui-header, #search-ride .ui-header, #add-ride .ui-header{
+#sign-up .ui-header, #forgot .ui-header, #profile .ui-header, #dashboard .ui-header, #view-ride .ui-header, #search-ride .ui-header, #add-ride .ui-header{
     height : 40px;
 }
 
 /*set the content to be full-width and height except it doesn't overlap the header or footer*/
-#sign-in .ui-content, #profile .ui-content, #view-ride .ui-content, #view-ride .ui-content, #add-ride .ui-content{
+#sign-up .ui-content, #forgot .ui-content, #profile .ui-content, #view-ride .ui-content, #view-ride .ui-content, #add-ride .ui-content{
     position: absolute;
     top: 40px;
     right: 0;
@@ -91,13 +119,22 @@ body {
     left: 0;
 }
 
-div[role="main"] {
+#sign-up .ui-content, #forgot .ui-content {
     background-image: url(../img/background_logo.png);
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-position: right 150px;
+    background-position: right bottom 10px;
     background-color: #D9DCDE;
     background-size: 184px 300px;
+}
+
+#view-ride .ui-content {
+    background-image: url(../img/company/chevron.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    background-color: #D9DCDE;
+    background-size: 50%;
 }
 
 .acc-btn-back {
@@ -108,6 +145,13 @@ div[role="main"] {
 }
 
 .acc-btn-menu {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-size: 20px;
+}
+
+.acc-btn-refresh {
     position: absolute;
     right: 10px;
     top: 10px;
@@ -154,25 +198,48 @@ div[role="main"] {
     margin-left: -19px;
 }
 
+#popupDialog .popup-content {
+    width: 270px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
 label.error {
+    display: block;
     color: red;
-    padding-top: .5em;
+    padding-top: .2em;
     vertical-align: top;
     font-weight:bold
 }
 
 /** Splash screen **/
-#splash_container {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #063B6A;
+
+#splash .ui-content {
+    background: none;
+    background: #063b6a; /* Old browsers */
+    background: -moz-radial-gradient(center, circle,  #7998B8 0%, #063b6a 75%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 75%, color-stop(0%,#7998B8), color-stop(75%,#063b6a)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, circle,  #7998B8 0%,#063b6a 75%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, circle,  #7998B8 0%,#063b6a 75%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, circle,  #7998B8 0%,#063b6a 75%); /* IE10+ */
+    background: radial-gradient(circle at center,  #7998B8 0%,#063b6a 75%); /* W3C */
 }
 
-#splash_container img {
+#splash-table {
+    display: table;
     width: 100%;
+    height: 100%;
+}
+
+.splash-cell {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.splash-cell img {
+    width: 100%;
+    display: none;
 }
 
 /** Login **/
@@ -188,6 +255,10 @@ label.error {
     color: white;
     text-shadow: none;
     text-decoration: underline;
+}
+
+#login-forgot {
+    margin-top: 10px;
 }
 
 .login-table {
@@ -206,26 +277,110 @@ label.error {
     width: 200px;
 }
 
-/** Profile **/
-
-.profile-table {
-    display: table;
-    width: 100%;
-    height: 100%;
+.checkbox-label-no-background {
+    background: none !important;
+    border: none !important;
+    color: #FFFFFF !important;
 }
 
-.profile-cell {
-    display: table-cell;
+.checkbox-label-no-background-black {
+    background: none !important;
+    border: none !important;
+}
+
+/** Sign-up **/
+#sign_up_vehicle_soat {
+    background: url(img/calendar.png) no-repeat;
+    background-position: left center;
+    background-size: 21px;
+    padding-left: 35px;
+}
+
+#sign-up hr {
+    width: 100%;
+    height: 1px;
+    background-color: #000000;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#sign-up .label-text{
+    font-size: 12px;
+}
+
+/** Profile **/
+
+#profile .row {
     text-align: center;
+    margin-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#profile .row span {
+    display: inline-block;
     vertical-align: middle;
 }
 
-#profile-name {
-    font-size: 26px;
+#profile .profile-picture {
+    width: 200px;
+    text-align: center;
 }
 
-#profile-picture {
+#profile .profile-name {
+    font-size: 26px;
+    text-align: center;
+}
+
+#profile .profile-email {
+    text-align: center;
+}
+
+#profile .profile-vehicles a, #profile .profile-vehicles a:visited, #profile .profile-vehicles a:hover, #profile .profile-vehicles a:active {
+    color: black;
+    text-shadow: none;
+    text-decoration: none;
+}
+
+/** Add Vehicle **/
+
+#add_vehicle_soat {
+    background: url(img/calendar.png) no-repeat;
+    background-position: left center;
+    background-size: 21px;
+    padding-left: 35px;
+}
+
+#add-vehicle .label-text{
+    font-size: 12px;
+}
+
+/** User profile **/
+
+#user-profile .row {
+    text-align: center;
+    margin-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#user-profile .row span {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#user-profile .profile-picture {
     width: 200px;
+    text-align: center;
+}
+
+#user-profile .profile-name {
+    font-size: 26px;
+    text-align: center;
+}
+
+#user-profile .profile-email {
+    text-align: center;
 }
 
 /** Dashboard **/
@@ -243,6 +398,15 @@ label.error {
 .date-divider {
     background-color: #d3d3d3;
     color: #000000;
+}
+
+/** Add ride **/
+
+#add_ride_datetime {
+    background: url(img/calendar.png) no-repeat;
+    background-position: left center;
+    background-size: 21px;
+    padding-left: 35px;
 }
 
 /** View ride **/
@@ -284,11 +448,15 @@ label.error {
 }
 
 #view-ride .container-passengers .seat div{
-    display: inline-block;
     vertical-align: middle;
 }
 
+#view-ride .container-passengers .user-info {
+    display: inline-block;
+}
+
 #view-ride .container-passengers .picture-container {
+    display: inline-block;
     width: 40px;
     height: 40px;
     -webkit-border-radius: 20px;
@@ -305,4 +473,24 @@ label.error {
 
 #view-ride .notes {
     color: #666;
+}
+
+/** Search Ride **/
+
+#search-ride .refresh-notification {
+    position: absolute;
+    top: 45px;
+    left: 50%;
+    margin-left: -100px;
+
+    height: 26px;
+    width: 200px;
+
+    background-color: #3388cc;
+    color: #ffffff;
+    border-radius: 13px;
+
+    text-align: center;
+    padding-top: 3px;
+    z-index: 100;
 }

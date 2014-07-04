@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'icomoon';
-	src:url('icomoon-fonts/icomoon.eot?-th3z9q');
-	src:url('icomoon-fonts/icomoon.eot?#iefix-th3z9q') format('embedded-opentype'),
-		url('icomoon-fonts/icomoon.woff?-th3z9q') format('woff'),
-		url('icomoon-fonts/icomoon.ttf?-th3z9q') format('truetype'),
-		url('icomoon-fonts/icomoon.svg?-th3z9q#icomoon') format('svg');
+	src:url('fonts/icomoon.eot?4xlwto');
+	src:url('fonts/icomoon.eot?#iefix4xlwto') format('embedded-opentype'),
+		url('fonts/icomoon.woff?4xlwto') format('woff'),
+		url('fonts/icomoon.ttf?4xlwto') format('truetype'),
+		url('fonts/icomoon.svg?4xlwto#icomoon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -32,14 +32,23 @@
 .icon-coin:before {
 	content: "\e602";
 }
+.icon-envelope:before {
+	content: "\e60e";
+}
 .icon-clock:before {
 	content: "\e603";
+}
+.icon-calendar:before {
+	content: "\e60f";
 }
 .icon-user:before {
 	content: "\e604";
 }
 .icon-user2:before {
 	content: "\e605";
+}
+.icon-spinner:before {
+	content: "\e610";
 }
 .icon-search:before {
 	content: "\e606";

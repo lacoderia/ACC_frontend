@@ -36,13 +36,14 @@
         <div data-role="page" id="splash">
 
             <div role="main" class="ui-content">
-                <div id="splash_container">
-                    <img src="img/splash_0.png" splash_frame="0"/>
-                    <img src="img/splash_1.png" splash_frame="1" style="display:none; z-index: 6"/>
-                    <img src="img/splash_2.png" splash_frame="2" style="display:none; z-index: 5"/>
-                    <img src="img/splash_3.png" splash_frame="3" style="display:none; z-index: 4"/>
-                    <img src="img/splash_4.png" splash_frame="4" style="display:none; z-index: 3"/>
-                    <img src="img/splash_5.png" splash_frame="5" style="display:none; z-index: 2"/>
+                <div id="splash-table">
+                    <div class="splash-cell">
+                        <img src="img/splash_0.png" splash_frame="0" />
+                        <img src="img/splash_1.png" splash_frame="1" />
+                        <img src="img/splash_2.png" splash_frame="2" />
+                        <img src="img/splash_3.png" splash_frame="3" />
+                        <img src="img/splash_4.png" splash_frame="4" />
+                    </div>
                 </div>
 
             </div><!-- /content -->
@@ -51,11 +52,8 @@
         
         <!-- Start of login -->
         <div data-role="page" id="login">
-            
+
             <div role="main" class="ui-content">
-                <div data-role="popup" id="popupBasic">
-                    <p>This is a completely basic popup, no options set.</p>
-                </div>
                 <div class="login-table">
                     <div class="login-cell">
                         <img id="login-logo" src="img/logo.png"/>
@@ -68,12 +66,13 @@
                         </select>
                         <input placeholder="Identificación" type="text" id="login-identificacion" />
                         <input placeholder="Contraseña" type="password" id="login-password" />
+                        <label class="checkbox-label-no-background"><input type="checkbox" name="login-remember-me" id="login-remember-me" data-mini="true">Recordarme</label>
                         <br/>
                         <a data-role="button" onclick="logIn()">Iniciar Sesión</a>
                         <br/>
                         <div id="login-buttons">
-                            <div><a href="#sign-up" data-transition="slide">Quiero registrarme</a></div>
-                            <div><a>¿Olvidaste tu contraseña?</a></div>
+                            <div id="login-sign-up"><a href="#sign-up" data-transition="slide">Quiero registrarme</a></div>
+                            <div id="login-forgot"><a href="#forgot" data-transition="slide">No puedo iniciar sesión</a></div>
                         </div>
                     </div>
                 </div>
@@ -92,18 +91,99 @@
             <div role="main" class="ui-content">
 
                 <form id="sign-up-form">
-                    <select name="agreement" id="sign-up-agreement" class="required">
-                        <option value="">Selecciona tu empresa</option>
-                    </select>
-                    <input type="text" name="sign-up-first-name" id="sign-up-first-name" placeholder="Nombre" class="required"/>
-                    <input type="text" name="sign-up-last-name" id="sign-up-last-name" placeholder="Apellido(s)" class="required"/>
-                    <input type="email" name="sign-up-email" id="sign-up-email" placeholder="Correo electrónico" class="required"/>
-                    <input type="text" name="sign-up-licence-plates" id="sign-up-licence-plate" placeholder="Número de placas" class="required"/>
-                    <input type="password" name="sign-up-password" id="sign-up-password" placeholder="Contraseña" class="required"/>
-                    <input type="password" name="sign-up-password-confirmation" id="sign-up-password-confirmation" placeholder="Confirmar contraseña" class="required"/>
+                    <div><b>Datos personales</b></div>
+                    <hr>
+                    <input name="sign_up_domain" id="sign_up_domain" type="hidden" value=""/>
+                    <div data-role="fieldcontainer">
+                        <select name="sign_up_agreement" id="sign_up_agreement" class="required" onchange="updateSelectedAgreement()">
+                            <option value="">Selecciona tu empresa</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <select name="sign_up_document_type" id="sign_up_document_type" class="required">
+                            <option value="">Seleccionar tipo de id</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="CE">Cédula de Extranjería</option>
+                            <option value="PS">Pasaporte</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="sign_up_document_id" id="sign_up_document_id" placeholder="Identificación" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="sign_up_first_name" id="sign_up_first_name" placeholder="Nombre" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="sign_up_last_name" id="sign_up_last_name" placeholder="Apellido(s)" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="email" name="sign_up_email" id="sign_up_email" placeholder="Correo electrónico" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="password" name="sign_up_password" id="sign_up_password" placeholder="Contraseña" class="required" minlength="8"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="password" name="sign_up_password_confirmation" id="sign_up_password_confirmation" placeholder="Confirmar contraseña" class="required" minlength="8"/>
+                    </div>
+                </form>
+                <br>
+                <div><b>Datos del vehículo</b></div>
+                <hr>
+                <label class="checkbox-label-no-background-black"><input type="checkbox" name="sign_up_add_vehicle" id="sign_up_add_vehicle" data-mini="true">Deseo registrar un vehículo</label>
+
+                <form id="sign-up-vehicle-form" style="display:none">
+                    <label class="checkbox-label-no-background-black"><input type="checkbox" name="sign_up_vehicle_owner" id="sign_up_vehicle_owner" data-mini="true">Soy el dueño del vehículo</label>
+                    <div data-role="fieldcontainer" style="display:none">
+                        <select name="sign_up_vehicle_document_type" id="sign_up_vehicle_document_type">
+                            <option value="">Seleccionar tipo de id</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="CE">Cédula de Extranjería</option>
+                            <option value="PS">Pasaporte</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontainer" style="display:none">
+                        <input type="text" name="sign_up_vehicle_document_id" id="sign_up_vehicle_document_id" placeholder="Identificación del dueño"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="sign_up_vehicle_plates" id="sign_up_vehicle_plates" placeholder="Placas"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="date" name="sign_up_vehicle_soat" id="sign_up_vehicle_soat" placeholder="Fecha de vencimiento SOAT:">
+                        <div class="label-text">Fecha de vencimiento del SOAT</div>
+                    </div>
                 </form>
                 <p><a data-role="button" onclick="signUp()">Registrarme</a></p>
 
+            </div><!-- /content -->
+
+        </div><!-- /page -->
+
+        <!-- Start of forgot -->
+        <div data-role="page" id="forgot">
+
+            <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left2" previous-page="login"></span>
+                <h1>Iniciar Sesión</h1>
+            </div><!-- /header -->
+
+            <div role="main" class="ui-content">
+                <br/>
+                <p>Selecciona la causa del problema, introduce tu correo electrónico registrado y da click en 'Enviar correo'.</p>
+                <form id="forgot-form">
+                    <div data-role="fieldcontainer">
+                        <select name="forgot_problem" id="forgot_problem" class="required">
+                            <option value="">Selecciona una opción</option>
+                            <option value="forgot">Olvidé mi contraseña</option>
+                            <option value="confirmation">No recibí el correo de confirmación</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="email" name="forgot_email" id="forgot_email" placeholder="Correo electrónico" class="required"/>
+                    </div>
+                </form>
+                <p><a data-role="button" onclick="sendMail()">Enviar correo</a></p>
             </div><!-- /content -->
 
         </div><!-- /page -->
@@ -112,8 +192,9 @@
         <div data-role="page" id="dashboard">
             
             <div data-role="header">
-		        <h1>Inicio</h1>
                 <span id="acc-btn-menu" class="acc-btn-menu icon-menu"></span>
+		        <h1>Inicio</h1>
+                <span id="acc-btn-refresh-dashboard" class="acc-btn-refresh icon-spinner"></span>
 
                 <div data-role="popup" id="dashboard-menu" data-theme="a">
                     <ul data-role="listview" data-inset="true" style="min-width:210px;">
@@ -123,18 +204,18 @@
                 </div>
             </div><!-- /header -->
 
-            <div role="main" class="ui-content">
-                <div id="dashboard-buttons">
-                    <div class="ui-grid-a">
-                        <div class="ui-block-a">
-                            <a href="#add-ride" data-role="button" data-mini="true">Ofertar viaje</a>
-                        </div>
-                        <div class="ui-block-b">
-                            <a href="#search-ride" data-role="button" data-mini="true">Buscar viaje</a>
-                        </div>
+            <div id="dashboard-buttons">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="#add-ride" data-role="button" data-mini="true">Publicar viaje</a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a data-role="button" data-mini="true" onclick="refreshAllRides()">Buscar viaje</a>
                     </div>
                 </div>
+            </div>
 
+            <div role="main" class="ui-content">
                 <p><ul data-role="listview" id="list-my-rides" class="rides-list" data-divider-theme="a"></ul></p>
                 <p><ul data-role="listview" id="list-next-rides" class="rides-list" data-divider-theme="a"></ul></p>
             </div><!-- /content -->
@@ -150,12 +231,57 @@
             </div><!-- /header -->
 
             <div role="main" class="ui-content">
-                <div class="profile-table">
-                    <div class="profile-cell">
-                        <img id="profile-picture" src="img/person.png" onclick="getPicture()">
-                        <div id="profile-name"></div>
-                    </div>
+                <div class="row">
+                    <span class="profile-picture"></span>
                 </div>
+                <div class="row">
+                    <span class="profile-name"></span>
+                </div>
+                <div class="row">
+                    <span class="profile-email"></span>
+                </div>
+                <br>
+                <span class="profile-vehicles"></span>
+                <br><p><a href="#add-vehicle" id="btn-add-vehicle" data-role="button" data-mini="true">Agregar vehículo</a></p>
+
+            </div><!-- /content -->
+
+        </div><!-- /page -->
+
+        <!-- Start of add-vehicle -->
+        <div data-role="page" id="add-vehicle">
+
+            <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left2" previous-page="profile"></span>
+                <h1>Agregar vehículo</h1>
+            </div><!-- /header -->
+
+            <div role="main" class="ui-content">
+                <div><b>Datos del vehículo</b></div>
+                <hr>
+                <form id="add-vehicle-form">
+                    <label class="checkbox-label-no-background-black"><input type="checkbox" name="add_vehicle_owner" id="add_vehicle_owner" data-mini="true">Soy el dueño del vehículo</label>
+                    <div data-role="fieldcontainer" style="display:none">
+                        <select name="add_vehicle_document_type" id="add_vehicle_document_type" class="required">
+                            <option value="">Seleccionar tipo de id</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="CE">Cédula de Extranjería</option>
+                            <option value="PS">Pasaporte</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontainer" style="display:none">
+                        <input type="text" name="add_vehicle_document_id" id="add_vehicle_document_id" placeholder="Identificación del dueño" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="add_vehicle_plates" id="add_vehicle_plates" placeholder="Placas" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="date" name="add_vehicle_soat" id="add_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="required"/>
+                        <div class="label-text">Fecha de vencimiento del SOAT</div>
+                    </div>
+                </form>
+                <p><a data-role="button" onclick="addVehicle()">Agregar vehículo</a></p>
             </div><!-- /content -->
 
         </div><!-- /page -->
@@ -166,10 +292,13 @@
             <div data-role="header">
                 <span class="acc-btn-back icon-arrow-left2" previous-page="dashboard"></span>
                 <h1>Buscar viajes</h1>
+                <span id="acc-btn-refresh-search" class="acc-btn-refresh icon-spinner"></span>
             </div><!-- /header -->
-            
+
+            <div class="refresh-notification" onclick="refreshAllRides()" style="display:none">Recargar información</div>
+
             <div role="main" class="ui-content">
-                <ul data-role="listview" id="list-all-rides" class="search-rides-list" data-divider-theme="a"></ul>
+                <p><ul data-role="listview" id="list-all-rides" class="search-rides-list" data-divider-theme="a"></ul></p>
             </div><!-- /content -->
             
         </div><!-- /page -->
@@ -179,20 +308,35 @@
             
             <div data-role="header">
                 <span class="acc-btn-back icon-arrow-left2" previous-page="dashboard"></span>
-		        <h1>Ofertar viaje</h1>
+		        <h1>Publicar viaje</h1>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
 
                 <form id="add-ride-form">
-                    <input type="text" name="add-ride-origin" id="add-ride-origin" placeholder="De:" class="required">
-                    <input type="text" name="add-ride-destination" id="add-ride-destination" placeholder="A:" class="required">
-                    <input type="datetime-local" name="add-ride-datetime" id="add-ride-datetime" placeholder="Fecha:" class="required">
-                    <input type="number" pattern="[0-9]*" name="add-ride-seats" id="add-ride-seats" placeholder="Asientos disponibles:" class="required" min="1">
-                    <input type="number" pattern="\d+(\.\d*)?" name="add-ride-cost" id="add-ride-cost" placeholder="Costo:" class="required">
-                    <textarea name="add-ride-notes" id="add-ride-notes" placeholder="Notas:" class="required"></textarea>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="add_ride_origin" id="add_ride_origin" placeholder="De:" class="required">
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="add_ride_destination" id="add_ride_destination" placeholder="A:" class="required">
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="datetime-local" name="add_ride_datetime" id="add_ride_datetime" placeholder="Fecha:" class="required">
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <select name="add_ride_vehicle_plates" id="add_ride_vehicle_plates"></select>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="number" pattern="[0-9]*" name="add_ride_seats" id="add_ride_seats" placeholder="Asientos disponibles:" class="required" min="1">
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="number" pattern="\d+(\.\d*)?" name="add_ride_cost" id="add_ride_cost" placeholder="Costo:" class="required">
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <textarea name="add_ride_notes" id="add_ride_notes" placeholder="Notas:" rows="2" class="required"></textarea>
+                    </div>
                 </form>
-                <p><a data-role="button" onclick="addRide()">Ofertar</a></p>
+                <p><a data-role="button" onclick="addRide()">Publicar</a></p>
 
             </div><!-- /content -->
             
@@ -234,8 +378,30 @@
                     <div class="passengers"></div>
                 </div>
 
-                <p><a id="btn-accept-ride" data-role="button" onclick="acceptRide()" style="display:none">Apartar lugar</a></p>
+                <p><a id="btn-accept-ride" data-role="button" onclick="acceptRide()" style="display:none">Reservar lugar</a></p>
             </div><!-- /content -->
+        </div><!-- /page -->
+
+        <!-- Start of profile -->
+        <div data-role="page" id="user-profile">
+
+            <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left2" previous-page="view-ride"></span>
+                <h1></span>Pasajero</h1>
+            </div><!-- /header -->
+
+            <div role="main" class="ui-content">
+                <div class="row">
+                    <span class="profile-picture"></span>
+                </div>
+                <div class="row">
+                    <span class="profile-name"></span>
+                </div>
+                <div class="row">
+                    <span class="profile-email"></span>
+                </div>
+            </div><!-- /content -->
+
         </div><!-- /page -->
     </body>
 </html>
