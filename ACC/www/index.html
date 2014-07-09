@@ -52,15 +52,17 @@
         <div id="solicitar-servicio" style="display:none">
             
             <div role="main" class="ui-content">
-            	Favor de proporcionar la siguiente información.
-            	<input type="text" placeholder="Nombre Completo" class="required" />
-            	<br/>
-            	<input type="text" placeholder="Telefono" class="required" />
-            	<br/>
-            	<input type="text" placeholder="Placas del vehículo" class="required" />
-            	<br/>
-            	<button type="button" onclick="enviar()">Enviar</button>
-            	<button type="button" onclick="hideSolicitarServicio()">Cancelar</button>
+            	<form id="solicitar-servicio-form">
+	            	Favor de proporcionar la siguiente información.
+	            	<input type="text" id="servicio_nombre" placeholder="Nombre Completo" class="required" />
+	            	<br/>
+	            	<input type="text" id="servicio_telefono" placeholder="Telefono" class="required" />
+	            	<br/>
+	            	<input type="text" id="servicio_placas" placeholder="Placas del vehículo" class="required" />
+	            	<br/>
+	            	<button type="button" onclick="enviar()">Enviar</button>
+	            	<button type="button" onclick="hideSolicitarServicio()">Cancelar</button>
+	            </form>
             </div><!-- /content -->
         </div><!-- /solicitar-servicio -->
         
@@ -69,6 +71,28 @@
         
     	<!-- Start of dashboard -->
         <div data-role="page" id="dashboard">
+        
+        	<!-- Start of menu-lateral -->
+	        <div data-role="panel" data-display="overlay" id="panel-menu-lateral">
+	        	<div class="clima">
+	         	<p>
+	         		23° C <a>i</a>
+	         	</p>
+	        	</div>
+	        	<ul class="menu" id="menu-lateral">
+	        		<li><a>Principal</a></li>
+	        		<li><a href="#mi-cuenta" data-prefetch="true" data-transition="slide" >Mi cuenta</a></li>
+	        		<li><a>Geocerca</a></li>
+	        		<li><a>Descuentos</a></li>
+	        		<li><a>Configuración</a></li>
+	        		<li><a>Tutorial</a></li>
+	        		<li id="boton-cerrar-sesion"><a onclick="hideMenuLateral();logOut()">Cerrar sesion</a></li>
+	        	</ul>
+	        	<div class="velocidad">
+	        		<p>80 Km/h</p>
+	        	</div>
+	        </div><!-- /menu-lateral -->
+        
             <div class="header" data-role="header">
             </div><!-- /header -->
             
@@ -131,33 +155,6 @@
 	            	<a><img src="img/Botones/policia.png" /></a>
             	</div>			
         </div><!-- /emergencias -->
-        
-        <!-- Start of menu-lateral -->
-        <div data-role="page" id="menu-lateral">
-            
-            <div data-role="header" class="header">
-                <h1></h1>
-            </div><!-- /header -->
-            
-            <div role="main" class="ui-content">
-            	<div class="clima">
-	            	<p>
-	            		23° C <a>i</a>
-	            	</p>
-            	</div>
-            	<ul class="menu">
-            		<li><a>Principal</a></li>
-            		<li><a href="#mi-cuenta" data-prefetch="true" data-transition="slide" >Mi cuenta</a></li>
-            		<li><a>Geocerca</a></li>
-            		<li><a>Descuentos</a></li>
-            		<li><a>Configuración</a></li>
-            		<li><a>Tutorial</a></li>
-            	</ul>
-            	<div class="velocidad">
-            		<p>80 Km/h</p>
-            	</div>
-            </div><!-- /content -->
-        </div><!-- /menu-lateral -->
         
         <!-- Start of mi-cuenta -->
         <div data-role="page" id="mi-cuenta">

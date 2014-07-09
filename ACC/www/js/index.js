@@ -39,18 +39,32 @@ var app = {
 var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId, timeOutAlert=200;
 var sesion, pagina;
 
-function initHeaderAndFooter(){
-	
-	var head = '<div id="nombre"><p>Bienvenido </p><p>Juan</p></div>';
-	head += '<div id="placa"><p>Pico y placa </p><p>1-3-5-7-9</p></div>';
-	
-	var elemArray = document.getElementsByClassName('header');
+function setHeader(){
+	var head = '<div id="nombre"><p>Bienvenido </p><div id ="contenedor_nombre"></div></div>';
+    
+    var user = getCache("user");
+    if(user != undefined){
+    	head += '<div id="placa"><p>Pico y placa </p><p id="contenedor_placa"></p></div>';
+    	$('#contenedor_nombre').html(user.first_name);
+    	$('#contenedor_placa').html(user.placas);
+    	
+    	$('#boton-cerrar-sesion').show();
+    }else{
+    	$('#boton-cerrar-sesion').hide();
+    }
+    
+    var elemArray = document.getElementsByClassName('header');
     for(var i = 0; i < elemArray.length; i++){
         var elem = elemArray[i];
         elem.innerHTML = head;
     }
+}
+
+function initHeaderAndFooter(){
+	
+	setHeader();
     
-	var foot = '<a href="#menu-lateral" data-transition="slide-to-right" data-prefetch="true"><img src="img/Botones/menu-lateral.png"></a>';
+	var foot = '<a onclick="showMenuLateral()" data-prefetch="true"><img src="img/Botones/menu-lateral.png"></a>';
 	foot += '<a onclick="showMenu()"><img src="img/Botones/menu-popup.png"></a>';
 	var elemArray = document.getElementsByClassName('footer');
     for(var i = 0; i < elemArray.length; i++){
@@ -119,24 +133,23 @@ function initMap(){
 	navigator.geolocation.getCurrentPosition(onSuccess, onError);
 }
 
-function validarSesion(){
-	sesion = setCache('user');
-	if(sesion != undefined || sesion != null || sesion != ""){
-		$.mobile.changePage("#solicitar-servicio");
-	}else{
-		$.mobile.changePage("#login");
-	}
-}
-
 function validarSocio(page){
 	hideMenu();
 	pagina = page;
+	
+	setCache("servicio", pagina);
+	
 	$('#popupDialog').remove();
-	setTimeout(function() {
-		var message = 'Presiona "Si" para iniciar sesion o presiona "No" para continuar como invitado.';
-		var title = "Es socio de ACC?";
-		showAlert(title, message, {"true":"Si","false":"No"});
-	}, timeOutAlert);
+	var user = getCache("user");
+	if(user != undefined){
+		solicitarServicio();
+	}else{
+		setTimeout(function() {
+			var message = 'Presiona "Si" para iniciar sesion o presiona "No" para continuar como invitado.';
+			var title = "Es socio de ACC?";
+			showAlert(title, message, {"true":"Si","false":"No"});
+		}, timeOutAlert);
+	}
 }
 
 function showEmergencias() {
@@ -176,6 +189,14 @@ function hideMenu(){
     $('#menu-principal').hide();
 }
 
+function showMenuLateral(){
+	$('#panel-menu-lateral').panel('open');
+}
+
+function hideMenuLateral(){
+	$('#panel-menu-lateral').panel('close');
+}
+
 function showAlert(title, message){
 	showAlert(title, message, null);
 }
@@ -192,7 +213,7 @@ function showAlert(title, message, buttons) {
 				    if(buttons && (sesion != undefined || sesion != null || sesion != "")){
 				    	popUp += '<div class="popup-content">' +
 				    	'<input type="button" onclick=redirige("#login") value="'+buttons['true']+'"/>'+
-				    	'<input type="button" onclick=$("#popupAlert").popup("close") value="'+buttons['false']+'"/>'+
+				    	'<input type="button" onclick="solicitarServicio(true)" value="'+buttons['false']+'"/>'+
 				    	'</div>';
 				    }
 				    
@@ -220,14 +241,55 @@ function enviar(){
 	console.log(currentLocation.coords.latitude +","+ currentLocation.coords.longitude);
 	$('.overlay').hide();
     $('#solicitar-servicio').hide();
+    
+    /*var data = {
+    		"nombre": $('#servicio_nombre').html(),
+    		"telefono": $('#servicio_telefono').html(),
+    		"placas": $('#servicio_placas').html()
+    };*/
+    
+    var servicio = getCache("servicio");
+    var data = {
+    		"nombre": "Alberto",
+    		"telefono": "12345678",
+    		"placas": "ABC-123",
+    		"servicio": servicio
+    };
+    removeCache("servicio");
+    
+    showLoader();
+    $.ajax({
+        type: "POST",
+        url: "http://166.78.117.195/servicio",
+        data: data,
+        dataType: "json",
+        success: function(response) {
+            if (response.success == true) {
+                hideLoader();
+                
+                showAlert('Solicitud Realizada', response.message);
+                
+            } else {
+                hideLoader();
+                showAlert('Error', 'Respuesta invalida: ' + response.message);
+            }
+        },
+        error: function(error) {
+            showAlert('Error', 'No se pudo solicitar el servicio');
+            hideLoader();
+        }
+    });
+    
+    
 }
 
-function solicitarServicio() {
-	
+function solicitarServicio(hay_alerta) {
+	if(hay_alerta){
+		$("#popupAlert").popup("close");
+	}
 	$.mobile.changePage("#dashboard");
-	
 	$('.overlay').show();
-    $('#solicitar-servicio').show();
+	$('#solicitar-servicio').show();
 }
 
 function hideSolicitarServicio(){
@@ -243,10 +305,10 @@ function logIn(documentType, documentId, password) {
     password = password || $('#login-password').val();
 
     var rememberMe = $("#login-remember-me").is(':checked');
-
+    
     var data = {
         "document_type": 'CC',
-        "document_id": '12345',
+        "document_id": '123',
         "password": '00000000'
     };
 
@@ -261,15 +323,15 @@ function logIn(documentType, documentId, password) {
             if (response.success == true) {
                 hideLoader();
                 if(typeof(Storage)!=="undefined") {
-                    localStorage.rememberMe = rememberMe;
-                    setCache('user', response.user);
+                	window.localStorage.rememberMe = rememberMe;
+                	console.log("LOGIN rememberMe: "+ window.localStorage.rememberMe);
+                	setCache('user', response.user);
                 }
-
-                //$('#dashboard .ui-content').css('background-image', 'url(../img/company/chevron.jpg)');
-
                 window.scrollTo(0,0);
                 $.mobile.changePage($('#dashboard'), {transition: 'none'});
-                //getDashboard();
+                
+                setHeader();
+                $('#menu-lateral').show();
                 solicitarServicio();
             } else {
                 hideLoader();
@@ -300,6 +362,7 @@ function logOut() {
                 hideLoader();
                 clearCache();
                 window.scrollTo(0,0);
+                $('#boton-cerrar-sesion').hide();
                 $.mobile.changePage($('#login'), {transition: 'none'});
             }
         },
@@ -323,16 +386,19 @@ function hideLoader() {
 //Funciones para persitencia de datos
 
 function setCache(key, value) {
-  if (isCache('rememberMe')) {
-      window.localStorage.setItem(key, JSON.stringify(value));
-  } else {
-      window.sessionStorage.setItem(key, JSON.stringify(value));
-  }
-
+	console.log("SET CACHE " + key + " , " + value);
+	console.log("localStorage(rememberMe) "+ window.localStorage.rememberMe);
+	if (window.localStorage.rememberMe == "true") {
+		console.log("LOCAL");
+		window.localStorage.setItem(key, JSON.stringify(value));
+	} else {
+		console.log("SESION");
+		window.sessionStorage.setItem(key, JSON.stringify(value));
+	}
 }
 
 function getCache(key) {
-  if (isCache('rememberMe')) {
+  if (window.localStorage.rememberMe == "true") {
       return JSON.parse(window.localStorage.getItem(key));
   } else {
       return JSON.parse(window.sessionStorage.getItem(key));
@@ -344,7 +410,7 @@ function isCache(key) {
 }
 
 function removeCache(key) {
-    if (isCache('rememberMe')) {
+    if (window.localStorage.rememberMe == "true") {
         window.localStorage.removeItem(key);
     } else {
         window.sessionStorage.removeItem(key);
@@ -353,6 +419,34 @@ function removeCache(key) {
 
 function clearCache() {
     removeCache('user');
-    removeCache('allRides');
+    removeCache('servicio');
     removeCache('rememberMe');
+}
+
+function logOut() {
+    showLoader();
+
+    var user = getCache('user');
+    var data = {
+        "auth_token": user.authentication_token
+    };
+    $.ajax({
+        type: "POST",
+        url: "http://166.78.117.195/logout",
+        data: data,
+        dataType: "json",
+        success: function(response) {
+            if (response.success == true) {
+                hideLoader();
+                clearCache();
+                window.scrollTo(0,0);
+                setHeader();
+                $.mobile.changePage($('#dashboard'), {transition: 'none'});
+            }
+        },
+        error: function(error) {
+            showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Intenta nuevamente.');
+            hideLoader();
+        }
+    });
 }

@@ -7,7 +7,7 @@
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0display: inline-block;
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -16,62 +16,481 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-* {
-    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+
+@font-face {
+    font-family: 'BreeRegular'; /*a name to be used later*/
+    src: url('fonts/Bree/BreeRegular.otf'); /*URL to font*/
 }
 
-@keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
-}
- 
-@-webkit-keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
-}
- 
-.blink {
-    animation:fade 3000ms infinite;
-    -webkit-animation:fade 3000ms infinite;
+html, body {
+    height : 100%;
 }
 
-/** View my ride **/
+body {
+    font-family: 'BreeRegular';
+}
 
-#view-my-ride, #view-next-ride, #view-ride {
+::-webkit-input-placeholder {
+    font-family: 'BreeRegular';
+}
+
+:-ms-input-placeholder {
+    font-family: 'BreeRegular';
+}
+
+:-moz-placeholder {
+    font-family: 'BreeRegular';
+}
+
+::-moz-placeholder {
+    font-family: 'BreeRegular';
+}
+
+::-moz-placeholder {
+    font-family: 'BreeRegular';
+}
+
+.ui-btn {
+    font-family: 'BreeRegular';
+}
+
+/** Overwrite jquery mobile style **/
+
+/* Active checkbox icon */
+.ui-page-theme-a .ui-checkbox-on:after,
+html .ui-bar-a .ui-checkbox-on:after,
+html .ui-body-a .ui-checkbox-on:after,
+html body .ui-group-theme-a .ui-checkbox-on:after,
+.ui-btn.ui-checkbox-on.ui-btn-a:after {
+    background-color: transparent /*{a-active-background-color}*/;
+    border-color: #FFFFFF /*{a-active-border}*/;
+    color: #FFFFFF /*{a-active-color}*/;
+    text-shadow: none;
+}
+
+.ui-nosvg .ui-alt-icon.ui-icon-check:after,
+.ui-nosvg .ui-alt-icon .ui-icon-check:after,
+.ui-nosvg .ui-alt-icon.ui-btn.ui-checkbox-on:after,
+.ui-nosvg .ui-alt-icon .ui-btn.ui-checkbox-on:after {
+    background-image: none;
+}
+
+.ui-alt-icon.ui-icon-check:after,
+.ui-alt-icon .ui-icon-check:after,
+html .ui-alt-icon.ui-btn.ui-checkbox-on:after,
+html .ui-alt-icon .ui-btn.ui-checkbox-on:after {
+    background-image: none;
+}
+
+/** Full height fix **/
+
+/*set the content to be full-width and height except it doesn't overlap the header or footer*/
+#splash .ui-content, #login .ui-content {
+    position : absolute;
+    top      : 0;
+    right    : 0;
+    bottom   : 0;
+    left     : 0;
+}
+
+#login, #sign-up, #forgot, #profile, #dashboard, #view-ride, #search-ride, #add-ride {
+    height : 100%;
+}
+
+/*specify a height for the header so we can line-up the elements, the default is 40px*/
+#sign-up .ui-header, #forgot .ui-header, #profile .ui-header, #dashboard .ui-header, #view-ride .ui-header, #search-ride .ui-header, #add-ride .ui-header{
+    height : 40px;
+}
+
+/*set the content to be full-width and height except it doesn't overlap the header or footer*/
+#sign-up .ui-content, #forgot .ui-content, #profile .ui-content, #view-ride .ui-content, #view-ride .ui-content, #add-ride .ui-content{
+    position: absolute;
+    top: 40px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+#dashboard .ui-content {
+    position: absolute;
+    top: 100px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+#sign-up .ui-content, #forgot .ui-content {
+    background-image: url(../img/background_logo.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: right bottom 10px;
+    background-color: #D9DCDE;
+    background-size: 184px 300px;
+}
+
+#view-ride .ui-content {
+    background-image: url(../img/company/chevron.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    background-color: #D9DCDE;
+    background-size: 50%;
+}
+
+.acc-btn-back {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-size: 20px;
+}
+
+.acc-btn-menu {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-size: 20px;
+}
+
+.acc-btn-refresh {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 20px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    background-color: rgba(0,0,0,0.5); /*dim the background*/
+}
+
+#loader {
+    display: inline-block;
+    width: 46px;
+    height: 46px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -23px;
+    margin-left: -23px;
+    z-index: 101;
+
     text-align: center;
+    vertical-align: middle;
+
+    background-color: black;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
 
-#view-my-ride .row, #view-next-ride .row, #view-ride .row {
+#loader img {
+    width: 38px;
+    height: 38px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -19px;
+    margin-left: -19px;
+}
+
+#popupDialog .popup-content {
+    width: 270px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+label.error {
+    display: block;
+    color: red;
+    padding-top: .2em;
+    vertical-align: top;
+    font-weight:bold
+}
+
+/** Splash screen **/
+
+#splash .ui-content {
+    background: none;
+    background: #063b6a; /* Old browsers */
+    background: -moz-radial-gradient(center, circle,  #7998B8 0%, #063b6a 75%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 75%, color-stop(0%,#7998B8), color-stop(75%,#063b6a)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, circle,  #7998B8 0%,#063b6a 75%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, circle,  #7998B8 0%,#063b6a 75%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, circle,  #7998B8 0%,#063b6a 75%); /* IE10+ */
+    background: radial-gradient(circle at center,  #7998B8 0%,#063b6a 75%); /* W3C */
+}
+
+#splash-table {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.splash-cell {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.splash-cell img {
+    width: 100%;
+    display: none;
+}
+
+/** Login **/
+
+#login .ui-content {
+    background: none;
+    background-color: #063B6A;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#login-buttons a, #login-buttons a:visited, #login-buttons a:hover, #login-buttons a:active {
+    color: white;
+    text-shadow: none;
+    text-decoration: underline;
+}
+
+#login-forgot {
+    margin-top: 10px;
+}
+
+.login-table {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.login-cell {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#login-logo {
+    width: 200px;
+}
+
+.checkbox-label-no-background {
+    background: none !important;
+    border: none !important;
+    color: #FFFFFF !important;
+}
+
+.checkbox-label-no-background-black {
+    background: none !important;
+    border: none !important;
+}
+
+/** Sign-up **/
+#sign_up_vehicle_soat {
+    background: url(img/calendar.png) no-repeat;
+    background-position: left center;
+    background-size: 21px;
+    padding-left: 35px;
+}
+
+#sign-up hr {
+    width: 100%;
+    height: 1px;
+    background-color: #000000;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#sign-up .label-text{
+    font-size: 12px;
+}
+
+/** Profile **/
+
+#profile .row {
+    text-align: center;
     margin-top: 20px;
     padding-left: 20px;
     padding-right: 20px;
 }
 
-#view-my-ride .row span, #view-next-ride .row span, #view-ride .row span {
+#profile .row span {
     display: inline-block;
     vertical-align: middle;
 }
 
-#view-my-ride .name, #view-next-ride .name, #view-ride .name {
+#profile .profile-picture {
+    width: 200px;
+    text-align: center;
+}
+
+#profile .profile-name {
+    font-size: 26px;
+    text-align: center;
+}
+
+#profile .profile-email {
+    text-align: center;
+}
+
+#profile .profile-vehicles a, #profile .profile-vehicles a:visited, #profile .profile-vehicles a:hover, #profile .profile-vehicles a:active {
+    color: black;
+    text-shadow: none;
+    text-decoration: none;
+}
+
+/** Add Vehicle **/
+
+#add_vehicle_soat {
+    background: url(img/calendar.png) no-repeat;
+    background-position: left center;
+    background-size: 21px;
+    padding-left: 35px;
+}
+
+#add-vehicle .label-text{
+    font-size: 12px;
+}
+
+/** User profile **/
+
+#user-profile .row {
+    text-align: center;
+    margin-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#user-profile .row span {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#user-profile .profile-picture {
+    width: 200px;
+    text-align: center;
+}
+
+#user-profile .profile-name {
+    font-size: 26px;
+    text-align: center;
+}
+
+#user-profile .profile-email {
+    text-align: center;
+}
+
+/** Dashboard **/
+
+#dashboard-buttons {
+    background-color: #063B6A;
+    position: fixed;
+    top: 40px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 60px;
+}
+
+.date-divider {
+    background-color: #d3d3d3;
+    color: #000000;
+}
+
+/** Add ride **/
+
+#add_ride_datetime {
+    background: url(img/calendar.png) no-repeat;
+    background-position: left center;
+    background-size: 21px;
+    padding-left: 35px;
+}
+
+/** View ride **/
+
+#view-ride {
+    text-align: center;
+}
+
+#view-ride .row {
+    margin-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#view-ride .row span {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#view-ride .name {
     font-weight: bold;
     font-size: 20px;
     margin-top: 10px;
 }
 
-#view-my-ride .container-when img, #view-next-ride .container-when img, #view-ride .container-when img {
+#view-ride .container-when img {
+    width: 30px;
     margin-right: 10px;
 }
 
-#view-my-ride .container-who img, #view-next-ride .container-who img, #view-ride .container-who img {
-    margin-right: 10px;
-}
-
-#view-my-ride .container-notes, #view-next-ride .container-notes, #view-ride .container-notes {
+#view-ride .container-passengers {
+    display: table;
+    width: 100%;
     text-align: left;
 }
 
-#view-my-ride .notes, #view-next-ride .notes, #view-ride .notes {
+#view-ride .container-passengers .seat {
+    margin-top: 10px;
+}
+
+#view-ride .container-passengers .seat div{
+    vertical-align: middle;
+}
+
+#view-ride .container-passengers .user-info {
+    display: inline-block;
+}
+
+#view-ride .container-passengers .picture-container {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #ffffff;
+    margin-right: 10px;
+}
+
+#view-ride .container-notes {
+    text-align: left;
+}
+
+#view-ride .notes {
     color: #666;
+}
+
+/** Search Ride **/
+
+#search-ride .refresh-notification {
+    position: absolute;
+    top: 45px;
+    left: 50%;
+    margin-left: -100px;
+
+    height: 26px;
+    width: 200px;
+
+    background-color: #3388cc;
+    color: #ffffff;
+    border-radius: 13px;
+
+    text-align: center;
+    padding-top: 3px;
+    z-index: 100;
 }
