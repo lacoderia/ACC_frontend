@@ -195,6 +195,12 @@ $(document).on('pagebeforeshow', "#sign-up", function (event, data) {
 
 $(document).on('pagebeforeshow', "#forgot", function (event, data) {
     clearForgot();
+
+    $("#forgot-form").validate({
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent().parent().after());
+        }
+    }).reset();
 });
 
 $(document).on('pagebeforeshow', '#profile', function(){
@@ -219,7 +225,7 @@ $(document).on('pagebeforeshow', '#search-ride', function(){
     // Iniciamos el timer de actualización de la información
     allRidesTimer = setInterval(function(){
         compareAllRides();
-    }, 5000);
+    }, 60000);
 });
 
 $(document).on('pagebeforehide', '#search-ride', function(){
@@ -232,11 +238,6 @@ $(document).on("pagebeforeshow", "#add-ride", function() {
     $("#add-ride-form").validate({
         errorPlacement: function(error, element) {
             error.appendTo(element.parent().parent().after());
-        },
-        rules: {
-            add_ride_datetime : {
-                validDate: true
-            }
         }
     }).resetForm();
 
@@ -278,27 +279,6 @@ jQuery.validator.addMethod("domain", function(value, element) {
     return false;
 
 }, "La dirección de correo no corresponde con la empresa seleccionada");
-
-jQuery.validator.addMethod("validDate", function(value, element) {
-    /*var d = new Date();
-    d.toISOString()
-
-    if (value) {
-        var d = new Date();
-        var d2 = new Date(Date.parse(value));
-
-        console.log(d.toString());
-        console.log(d2.toString());
-
-        if (value > d.toISOString()){
-            return true;
-        }
-    }
-    return false;*/
-    return true;
-
-}, "La fecha y hora deben ser mayores a la fecha y hora actual");
-
 
 var agreements = new Array();
 var myRides = new Array();
@@ -342,6 +322,40 @@ function showAlert(title, message) {
     $('#popupDialog').popup('open');
 }
 
+function showConfirmation(title, message, acceptFunction) {
+    var popUp = '<div data-role="popup" id="popupConfirmation" data-overlay-theme="a" data-theme="a" data-dismissible="false">' +
+        '<div data-role="header" data-theme="a">' +
+            '<h1>' + title + '</h1>' +
+        '</div>' +
+        '<div class="popup-content">' +
+            '<p>' + message + '</p>' +
+            '<div class="confirmation-buttons">' +
+                '<a href="#" class="cancel" data-role="button" data-inline="true" data-rel="back" data-theme="a">Cancelar</a>' +
+                '<a href="#" class="ok" data-role="button" data-inline="true" data-theme="a">Eliminar</a>' +
+            '</div>'+
+        '</div>' +
+        '</div>';
+
+    $(popUp).appendTo($.mobile.pageContainer);
+
+    $('#popupConfirmation').trigger('create');
+
+    $('#popupConfirmation').popup({
+        afterclose: function( event, ui ) {
+            $('#popupConfirmation').remove();
+        },
+        transition: 'pop'
+    });
+
+    $('#popupConfirmation a.ok').off('click');
+    $('#popupConfirmation a.ok').on('click', function(){
+        acceptFunction();
+        $('#popupConfirmation').popup('close');
+    });
+
+    $('#popupConfirmation').popup('open');
+}
+
 // Funciones de Login
 
 function clearLogIn() {
@@ -359,17 +373,17 @@ function logIn(documentType, documentId, password) {
 
     var rememberMe = $("#login-remember-me").is(':checked');
 
-    /*var data = {
+    var data = {
         "document_type": documentType,
         "document_id": documentId,
         "password": password
-    };*/
+    };
 
-    var data = {
+    /*var data = {
         "document_type": 'CC',
         "document_id": '12345',
         "password": '00000000'
-    };
+    };*/
 
     showLoader();
 
@@ -384,9 +398,8 @@ function logIn(documentType, documentId, password) {
                 if(typeof(Storage)!=="undefined") {
                     localStorage.rememberMe = rememberMe;
                     setCache('user', response.user);
+                    console.log(response.user);
                 }
-
-                $('#dashboard .ui-content').css('background-image', 'url(../img/company/chevron.jpg)');
 
                 window.scrollTo(0,0);
                 $.mobile.changePage($('#dashboard'), {transition: 'none'});
@@ -627,10 +640,12 @@ function clearProfile() {
     $('#profile .profile-name').html('');
     $('#profile .profile-email').html('');
     $('#profile .profile-vehicles').html('');
+    $('#btn-add-vehicle').hide();
 }
 
 function getProfile() {
     showLoader();
+    clearProfile();
     var user = getCache('user');
 
     $.ajax({
@@ -651,31 +666,32 @@ function getProfile() {
                 $('#profile .profile-name').html(user.first_name + ' ' + user.last_name);
                 $('#profile .profile-email').html('<a mailto:"' + user.email + '">' + user.email + '</a>');
 
-                var vehicleHTML = '';
+                var vehicleHTML = '<hr class="separator"><b>Mis vehículos</b><hr class="separator">';
 
                 if (user.vehicles.length) {
-                    vehicleHTML += '<hr><b>Mis vehículos</b>'
-                    vehicleHTML += '<p><ul data-role="listview" id="list-my-vehicles" class="rides-list" data-divider-theme="a">';
+                    vehicleHTML += '<p>';
 
                     for (var i=0; i<user.vehicles.length; i++) {
                         var date = createDateFromMysql(user.vehicles[i].soat_date);
-                        vehicleHTML += '<li class="ui-nodisc-icon">' +
-                                            '<a onclick="editVehicle(' + user.vehicles[i].id + ')">' +
+                        vehicleHTML += '<div class="vehicle-item">' +
+                                            '<div class="vehicle-info">' +
                                                 '<div>Placas: ' + user.vehicles[i].plate_number + '</div>' +
-                                                '<div>Vencimiento SOAT: ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</div>'+
-                                            '</a>' +
-                                        '</li>';
+                                                '<div>Vencimiento SOAT: ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</div>' +
+                                            '</div>' +
+                                            '<div class="vehicle-actions">' +
+                                                '<div class="delete-btn icon-cancel-circle" onclick="confirmDeleteVehicle(\'' + user.vehicles[i].plate_number + '\')"></div>' +
+                                            '</div>' +
+                                        '</div><hr>';
                     }
 
-                    vehicleHTML += '</ul></p>';
+                    vehicleHTML += '</p>';
                 } else {
-                    vehicleHTML += '<hr><b>Mis vehículos</b><hr>';
                     vehicleHTML += 'Actualmente no cuentas con vehículos registrados';
                 }
 
                 $('#profile .profile-vehicles').html(vehicleHTML);
 
-                $('#list-my-vehicles').listview();
+                $('#btn-add-vehicle').show();
 
                 hideLoader();
             } else {
@@ -754,6 +770,8 @@ function addVehicle() {
             success: function(response) {
                 if (response.success == true) {
                     hideLoader();
+                    user.vehicles = response.vehicles;
+                    setCache('user', user);
                     window.scrollTo(0,0);
                     $.mobile.changePage($('#profile'), {transition: 'none'});
                     showAlert('Agregar vehículo', response.message);
@@ -872,7 +890,6 @@ function compareAllRides() {
     var hash = getCache('allRidesHash');
     var user = getCache('user');
 
-    console.log('compare')
     $.ajax({
         type: "GET",
         url: "http://166.78.117.195/rides/available.json?user_id=" + user.id,
@@ -880,9 +897,6 @@ function compareAllRides() {
         dataType: "json",
         success: function(response) {
             if (response.hash != hash) {
-                $('#search-ride .refresh-notification').show();
-                clearInterval(allRidesTimer);
-            } else {
                 $('#search-ride .refresh-notification').show();
                 clearInterval(allRidesTimer);
             }
@@ -1088,7 +1102,7 @@ function clearViewRide() {
     $('#view-ride .notes').html('');
 }
 
-// Funciones de ver perfil de usuario
+// Funciones de Mi Perfil
 
 function showUserProfile(userId) {
     showLoader();
@@ -1129,6 +1143,44 @@ function showUserProfile(userId) {
     });
 }
 
+function confirmDeleteVehicle(vehiclePlateNumber) {
+    showConfirmation('Eliminar Vehículo',
+        '¿Estás seguro que deseas eliminar el vehículo?',
+        function() {
+            var user = getCache('user');
+            var vehicle = {
+                "vehicle": {
+                    "plate_number": vehiclePlateNumber
+                }
+            };
+
+            showLoader();
+            $.ajax({
+                type: "POST",
+                url: "http://166.78.117.195/users/" + user.id + "/remove_vehicle.json",
+                data: vehicle,
+                dataType: "json",
+                success: function(response) {
+                    if (response.success == true) {
+                        hideLoader();
+                        showAlert('Eliminar Vehículo', response.message);
+                        user.vehicles = response.vehicles;
+                        setCache('user', user);
+                        getProfile();
+                    } else {
+                        hideLoader();
+                        showAlert('Eliminar Vehículo', response.message);
+                    }
+                },
+                error: function(error) {
+                    hideLoader();
+                    showAlert('Eliminar Vehículo', response.message);
+                }
+            });
+        }
+    );
+}
+
 // Funciones de Añadir viaje
 
 function clearAddRide() {
@@ -1142,7 +1194,6 @@ function clearAddRide() {
     var user = getCache('user');
 
     var vehiclesHTML = '<option value="">Selecciona placas</option>';
-    vehiclesHTML += '<option value="ABC-123">ABC-123</option>';
     if (user.vehicles && user.vehicles.length) {
         for (var i=0; i<user.vehicles.length; i++){
             vehiclesHTML += '<option value="' + user.vehicles[i].plate_number + '">' + user.vehicles[i].plate_number + '</option>';
@@ -1183,19 +1234,19 @@ function addRide() {
             data: ride,
             dataType: "json",
             success: function(response) {
-                if (response.id) {
-                    showAlert('Publicar viaje', 'El viaje se publicó con éxito');
+                if (response.success == true) {
+                    showAlert('Publicar viaje', response.message);
                     getDashboard();
                     window.scrollTo(0,0);
                     $.mobile.changePage($('#dashboard'), {transition: 'none'});
                 } else {
                     hideLoader();
-                    showAlert('Publicar viaje', 'El viaje no fue publicado. Intenta nuevamente.');
+                    showAlert('Publicar viaje', response.message);
                 }
             },
             error: function(error) {
                 hideLoader();
-                showAlert('Publicar viaje', 'El viaje no fue publicado. Intenta nuevamente.');
+                showAlert('Publicar viaje', response.message);
             }
         });
     }
@@ -1218,7 +1269,6 @@ function acceptRide() {
         data: data,
         dataType: "json",
         success: function(response) {
-            console.log(response);
             if (response.success == true) {
                 getDashboard();
                 sessionStorage.rideId = rideId;
@@ -1243,7 +1293,7 @@ function acceptRide() {
 // Funciones para persitencia de datos
 
 function setCache(key, value) {
-  if (isCache('rememberMe')) {
+  if (localStorage.rememberMe == 'true') {
       window.localStorage.setItem(key, JSON.stringify(value));
   } else {
       window.sessionStorage.setItem(key, JSON.stringify(value));
@@ -1252,7 +1302,7 @@ function setCache(key, value) {
 }
 
 function getCache(key) {
-  if (isCache('rememberMe')) {
+  if (localStorage.rememberMe == 'true') {
       return JSON.parse(window.localStorage.getItem(key));
   } else {
       return JSON.parse(window.sessionStorage.getItem(key));
@@ -1264,7 +1314,7 @@ function isCache(key) {
 }
 
 function removeCache(key) {
-    if (isCache('rememberMe')) {
+    if (localStorage.rememberMe == 'true') {
         window.localStorage.removeItem(key);
     } else {
         window.sessionStorage.removeItem(key);

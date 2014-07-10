@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'icomoon';
-	src:url('fonts/icomoon.eot?4xlwto');
-	src:url('fonts/icomoon.eot?#iefix4xlwto') format('embedded-opentype'),
-		url('fonts/icomoon.woff?4xlwto') format('woff'),
-		url('fonts/icomoon.ttf?4xlwto') format('truetype'),
-		url('fonts/icomoon.svg?4xlwto#icomoon') format('svg');
+	src:url('fonts/icomoon.eot?-8ethix');
+	src:url('fonts/icomoon.eot?#iefix-8ethix') format('embedded-opentype'),
+		url('fonts/icomoon.woff?-8ethix') format('woff'),
+		url('fonts/icomoon.ttf?-8ethix') format('truetype'),
+		url('fonts/icomoon.svg?-8ethix#icomoon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -23,9 +23,6 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
-.icon-home:before {
-	content: "\e600";
-}
 .icon-home2:before {
 	content: "\e601";
 }
@@ -58,6 +55,18 @@
 }
 .icon-menu:before {
 	content: "\e608";
+}
+.icon-info:before {
+	content: "\e600";
+}
+.icon-cancel-circle:before {
+	content: "\e611";
+}
+.icon-checkmark-circle:before {
+	content: "\e612";
+}
+.icon-spam:before {
+	content: "\e613";
 }
 .icon-exit:before {
 	content: "\e609";
