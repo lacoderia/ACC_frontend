@@ -114,23 +114,23 @@ h1 {
     -webkit-animation:fade 3000ms infinite;
 }
 
-
-.menu-principal{
-	width: 85%;
-	background: #eee;
-	padding: 0;
-	overflow: hidden;
-	margin: 30% auto;
+html, body {
+    height : 100%;
 }
 
-.menu-principal a {
+.menu-principal {
+	padding: 15%;
+	background-color: #ffffff;
+}
+
+#menu-principal a {
 	float: left;
-	margin: 7px;
-	width: 30%;
+	margin: 5px;
+	width: 25%;
 }
 
-.menu-principal a img {
-	margin: 7px;
+#menu-principal a img {
+	margin: 5px;
 	width: 100%;
 }
 
@@ -174,6 +174,10 @@ h1 {
     to { -webkit-transform: translateX(-100%); }
 }
 
+.header{
+	background-color: rgba(0,0,0,0.5);
+}
+
 .header div{
 	margin: 0 30px;
 	display: inline;
@@ -188,6 +192,7 @@ h1 {
 .footer {
 	position: absolute;
 	bottom: 0;
+	margin-bottom: 45px;
 	width: 100%;
 	float: left;
 }
@@ -207,18 +212,19 @@ h1 {
 }
 
 .menu{
-	background: #008;
+	background-color: rgba(0, 0, 88, .5);
 	list-style-type: none;
 	padding: 10px;
 }
 
 .menu li{
-	margin-top: 10px;
-	margin-bottom: 10px;
+	margin-top: 30px;
+	margin-bottom: 30px;
 	text-decoration: none;
 }
 
 .menu li a{
+	padding: 15px 30px;
 	color: #FFF;
 	text-decoration: none;
 }
@@ -249,6 +255,8 @@ h1 {
 
 .ui-content{
 	padding:0px;
+	background: #FFF;
+	align: center;
 }
 
 /*Quita del mapa los links de logo de Google y terminos de uso */
@@ -261,3 +269,161 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
     background:none !important;
 }
 
+/* para menu popup */
+#popupDialog .popup-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#popupAlert .popup-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#popupServicio .popup-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.ui-dialog{
+	height: auto;
+}
+
+/** Login **/
+
+#login .ui-content {
+    position : absolute;
+    top      : 0;
+    right    : 0;
+    bottom   : 0;
+    left     : 0;
+}
+
+#login {
+    height : 100%;
+}
+
+#login .ui-content {
+    background: none;
+    background-color: #063B6A;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#login-buttons a, #login-buttons a:visited, #login-buttons a:hover, #login-buttons a:active {
+    color: white;
+    text-shadow: none;
+    text-decoration: underline;
+}
+
+#login-forgot {
+    margin-top: 10px;
+}
+
+.login-table {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.login-cell {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#login-logo {
+    width: 200px;
+}
+
+.checkbox-label-no-background {
+    background: none !important;
+    border: none !important;
+    color: #FFFFFF !important;
+}
+
+.checkbox-label-no-background-black {
+    background: none !important;
+    border: none !important;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    background-color: rgba(0,0,0,0.5); /*dim the background*/
+}
+
+#loader {
+    display: inline-block;
+    width: 46px;
+    height: 46px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -23px;
+    margin-left: -23px;
+    z-index: 101;
+
+    text-align: center;
+    vertical-align: middle;
+
+    background-color: black;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#loader img {
+    width: 38px;
+    height: 38px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -19px;
+    margin-left: -19px;
+}
+
+#solicitar-servicio {
+    display: inline-block;
+    width: 90%;
+    height: auto;
+    position: fixed;
+    top: 50%;
+    left: 10%;
+    margin-top: -23px;
+    margin-left: -23px;
+    z-index: 101;
+
+    text-align: center;
+    vertical-align: middle;
+
+    background-color: black;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#menu-principal {
+    display: none;
+    width: 80%;
+    height: auto;
+    position: fixed;
+    top: 25%;
+    left: 3%;
+    padding-left: 15%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    z-index: 101;
+
+    text-align: center;
+    vertical-align: middle;
+
+    background-color: white;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+}

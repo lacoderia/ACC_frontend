@@ -3,63 +3,187 @@
     <head>
         <title>Page Titles</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
 
         <link rel="stylesheet" href="jquery/jquery.mobile-1.4.2.min.css" />
         <link rel="stylesheet" href="css/themes/carpooling.css" />
         <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/icomoon-style.css" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
 
-        
         <script src="jquery/jquery-2.1.1.min.js"></script>
-        <script src="jquery/jquery.mobile-1.4.2.min.js"></script>
+        <script src="jquery/jquery-validation/jquery.validate.min.js"></script>
         
         <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/imagesloaded.min.js"></script>
+        <script type="text/javascript" src="js/iscroll.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
             app.initialize();
-            </script>
+        </script>
+
+        <script src="jquery/jquery.mobile-1.4.2.min.js"></script>
         
     </head>
     <body class="ui-alt-icon">
-        
-        <!-- Start of login -->
-        <div data-role="page" id="login">
-            
-            <div data-role="header">
-                <h1>Carpooling</h1>
-            </div><!-- /header -->
-            
+        <div class="overlay" style="display: none"></div>
+        <div id="loader" style="display: none">
+            <img src="img/ajax-loader.gif"/>
+        </div>
+
+        <!-- Start of splash -->
+        <div data-role="page" id="splash">
+
             <div role="main" class="ui-content">
-                <input placeholder="Identificación" type="text" id="id" />
-                <input placeholder="Contraseña" type="password" id="pass" />
-                <img src="" />
-                <br/>
-                <!--button onclick="validaDatos()" type="button">Iniciar Sesión</button-->
-                <a href="#dashboard" data-role="button" data-transition="slide">Iniciar Sesión</a>
-                <br/>
-                <a href="#registro" data-transition="slide">Quiero registrarme</a>
-                <br/>
-                <a>¿Olvidaste tu contraseña?</a>
+                <div id="splash-table">
+                    <div class="splash-cell">
+                        <img src="img/splash_0.png" splash_frame="0" />
+                        <img src="img/splash_1.png" splash_frame="1" />
+                        <img src="img/splash_2.png" splash_frame="2" />
+                        <img src="img/splash_3.png" splash_frame="3" />
+                        <img src="img/splash_4.png" splash_frame="4" />
+                    </div>
+                </div>
+
             </div><!-- /content -->
 
         </div><!-- /page -->
         
-        <!-- Start of registro -->
-        <div data-role="page" id="registro">
+        <!-- Start of login -->
+        <div data-role="page" id="login">
+
+            <div role="main" class="ui-content">
+                <div class="login-table">
+                    <div class="login-cell">
+                        <img id="login-logo" src="img/logo.png"/>
+                        <select name="login-tipo-identificacion" id="login-tipo-identificacion">
+                            <option value="">Seleccionar tipo de id</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="CE">Cédula de Extranjería</option>
+                            <option value="PS">Pasaporte</option>
+                        </select>
+                        <input placeholder="Identificación" type="text" id="login-identificacion" />
+                        <input placeholder="Contraseña" type="password" id="login-password" />
+                        <label class="checkbox-label-no-background"><input type="checkbox" name="login-remember-me" id="login-remember-me" data-mini="true">Recordarme</label>
+                        <br/>
+                        <a data-role="button" onclick="logIn()">Iniciar Sesión</a>
+                        <br/>
+                        <div id="login-buttons">
+                            <div id="login-sign-up"><a href="#sign-up" data-transition="slide">Quiero registrarme</a></div>
+                            <div id="login-forgot"><a href="#forgot" data-transition="slide">No puedo iniciar sesión</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /content -->
+
+        </div><!-- /page -->
+        
+        <!-- Start of sign-up -->
+        <div data-role="page" id="sign-up">
             
             <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left2" previous-page="login"></span>
                 <h1>Registro</h1>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
-                <input type="text" name="convenio" placeholder="No. de convenio" />
-                <input type="text" name="nombre" placeholder="Nombre completo"/>
-                <input type="email" name="email" placeholder="Correo electrónico"/>
-                <input type="text" name="placas" placeholder="Número de placas"/>
-                <input type="text" name="password" placeholder="Contraseña"/>
-                <input type="text" name="confirma_password" placeholder="Confirmar contraseña"/>
-                <p><a href="#login" data-role="button">Registrarme</a></p>
+
+                <form id="sign-up-form">
+                    <div><b>Datos personales</b></div>
+                    <hr>
+                    <input name="sign_up_domain" id="sign_up_domain" type="hidden" value=""/>
+                    <div data-role="fieldcontainer">
+                        <select name="sign_up_agreement" id="sign_up_agreement" class="required" onchange="updateSelectedAgreement()">
+                            <option value="">Selecciona tu empresa</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <select name="sign_up_document_type" id="sign_up_document_type" class="required">
+                            <option value="">Seleccionar tipo de id</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="CE">Cédula de Extranjería</option>
+                            <option value="PS">Pasaporte</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="sign_up_document_id" id="sign_up_document_id" placeholder="Identificación" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="sign_up_first_name" id="sign_up_first_name" placeholder="Nombre" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="sign_up_last_name" id="sign_up_last_name" placeholder="Apellido(s)" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="email" name="sign_up_email" id="sign_up_email" placeholder="Correo electrónico" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="password" name="sign_up_password" id="sign_up_password" placeholder="Contraseña" class="required" minlength="8"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="password" name="sign_up_password_confirmation" id="sign_up_password_confirmation" placeholder="Confirmar contraseña" class="required" minlength="8"/>
+                    </div>
+                </form>
+                <br>
+                <div><b>Datos del vehículo</b></div>
+                <hr>
+                <label class="checkbox-label-no-background-black"><input type="checkbox" name="sign_up_add_vehicle" id="sign_up_add_vehicle" data-mini="true">Deseo registrar un vehículo</label>
+
+                <form id="sign-up-vehicle-form" style="display:none">
+                    <label class="checkbox-label-no-background-black"><input type="checkbox" name="sign_up_vehicle_owner" id="sign_up_vehicle_owner" data-mini="true">Soy el dueño del vehículo</label>
+                    <div data-role="fieldcontainer" style="display:none">
+                        <select name="sign_up_vehicle_document_type" id="sign_up_vehicle_document_type">
+                            <option value="">Seleccionar tipo de id</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="CE">Cédula de Extranjería</option>
+                            <option value="PS">Pasaporte</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontainer" style="display:none">
+                        <input type="text" name="sign_up_vehicle_document_id" id="sign_up_vehicle_document_id" placeholder="Identificación del dueño"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="sign_up_vehicle_plates" id="sign_up_vehicle_plates" placeholder="Placas"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="date" name="sign_up_vehicle_soat" id="sign_up_vehicle_soat" placeholder="Fecha de vencimiento SOAT:">
+                        <div class="label-text">Fecha de vencimiento del SOAT</div>
+                    </div>
+                </form>
+                <p><a data-role="button" onclick="signUp()">Registrarme</a></p>
+
+            </div><!-- /content -->
+
+        </div><!-- /page -->
+
+        <!-- Start of forgot -->
+        <div data-role="page" id="forgot">
+
+            <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left2" previous-page="login"></span>
+                <h1>Iniciar Sesión</h1>
+            </div><!-- /header -->
+
+            <div role="main" class="ui-content">
+                <br/>
+                <p>Selecciona la causa del problema, introduce tu correo electrónico registrado y da click en 'Enviar correo'.</p>
+                <form id="forgot-form">
+                    <div data-role="fieldcontainer">
+                        <select name="forgot_problem" id="forgot_problem" class="required">
+                            <option value="">Selecciona una opción</option>
+                            <option value="forgot">Olvidé mi contraseña</option>
+                            <option value="confirmation">No recibí el correo de confirmación</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="email" name="forgot_email" id="forgot_email" placeholder="Correo electrónico" class="required"/>
+                    </div>
+                </form>
+                <p><a data-role="button" onclick="sendMail()">Enviar correo</a></p>
             </div><!-- /content -->
 
         </div><!-- /page -->
@@ -68,36 +192,113 @@
         <div data-role="page" id="dashboard">
             
             <div data-role="header">
-		        <h1>Mi Cuenta</h1>
-                <a href="#dashboard-menu" data-rel="popup" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-right ui-btn-icon-notext ui-btn-inline" data-transition="slidedown"></a>
+                <span id="acc-btn-menu" class="acc-btn-menu icon-menu"></span>
+		        <h1>Inicio</h1>
+                <span id="acc-btn-refresh-dashboard" class="acc-btn-refresh icon-spinner"></span>
 
                 <div data-role="popup" id="dashboard-menu" data-theme="a">
                     <ul data-role="listview" data-inset="true" style="min-width:210px;">
-                        <li class="ui-nodisc-icon" data-icon="user" data-iconpos="left"><a href="#dashboard" data-transition="slide">Mi cuenta</a></li>
-                        <li class="ui-nodisc-icon" data-icon="search" data-iconpos="left"><a href="#search-ride" data-transition="slide">Buscar viajes</a></li>
-                        <li class="ui-nodisc-icon" data-icon="plus" data-iconpos="left"><a href="#add-ride" data-transition="slide">Añadir viaje</a></li>
-                        <li class="ui-nodisc-icon" data-icon="power" data-iconpos="left"><a href="#login" data-transition="slide">Salir</a></li>
+                        <li class="ui-nodisc-icon" data-icon="user" data-iconpos="left"><a href="#profile" data-transition="slide">Mi perfil</a></li>
+                        <li class="ui-nodisc-icon" data-icon="power" data-iconpos="left"><a onclick="logOut()">Cerrar sesión</a></li>
                     </ul>
                 </div>
             </div><!-- /header -->
-            
+
+            <div id="dashboard-buttons">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="#add-ride" data-role="button" data-mini="true">Publicar viaje</a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a data-role="button" data-mini="true" onclick="refreshAllRides()">Buscar viaje</a>
+                    </div>
+                </div>
+            </div>
+
             <div role="main" class="ui-content">
-                <ul data-role="listview" id="list-my-rides" data-inset="true" data-divider-theme="a"></ul>
-                <ul data-role="listview" id="list-next-rides" data-inset="true" data-divider-theme="a"></ul>
+                <p><ul data-role="listview" id="list-my-rides" class="rides-list" data-divider-theme="a"></ul></p>
+                <p><ul data-role="listview" id="list-next-rides" class="rides-list" data-divider-theme="a"></ul></p>
             </div><!-- /content -->
             
+        </div><!-- /page -->
+
+        <!-- Start of profile -->
+        <div data-role="page" id="profile">
+
+            <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left2" previous-page="dashboard"></span>
+                <h1></span>Mi perfil</h1>
+            </div><!-- /header -->
+
+            <div role="main" class="ui-content">
+                <div class="row">
+                    <span class="profile-picture"></span>
+                </div>
+                <div class="row">
+                    <span class="profile-name"></span>
+                </div>
+                <div class="row">
+                    <span class="profile-email"></span>
+                </div>
+                <br>
+                <span class="profile-vehicles"></span>
+                <br><p><a href="#add-vehicle" id="btn-add-vehicle" data-role="button" data-mini="true">Agregar vehículo</a></p>
+
+            </div><!-- /content -->
+
+        </div><!-- /page -->
+
+        <!-- Start of add-vehicle -->
+        <div data-role="page" id="add-vehicle">
+
+            <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left2" previous-page="profile"></span>
+                <h1>Agregar vehículo</h1>
+            </div><!-- /header -->
+
+            <div role="main" class="ui-content">
+                <div><b>Datos del vehículo</b></div>
+                <hr>
+                <form id="add-vehicle-form">
+                    <label class="checkbox-label-no-background-black"><input type="checkbox" name="add_vehicle_owner" id="add_vehicle_owner" data-mini="true">Soy el dueño del vehículo</label>
+                    <div data-role="fieldcontainer" style="display:none">
+                        <select name="add_vehicle_document_type" id="add_vehicle_document_type" class="required">
+                            <option value="">Seleccionar tipo de id</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="CE">Cédula de Extranjería</option>
+                            <option value="PS">Pasaporte</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontainer" style="display:none">
+                        <input type="text" name="add_vehicle_document_id" id="add_vehicle_document_id" placeholder="Identificación del dueño" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="add_vehicle_plates" id="add_vehicle_plates" placeholder="Placas" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="date" name="add_vehicle_soat" id="add_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="required"/>
+                        <div class="label-text">Fecha de vencimiento del SOAT</div>
+                    </div>
+                </form>
+                <p><a data-role="button" onclick="addVehicle()">Agregar vehículo</a></p>
+            </div><!-- /content -->
+
         </div><!-- /page -->
 
         <!-- Start of search-ride -->
         <div data-role="page" id="search-ride">
             
             <div data-role="header">
-                <a href="#dashboard" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-left ui-btn-icon-notext ui-btn-inline" data-transition="slide" data-direction="reverse"></a>
+                <span class="acc-btn-back icon-arrow-left2" previous-page="dashboard"></span>
                 <h1>Buscar viajes</h1>
+                <span id="acc-btn-refresh-search" class="acc-btn-refresh icon-spinner"></span>
             </div><!-- /header -->
-            
+
+            <div class="refresh-notification" onclick="refreshAllRides()" style="display:none">Recargar información</div>
+
             <div role="main" class="ui-content">
-                <ul data-role="listview" id="list-all-rides" data-inset="true" data-divider-theme="a"></ul>
+                <p><ul data-role="listview" id="list-all-rides" class="search-rides-list" data-divider-theme="a"></ul></p>
             </div><!-- /content -->
             
         </div><!-- /page -->
@@ -106,111 +307,47 @@
         <div data-role="page" id="add-ride">
             
             <div data-role="header">
-                <a href="#dashboard" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-left ui-btn-icon-notext ui-btn-inline" data-transition="slide" data-direction="reverse"></a>
-		        <h1>Añadir viaje</h1>
+                <span class="acc-btn-back icon-arrow-left2" previous-page="dashboard"></span>
+		        <h1>Publicar viaje</h1>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
-            	<div>
-                    <label for="add-ride-from">De:</label>
-                    <input type="text" id="add-ride-from"/>
-                </div>
-                <div>
-                    <label for="add-ride-to">A:</label>
-                    <input type="text" id="add-ride-to"/>
-                </div>
-                <div>
-                    <label for="add-ride-datetime">Fecha:</label>
-                    <input type="datetime" id="add-ride-datetime"/>
-                </div>
-                <div>
-                    <label for="add-ride-seats">Asientos disponibles:</label>
-                    <input type="number" name="seats" pattern="[0-9]*" id="add-ride-seats" value="">
-                </div>
-            	<div>
-                    <label for="add-ride-notes">Notas:</label>
-                    <textarea id="add-ride-notes"></textarea>
-                </div>
-                <p><a href="#dashboard" data-role="button" onclick="addRide()">Añadir</a></p>
-            </div><!-- /content -->
-            
-        </div><!-- /page -->
-        
-        <!-- Start of view-my-ride -->
-        <div data-role="page" id="view-my-ride">
-            
-            <div data-role="header">
-                <a href="#dashboard" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-left ui-btn-icon-notext ui-btn-inline" data-transition="slide" data-direction="reverse"></a>
-		        <h1>Detalle del viaje</h1>
-            </div><!-- /header -->
-            
-            <div role="main" class="ui-content">
-                <div class="row name"></div>
-                <div class="row container-when">
-                    <span><img src="img/clock.png"/></span>
-                    <span class="date"></span>
-                    <span class="time"></span>
-                </div>
-                <div class="row">
-                    <span>De:</span>
-                    <span class="from"></span>
-                </div>
-                <div class="row">
-                    <span>A:</span>
-                    <span class="to"></span>
-                </div>
-                <div class="row container-who">
-                    <span class="seats"></span>
-                </div>
-                <div class="row container-notes">
-                    <div><b>Notas:</b></div>
-                    <div class="notes"></div>
-                </div>
-            </div><!-- /content -->
-            
-        </div><!-- /page -->
-        
-        <!-- Start of view-next-ride -->
-        <div data-role="page" id="view-next-ride">
-            
-            <div data-role="header">
-                <a href="#dashboard" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-left ui-btn-icon-notext ui-btn-inline" data-transition="slide" data-direction="reverse"></a>
-		        <h1>Detalles del viaje</h1>
-            </div><!-- /header -->
-            
-            <div role="main" class="ui-content">
-                <div class="row name"></div>
-                <div class="row container-when">
-                    <span><img src="img/clock.png"/></span>
-                    <span class="date"></span>
-                    <span class="time"></span>
-                </div>
-                <div class="row">
-                    <span>De:</span>
-                    <span class="from"></span>
-                </div>
-                <div class="row">
-                    <span>A:</span>
-                    <span class="to"></span>
-                </div>
-                <div class="row container-who">
-                    <span><img src="img/person.png"/></span>
-                    <span class="seats"></span>
-                </div>
-                <div class="row container-notes">
-                    <div><b>Notas:</b></div>
-                    <div class="notes"></div>
-                </div>
-            </div><!-- /content -->
-            
-        </div><!-- /page -->
 
+                <form id="add-ride-form">
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="add_ride_origin" id="add_ride_origin" placeholder="De:" class="required">
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="add_ride_destination" id="add_ride_destination" placeholder="A:" class="required">
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="datetime-local" name="add_ride_datetime" id="add_ride_datetime" placeholder="Fecha:" class="required">
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <select name="add_ride_vehicle_plates" id="add_ride_vehicle_plates"></select>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="number" pattern="[0-9]*" name="add_ride_seats" id="add_ride_seats" placeholder="Asientos disponibles:" class="required" min="1">
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="number" pattern="\d+(\.\d*)?" name="add_ride_cost" id="add_ride_cost" placeholder="Costo:" class="required">
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <textarea name="add_ride_notes" id="add_ride_notes" placeholder="Notas:" rows="2" class="required"></textarea>
+                    </div>
+                </form>
+                <p><a data-role="button" onclick="addRide()">Publicar</a></p>
+
+            </div><!-- /content -->
+            
+        </div><!-- /page -->
+        
         <!-- Start of view-ride -->
         <div data-role="page" id="view-ride">
             
             <div data-role="header">
-                <a href="#search-ride" class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-carat-l ui-btn-left ui-btn-icon-notext ui-btn-inline" data-transition="slide" data-direction="reverse"></a>
-                <h1>Detalles del viaje</h1>
+                <span id="bnt-back-view-ride" class="acc-btn-back icon-arrow-left2"></span>
+                <h1>Detalles</h1>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
@@ -222,22 +359,49 @@
                 </div>
                 <div class="row">
                     <span>De:</span>
-                    <span class="from"></span>
+                    <span class="origin"></span>
                 </div>
                 <div class="row">
                     <span>A:</span>
-                    <span class="to"></span>
+                    <span class="destination"></span>
                 </div>
-                <div class="row container-who">
-                    <span><img src="img/person.png"/></span>
-                    <span class="seats"></span>
+                <div class="row">
+                    <span>Costo:</span>
+                    <span class="cost"></span>
                 </div>
                 <div class="row container-notes">
                     <div><b>Notas:</b></div>
                     <div class="notes"></div>
                 </div>
-                <p><a href="#dashboard" data-role="button" onclick="acceptRide()">Apartar lugar</a></p>
+                <div class="row container-passengers">
+                    <div><b>Pasajeros:</b></div>
+                    <div class="passengers"></div>
+                </div>
+
+                <p><a id="btn-accept-ride" data-role="button" onclick="acceptRide()" style="display:none">Reservar lugar</a></p>
             </div><!-- /content -->
+        </div><!-- /page -->
+
+        <!-- Start of profile -->
+        <div data-role="page" id="user-profile">
+
+            <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left2" previous-page="view-ride"></span>
+                <h1></span>Pasajero</h1>
+            </div><!-- /header -->
+
+            <div role="main" class="ui-content">
+                <div class="row">
+                    <span class="profile-picture"></span>
+                </div>
+                <div class="row">
+                    <span class="profile-name"></span>
+                </div>
+                <div class="row">
+                    <span class="profile-email"></span>
+                </div>
+            </div><!-- /content -->
+
         </div><!-- /page -->
     </body>
 </html>

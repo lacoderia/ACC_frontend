@@ -36,26 +36,43 @@ var app = {
     }
 };
 
-function initHeaderAndFooter(){
-	
-	var head = '<div id="nombre"><p>Bienvenido </p><p>Juan</p></div>';
-	head += '<div id="placa"><p>Pico y placa </p><p>1-3-5-7-9</p></div>';
-	
-	var elemArray = document.getElementsByClassName('header');
+var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId, timeOutAlert=200;
+var sesion, pagina;
+
+function setHeader(){
+	var head = '<div id="nombre"><p>Bienvenido </p><div id ="contenedor_nombre"></div></div>';
+    
+    var user = getCache("user");
+    if(user != undefined){
+    	head += '<div id="placa"><p>Pico y placa </p><p id="contenedor_placa"></p></div>';
+    	$('#contenedor_nombre').html(user.first_name);
+    	$('#contenedor_placa').html(user.placas);
+    	
+    	$('#boton-cerrar-sesion').show();
+    }else{
+    	$('#boton-cerrar-sesion').hide();
+    }
+    
+    var elemArray = document.getElementsByClassName('header');
     for(var i = 0; i < elemArray.length; i++){
         var elem = elemArray[i];
         elem.innerHTML = head;
     }
+}
+
+function initHeaderAndFooter(){
 	
-	var foot = '<a href="#menu" data-transition="slide-to-right" data-prefetch="true"><img src="img/Botones/menu.png"></a><a><img src="img/Botones/share.png"></a>';
+	setHeader();
+    
+	var foot = '<a onclick="showMenuLateral()" data-prefetch="true"><img src="img/Botones/menu-lateral.png"></a>';
+	foot += '<a onclick="showMenu()"><img src="img/Botones/menu-popup.png"></a>';
 	var elemArray = document.getElementsByClassName('footer');
     for(var i = 0; i < elemArray.length; i++){
     	var elem = elemArray[i];
         elem.innerHTML = foot;
     }
+    initMap();
 }
-
-var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId;
 
 function loadMapScript() {
 	var script = document.createElement("script");
@@ -116,28 +133,320 @@ function initMap(){
 	navigator.geolocation.getCurrentPosition(onSuccess, onError);
 }
 
-var sesion, pagina;
-function iniciarSesion(){
-	sesion = true;
-	if(pagina){
-		console.log(pagina);
-		//$.mobile.changePage(pagina);
-	}
-}
-
-function terminarSesion(){
-	sesion = false;
-}
-
-function validarSesion(page){
+function validarSocio(page){
+	hideMenu();
 	pagina = page;
-	if(sesion == true){
-		$.mobile.changePage("#solicitar-servicio");
+	
+	setCache("servicio", pagina);
+	
+	$('#popupDialog').remove();
+	var user = getCache("user");
+	if(user != undefined){
+		solicitarServicio();
 	}else{
-		$.mobile.changePage("#login");
+		setTimeout(function() {
+			var message = 'Presiona "Si" para iniciar sesion o presiona "No" para continuar como invitado.';
+			var title = "Es socio de ACC?";
+			showAlert(title, message, {"true":"Si","false":"No"});
+		}, timeOutAlert);
 	}
+}
+
+function showEmergencias() {
+	var menuEmergencias = '<div data-role="popup" id="popupDialog2" data-overlay-theme="none" data-theme="a" data-dismissible="true">'+
+					'<a><img src="img/Botones/ambulancia.png" /></a>'+
+					'<a><img src="img/Botones/policia.png" /></a>'+
+				'</div>';
+	$('#menu-principal').empty();
+	$(menuEmergencias).appendTo('#menu-principal');
+}
+
+function showMenu() {
+    var menu = '<a href="" onclick=validarSocio("desvare") data-prefetch="true"><img src="img/Botones/desvare.png" /></a>'+
+			    '<a href="" onclick=validarSocio("grua") data-prefetch="true"><img src="img/Botones/grua.png" /></a>'+
+			    '<a href="" onclick="showEmergencias()" data-prefetch="true"><img src="img/Botones/emergencias.png" /></a>'+
+			    '<a href=""><img src="img/Botones/acc.png" /></a>'+
+			    '<a href="" data-prefetch="true"><img src="img/Botones/descuentos.png" /></a>'+
+			    '<a href="" data-prefetch="true"><img src="img/Botones/trafico.png" /></a>'+
+			    '<a href="" data-prefetch="true"><img src="img/Botones/parqueaderos.png" /></a>'+
+			    '<a href="" data-prefetch="true"><img src="img/Botones/gasolineras.png" /></a>'+
+			    '<a href=""><img src="img/Botones/diversion.png" /></a>';
+
+    $('#menu-principal').empty();
+    $(menu).appendTo('#menu-principal');
+    
+    $('.overlay').addClass("dismissable");
+    $('.overlay').show();
+    $('#menu-principal').show();
+    
+}
+
+function hideMenu(){
+	var dismissable = $('.overlay').hasClass("dismissable");
+	if(dismissable){
+		$('.overlay').hide();
+	}
+    $('#menu-principal').hide();
+}
+
+function showMenuLateral(){
+	$('#panel-menu-lateral').panel('open');
+}
+
+function hideMenuLateral(){
+	$('#panel-menu-lateral').panel('close');
+}
+
+function showAlert(title, message){
+	showAlert(title, message, null);
+}
+
+function showAlert(title, message, buttons) {
+    var popUp = '<div data-role="popup" id="popupAlert" data-overlay-theme="none" data-theme="a" data-dismissible="true">' +
+                    '<div data-role="header" data-theme="a">' +
+                        '<h1>' + title + '</h1>' +
+                    '</div>' +
+                    '<div class="popup-content">' +
+                        '<p>' + message + '</p>' +
+                    '</div>';
+    
+				    if(buttons && (sesion != undefined || sesion != null || sesion != "")){
+				    	popUp += '<div class="popup-content">' +
+				    	'<input type="button" onclick=redirige("#login") value="'+buttons['true']+'"/>'+
+				    	'<input type="button" onclick="solicitarServicio(true)" value="'+buttons['false']+'"/>'+
+				    	'</div>';
+				    }
+				    
+			popUp += '</div>';
+
+    $(popUp).appendTo($.mobile.pageContainer);
+
+    $('#popupAlert').trigger('create');
+
+    $('#popupAlert').popup({
+        afterclose: function( event, ui ) {
+            $('#popupAlert').remove();
+        },
+        transition: 'pop'
+    });
+    $('#popupAlert').popup('open');
+    $('.overlay').removeClass("dismissable");
+}
+
+function redirige(pagina){
+	window.location=pagina;
 }
 
 function enviar(){
 	console.log(currentLocation.coords.latitude +","+ currentLocation.coords.longitude);
+	$('.overlay').hide();
+    $('#solicitar-servicio').hide();
+    
+    /*var data = {
+    		"nombre": $('#servicio_nombre').html(),
+    		"telefono": $('#servicio_telefono').html(),
+    		"placas": $('#servicio_placas').html()
+    };*/
+    
+    var servicio = getCache("servicio");
+    var data = {
+    		"nombre": "Alberto",
+    		"telefono": "12345678",
+    		"placas": "ABC-123",
+    		"servicio": servicio
+    };
+    removeCache("servicio");
+    
+    showLoader();
+    $.ajax({
+        type: "POST",
+        url: "http://166.78.117.195/servicio",
+        data: data,
+        dataType: "json",
+        success: function(response) {
+            if (response.success == true) {
+                hideLoader();
+                
+                showAlert('Solicitud Realizada', response.message);
+                
+            } else {
+                hideLoader();
+                showAlert('Error', 'Respuesta invalida: ' + response.message);
+            }
+        },
+        error: function(error) {
+            showAlert('Error', 'No se pudo solicitar el servicio');
+            hideLoader();
+        }
+    });
+    
+    
+}
+
+function solicitarServicio(hay_alerta) {
+	if(hay_alerta){
+		$("#popupAlert").popup("close");
+	}
+	$.mobile.changePage("#dashboard");
+	$('.overlay').show();
+	$('#solicitar-servicio').show();
+}
+
+function hideSolicitarServicio(){
+	$('.overlay').addClass("dismissable");
+	$('.overlay').hide();
+    $('#solicitar-servicio').hide();
+}
+
+function logIn(documentType, documentId, password) {
+
+    documentType = documentType || $('#login-tipo-identificacion').val();
+    documentId = documentId || $('#login-identificacion').val();
+    password = password || $('#login-password').val();
+
+    var rememberMe = $("#login-remember-me").is(':checked');
+    
+    var data = {
+        "document_type": 'CC',
+        "document_id": '123',
+        "password": '00000000'
+    };
+
+    showLoader();
+
+    $.ajax({
+        type: "POST",
+        url: "http://166.78.117.195/login",
+        data: data,
+        dataType: "json",
+        success: function(response) {
+            if (response.success == true) {
+                hideLoader();
+                if(typeof(Storage)!=="undefined") {
+                	window.localStorage.rememberMe = rememberMe;
+                	console.log("LOGIN rememberMe: "+ window.localStorage.rememberMe);
+                	setCache('user', response.user);
+                }
+                window.scrollTo(0,0);
+                $.mobile.changePage($('#dashboard'), {transition: 'none'});
+                
+                setHeader();
+                $('#menu-lateral').show();
+                solicitarServicio();
+            } else {
+                hideLoader();
+                showAlert('Iniciar sesión', response.message);
+            }
+        },
+        error: function(error) {
+            showAlert('Iniciar sesión', 'Hubo un error al iniciar la sesión. Intenta nuevamente.');
+            hideLoader();
+        }
+    });
+}
+
+function logOut() {
+    showLoader();
+
+    var user = getCache('user');
+    var data = {
+        "auth_token": user.authentication_token
+    };
+    $.ajax({
+        type: "POST",
+        url: "http://166.78.117.195/logout",
+        data: data,
+        dataType: "json",
+        success: function(response) {
+            if (response.success == true) {
+                hideLoader();
+                clearCache();
+                window.scrollTo(0,0);
+                $('#boton-cerrar-sesion').hide();
+                $.mobile.changePage($('#login'), {transition: 'none'});
+            }
+        },
+        error: function(error) {
+            showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Intenta nuevamente.');
+            hideLoader();
+        }
+    });
+}
+
+function showLoader() {
+    $('.overlay').show();
+    $('#loader').show();
+}
+
+function hideLoader() {
+    $('.overlay').hide();
+    $('#loader').hide();
+}
+
+//Funciones para persitencia de datos
+
+function setCache(key, value) {
+	console.log("SET CACHE " + key + " , " + value);
+	console.log("localStorage(rememberMe) "+ window.localStorage.rememberMe);
+	if (window.localStorage.rememberMe == "true") {
+		console.log("LOCAL");
+		window.localStorage.setItem(key, JSON.stringify(value));
+	} else {
+		console.log("SESION");
+		window.sessionStorage.setItem(key, JSON.stringify(value));
+	}
+}
+
+function getCache(key) {
+  if (window.localStorage.rememberMe == "true") {
+      return JSON.parse(window.localStorage.getItem(key));
+  } else {
+      return JSON.parse(window.sessionStorage.getItem(key));
+  }
+}
+
+function isCache(key) {
+  return window.localStorage.getItem(key) !== null && window.localStorage.getItem(key) !== undefined;
+}
+
+function removeCache(key) {
+    if (window.localStorage.rememberMe == "true") {
+        window.localStorage.removeItem(key);
+    } else {
+        window.sessionStorage.removeItem(key);
+    }
+}
+
+function clearCache() {
+    removeCache('user');
+    removeCache('servicio');
+    removeCache('rememberMe');
+}
+
+function logOut() {
+    showLoader();
+
+    var user = getCache('user');
+    var data = {
+        "auth_token": user.authentication_token
+    };
+    $.ajax({
+        type: "POST",
+        url: "http://166.78.117.195/logout",
+        data: data,
+        dataType: "json",
+        success: function(response) {
+            if (response.success == true) {
+                hideLoader();
+                clearCache();
+                window.scrollTo(0,0);
+                setHeader();
+                $.mobile.changePage($('#dashboard'), {transition: 'none'});
+            }
+        },
+        error: function(error) {
+            showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Intenta nuevamente.');
+            hideLoader();
+        }
+    });
 }

@@ -1,4 +1,4 @@
-C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\ant-gen\mx\coderia\Carpooling\R.java \
+C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\ant-gen\mx\coderia\ACC\Carpooling\R.java \
  : C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\res\drawable\icon.png \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\res\drawable-hdpi\icon.png \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\res\drawable-ldpi\icon.png \
