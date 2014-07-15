@@ -51,15 +51,20 @@
         <!-- Start of solicitar-servicio -->
         <div id="solicitar-servicio" style="display:none">
             
-            <div role="main" class="ui-content">
+            <div >
             	<form id="solicitar-servicio-form">
-	            	Favor de proporcionar la siguiente información.
-	            	<input type="text" id="servicio_nombre" placeholder="Nombre Completo" class="required" />
-	            	<br/>
-	            	<input type="text" id="servicio_telefono" placeholder="Telefono" class="required" />
-	            	<br/>
-	            	<input type="text" id="servicio_placas" placeholder="Placas del vehículo" class="required" />
-	            	<br/>
+            		<h1>Solicitar Servicio</h1>
+	            	<p>Favor de proporcionar la siguiente información.</p>
+	            	<div data-role="fieldcontainer">
+		            	<input type="text" id="servicio_nombre" name="servicio_nombre" placeholder="Nombre Completo" class="required" />
+		            </div>
+	            	<div data-role="fieldcontainer">
+	            		<input type="text" id="servicio_telefono" name="servicio_telefono" placeholder="Telefono" class="required" />
+	            	</div>
+	            	<div data-role="fieldcontainer">
+	            		<input type="text" id="servicio_placas" name="servicio_placas" placeholder="Placas del vehículo" class="required" />
+	            	</div>
+	            	<div class="vertical-space"></div>
 	            	<button type="button" onclick="enviar()">Enviar</button>
 	            	<button type="button" onclick="hideSolicitarServicio()">Cancelar</button>
 	            </form>
@@ -74,11 +79,6 @@
         
         	<!-- Start of menu-lateral -->
 	        <div data-role="panel" data-display="overlay" id="panel-menu-lateral">
-	        	<div class="clima">
-	         	<p>
-	         		23° C <a>i</a>
-	         	</p>
-	        	</div>
 	        	<ul class="menu" id="menu-lateral">
 	        		<li><a>Principal</a></li>
 	        		<li><a href="#mi-cuenta" data-prefetch="true" data-transition="slide" >Mi cuenta</a></li>
@@ -88,10 +88,8 @@
 	        		<li><a>Tutorial</a></li>
 	        		<li id="boton-cerrar-sesion"><a onclick="hideMenuLateral();logOut()">Cerrar sesion</a></li>
 	        	</ul>
-	        	<div class="velocidad">
-	        		<p>80 Km/h</p>
-	        	</div>
-	        </div><!-- /menu-lateral -->
+	        </div>
+	        <!-- /menu-lateral -->
         
             <div class="header" data-role="header">
             </div><!-- /header -->
@@ -123,6 +121,7 @@
                         <label class="checkbox-label-no-background"><input type="checkbox" name="login-remember-me" id="login-remember-me" data-mini="true">Recordarme</label>
                         <br/>
                         <a data-role="button" onclick="logIn()">Iniciar Sesión</a>
+                        <a data-role="button" onclick="continuarInvitado()">Quiero continuar como invitado</a>
                         <br/>
                         <div id="login-buttons">
                             <!--div id="login-sign-up"><a href="#sign-up" data-transition="slide">Quiero registrarme</a></div-->
@@ -148,13 +147,13 @@
 			    </div>
         </div--><!-- /menu-popup -->
         
-        <!-- Start of emergencias -->
+        <!-- Start of emergencias >
         <div data-role="page" id="emergencias">
             	<div class="menu-principal">
-            		<a><img src="img/Botones/ambulancia.png" /></a>
-	            	<a><img src="img/Botones/policia.png" /></a>
+            		<a href=""><img src="img/Botones/ambulancia.png" /></a>
+	            	<a href=""><img src="img/Botones/policia.png" /></a>
             	</div>			
-        </div><!-- /emergencias -->
+        </div--><!-- /emergencias -->
         
         <!-- Start of mi-cuenta -->
         <div data-role="page" id="mi-cuenta">
