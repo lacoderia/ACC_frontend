@@ -54,7 +54,7 @@ var app = {
 var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId;
 var sesion, pagina;
 
-function setHeader(){
+function setHeader(){    
     var user = getCache("user");
     if(user != undefined){
     	$('#contenedor_nombre').html(user.first_name);
@@ -111,6 +111,8 @@ function initializeMap(mapOptions) {
 	});
 
     hideLoader();
+	
+	trafficLayer = new google.maps.TrafficLayer();
 }
 
 function onError(){
@@ -322,7 +324,7 @@ function logIn(documentType, documentId, password) {
                 hideLoader();
                 if(typeof(Storage)!=="undefined") {
                 	window.localStorage.rememberMe = rememberMe;
-                	console.log("LOGIN rememberMe: "+ window.localStorage.rememberMe);
+                	//console.log("LOGIN rememberMe: "+ window.localStorage.rememberMe);
                 	setCache('user', response.user);
                 }
                 window.scrollTo(0,0);
@@ -384,13 +386,13 @@ function hideLoader() {
 //Funciones para persitencia de datos
 
 function setCache(key, value) {
-	console.log("SET CACHE " + key + " , " + value);
-	console.log("localStorage(rememberMe) "+ window.localStorage.rememberMe);
+	//console.log("SET CACHE " + key + " , " + value);
+	//console.log("localStorage(rememberMe) "+ window.localStorage.rememberMe);
 	if (window.localStorage.rememberMe == "true") {
-		console.log("LOCAL");
+		//console.log("LOCAL");
 		window.localStorage.setItem(key, JSON.stringify(value));
 	} else {
-		console.log("SESION");
+		//console.log("SESION");
 		window.sessionStorage.setItem(key, JSON.stringify(value));
 	}
 }
@@ -447,4 +449,74 @@ function logOut() {
             hideLoader();
         }
     });
+}
+
+$(document).on('pagebeforeshow', "#solicitar-servicio", function (event, data) {
+	$("#solicitar-servicio-form").validate({
+		errorPlacement: function(error, element) {
+            error.appendTo(element.parent().parent().after());
+        },
+        rules: {
+            servicio_nombre : {
+            	required: true
+            },
+            servicio_telefono : {
+            	required: true
+            },
+            servicio_placas : {
+            	required: true
+            }
+        }
+    }).resetForm();
+});
+
+function solicitarEmergencia(emergencia){
+	setCache("Emergencia", emergencia);
+	showAlert("Emergencia", "Deseas solicitar asistencia?", {"true":"Si", "false":"No", "true_func": 'llamar()', "false_func": "hideAlert()"});
+	hideMenu();
+}
+
+function llamar(){
+	var emergencia = getCache("Emergencia");
+	hideAlert();
+	if(emergencia == "ambulancia"){
+		document.location.href = 'tel:+1-800-555-1234';
+	}
+	
+	if(emergencia == "policia"){
+		document.location.href = 'tel:+1-800-555-1234';
+	}
+}
+
+$(document).on('pagebeforeshow', '#solicitar-servicio-form', function(){
+    $("#solicitar-servicio-form").validate({
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent().parent().after());
+        }
+    });
+
+});
+
+jQuery.extend(jQuery.validator.messages, {
+    required: "Este campo es requerido.",
+    email: "Ingresa un email válido.",
+    date: "Ingresa una fecha válida.",
+    number: "Ingresa un número válido.",
+    maxlength: jQuery.validator.format("No ingreses más de {0} caracteres."),
+    minlength: jQuery.validator.format("Ingresa al menos {0} caracteres."),
+    rangelength: jQuery.validator.format("Ingresa un valor de longitud entre {0} y {1}."),
+    range: jQuery.validator.format("Ingresa un valor entre {0} y {1}."),
+    max: jQuery.validator.format("Ingresa un valor menor o igual a {0}."),
+    min: jQuery.validator.format("Ingresa un valor mayor o igual a {0}."),
+    equalTo: jQuery.validator.format("El valor de la confirmación no es igual al de la contraseña.")
+});
+
+function toggleTraffic(){
+	hideMenu();
+	if(traffic_on == true){
+		trafficLayer.setMap(null);
+	}else{
+		trafficLayer.setMap(map);
+	}
+	traffic_on = !traffic_on;
 }

@@ -98,12 +98,7 @@
         
         	<!-- Start of menu-lateral -->
 	        <div data-role="panel" data-display="overlay" id="panel-menu-lateral">
-	        	<div class="clima">
-	         	<p>
-	         		23° C <a>i</a>
-	         	</p>
-	        	</div>
-	        	<ul id="menu-lateral">
+	        	<ul class="menu" id="menu-lateral">
 	        		<li><a>Principal</a></li>
 	        		<li><a href="#mi-cuenta" data-transition="slide" >Mi cuenta</a></li>
 	        		<li><a>Geocerca</a></li>
@@ -112,10 +107,8 @@
 	        		<li><a>Tutorial</a></li>
 	        		<li id="boton-cerrar-sesion"><a onclick="hideMenuLateral();logOut()">Cerrar sesion</a></li>
 	        	</ul>
-	        	<div class="velocidad">
-	        		<p>80 Km/h</p>
-	        	</div>
-	        </div><!-- /menu-lateral -->
+	        </div>
+	        <!-- /menu-lateral -->
         
             <div role="main" class="ui-content">
                 <div class="header">
@@ -149,6 +142,7 @@
                         <label class="checkbox-label-no-background"><input type="checkbox" name="login-remember-me" id="login-remember-me" data-mini="true">Recordarme</label>
                         <br/>
                         <a data-role="button" onclick="logIn()">Iniciar Sesión</a>
+                        <a data-role="button" onclick="continuarInvitado()">Quiero continuar como invitado</a>
                         <br/>
                         <div id="login-buttons">
                             <!--div id="login-sign-up"><a href="#sign-up" data-transition="slide">Quiero registrarme</a></div-->
