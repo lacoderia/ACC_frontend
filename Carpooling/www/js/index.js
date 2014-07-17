@@ -33,20 +33,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-
-        /*var iOS7 = window.device
-            && window.device.platform
-            && window.device.platform.toLowerCase() == "ios"
-            && parseFloat(window.device.version) >= 7.0;
-
-        if (iOS7) {
-            StatusBar.hide();
-        }*/
-
-        setTimeout(function() {
-            navigator.splashscreen.hide();
-            StatusBar.hide();
-        }, 2000);
+        navigator.splashscreen.hide();
 
         var imgLoad = imagesLoaded('#splash_table');
 
@@ -112,7 +99,6 @@ var app = {
                     $("#sign-up-vehicle-form").valid();
                 }
             }
-
         });
 
         $('#add_vehicle_owner').change(function(){
@@ -287,7 +273,7 @@ var allRides = new Array();
 var allRidesTimer = null;
 
 var months = new Array("Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic");
-var days = new Array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
+var days = new Array("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado");
 
 function showLoader() {
     $('.overlay').show();
@@ -300,7 +286,7 @@ function hideLoader() {
 }
 
 function showAlert(title, message) {
-    var popUp = '<div data-role="popup" id="popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="true">' +
+    var popUp = '<div data-role="popup" id="popupAlert" data-overlay-theme="a" data-theme="a" data-dismissible="true">' +
                     '<div data-role="header" data-theme="a">' +
                         '<h1>' + title + '</h1>' +
                     '</div>' +
@@ -311,19 +297,19 @@ function showAlert(title, message) {
 
     $(popUp).appendTo($.mobile.pageContainer);
 
-    $('#popupDialog').trigger('create');
+    $('#popupAlert').trigger('create');
 
-    $('#popupDialog').popup({
+    $('#popupAlert').popup({
         afterclose: function( event, ui ) {
-            $('#popupDialog').remove();
+            $('#popupAlert').remove();
         },
         transition: 'pop'
     });
-    $('#popupDialog').popup('open');
+    $('#popupAlert').popup('open');
 }
 
-function showConfirmation(title, message, acceptFunction) {
-    var popUp = '<div data-role="popup" id="popupConfirmation" data-overlay-theme="a" data-theme="a" data-dismissible="false">' +
+function showDialog(title, message, acceptFunction) {
+    var popUp = '<div data-role="popup" id="popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false">' +
         '<div data-role="header" data-theme="a">' +
             '<h1>' + title + '</h1>' +
         '</div>' +
@@ -338,22 +324,22 @@ function showConfirmation(title, message, acceptFunction) {
 
     $(popUp).appendTo($.mobile.pageContainer);
 
-    $('#popupConfirmation').trigger('create');
+    $('#popupDialog').trigger('create');
 
-    $('#popupConfirmation').popup({
+    $('#popupDialog').popup({
         afterclose: function( event, ui ) {
-            $('#popupConfirmation').remove();
+            $('#popupDialog').remove();
         },
         transition: 'pop'
     });
 
-    $('#popupConfirmation a.ok').off('click');
-    $('#popupConfirmation a.ok').on('click', function(){
+    $('#popupDialog a.ok').off('click');
+    $('#popupDialog a.ok').on('click', function(){
         acceptFunction();
-        $('#popupConfirmation').popup('close');
+        $('#popupDialog').popup('close');
     });
 
-    $('#popupConfirmation').popup('open');
+    $('#popupDialog').popup('open');
 }
 
 // Funciones de Login
@@ -373,17 +359,17 @@ function logIn(documentType, documentId, password) {
 
     var rememberMe = $("#login-remember-me").is(':checked');
 
-    var data = {
+    /*var data = {
         "document_type": documentType,
         "document_id": documentId,
         "password": password
-    };
+    };*/
 
-    /*var data = {
+    var data = {
         "document_type": 'CC',
         "document_id": '12345',
         "password": '00000000'
-    };*/
+    };
 
     showLoader();
 
@@ -398,8 +384,13 @@ function logIn(documentType, documentId, password) {
                 if(typeof(Storage)!=="undefined") {
                     localStorage.rememberMe = rememberMe;
                     setCache('user', response.user);
-                    console.log(response.user);
                 }
+
+                //$('#dashboard .fake-background img').attr('src', 'http://166.78.117.195' + response.user.agreement_logo);
+                $('#dashboard .fake-background img').attr('src', 'img/company/ACC.png');
+                $('#view-ride .fake-background img').attr('src', 'img/company/ACC.png');
+                $('#dashboard .footer img').attr('src','img/company/ACC.png');
+                $('#view-ride .footer img').attr('src','img/company/ACC.png');
 
                 window.scrollTo(0,0);
                 $.mobile.changePage($('#dashboard'), {transition: 'none'});
@@ -410,8 +401,8 @@ function logIn(documentType, documentId, password) {
             }
         },
         error: function(error) {
-            showAlert('Iniciar sesión', 'Hubo un error al iniciar la sesión. Intenta nuevamente.');
             hideLoader();
+            showAlert('Iniciar sesión', 'Hubo un error al iniciar la sesión. Intenta nuevamente.');
         }
     });
 }
@@ -437,8 +428,8 @@ function logOut() {
             }
         },
         error: function(error) {
-            showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Intenta nuevamente.');
             hideLoader();
+            showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Intenta nuevamente.');
         }
     });
 }
@@ -523,14 +514,14 @@ function signUp() {
         if ($("#sign_up_add_vehicle").is(':checked')) {
             if ($('#sign_up_vehicle_owner').is(':checked')) {
                 data.vehicle = {
-                    "plate_number": $('#sign_up_vehicle_plates').val(),
+                    "plate_number": $('#sign_up_vehicle_plates').val().toUpperCase(),
                     "soat_date": $('#sign_up_vehicle_soat').val(),
                     "document_type_owner": $('#sign_up_document_type').val(),
                     "document_id_owner": $('#sign_up_document_id').val()
                 };
             } else {
                 data.vehicle = {
-                    "plate_number": $('#sign_up_vehicle_plates').val(),
+                    "plate_number": $('#sign_up_vehicle_plates').val().toUpperCase(),
                     "soat_date": $('#sign_up_vehicle_soat').val(),
                     "document_type_owner": $('#sign_up_vehicle_document_type').val(),
                     "document_id_owner": $('#sign_up_vehicle_document_id').val()
@@ -557,7 +548,7 @@ function signUp() {
             },
             error: function(error) {
                 hideLoader();
-                showAlert('Registro', response.message);
+                showAlert('Registro', 'Ocurrió un error al intentar registrarte. Intenta nuevamente.');
             }
         });
     }
@@ -657,10 +648,16 @@ function getProfile() {
             if(response.id) {
                 var user = response;
 
-                if (user.picture) {
-                    $('#profile .profile-picture').html('<img src="' + user.picture + '"/>');
-                } else {
-                    $('#profile .profile-picture').html('<img src="img/person.png"/>');
+                if (user.avatar) {
+                    $('<img/>')
+                        .attr('src', 'http://166.78.117.195' + user.avatar)
+                        .load(function(){
+                            $('#profile .profile-picture').html('<img id="profile-picture" src="http://166.78.117.195' + user.avatar + '"/>');
+                            hideLoader();
+                        })
+                        .error(function(){
+                            hideLoader();
+                        });
                 }
 
                 $('#profile .profile-name').html(user.first_name + ' ' + user.last_name);
@@ -692,8 +689,6 @@ function getProfile() {
                 $('#profile .profile-vehicles').html(vehicleHTML);
 
                 $('#btn-add-vehicle').show();
-
-                hideLoader();
             } else {
                 window.scrollTo(0,0);
                 $.mobile.changePage($('#dashboard'), {transition: 'slide'});
@@ -711,8 +706,40 @@ function getProfile() {
 function getPicture() {
     navigator.camera.getPicture(
         function(imageData) {
-            var image = document.getElementById('profile-picture');
-            image.src = "data:image/jpeg;base64," + imageData;
+            showLoader();
+            var user = getCache('user');
+            var data = {
+                "user": {
+                    "avatar": imageData
+                }
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "http://166.78.117.195/users/" + user.id + "/change_avatar.json",
+                data: data,
+                dataType: "json",
+                success: function(response) {
+                    if (response.success == true) {
+                        $('<img/>')
+                            .attr('src', 'http://166.78.117.195' + response.avatar)
+                            .load(function(){
+                                $('#profile .profile-picture').html('<img id="profile-picture" src="http://166.78.117.195' + response.avatar + '"/>');
+                                hideLoader();
+                            })
+                            .error(function(){
+                                hideLoader();
+                            });
+                    } else {
+                        hideLoader();
+                        showAlert('Mi perfil', response.message);
+                    }
+                },
+                error: function(error) {
+                    hideLoader();
+                    showAlert('Mi perfil', 'Ocurrió un error al cambiar la foto de tu perfil. Intenta nuevamente.');
+                }
+            });
         },
         function() {
 
@@ -747,14 +774,14 @@ function addVehicle() {
 
         if ($('#add_vehicle_owner').is(':checked')) {
             data.vehicle = {
-                "plate_number": $('#add_vehicle_plates').val(),
+                "plate_number": $('#add_vehicle_plates').val().toUpperCase(),
                 "soat_date": $('#add_vehicle_soat').val(),
                 "document_type_owner": user.document_type,
                 "document_id_owner": user.document_id
             };
         } else {
             data.vehicle = {
-                "plate_number": $('#add_vehicle_plates').val(),
+                "plate_number": $('#add_vehicle_plates').val().toUpperCase(),
                 "soat_date": $('#add_vehicle_soat').val(),
                 "document_type_owner": $('#add_vehicle_document_type').val(),
                 "document_id_owner": $('#add_vehicle_document_id').val()
@@ -782,7 +809,7 @@ function addVehicle() {
             },
             error: function(error) {
                 hideLoader();
-                showAlert('Agregar vehículo', response.message);
+                showAlert('Agregar Vehículo', 'Ocurrió un error al agregar el vehículo. Intenta nuevamente.');
             }
         });
     }
@@ -1019,36 +1046,38 @@ function getRideDetail(rideId) {
 
                 for(var i=0; i<availableSeats; i++) {
                     if(i<takenSeats) {
-                        if (ride.users[i].picture) {
-                            $('#view-ride .passengers').append($('<div class="seat"><div class="picture-container" onclick="showUserProfile(' + ride.users[i].id + ')"><img src="' + ride.users[i].picture + '"/></div><div class="user-info"><div>' + ride.users[i].first_name + '</div><div><a href="mailto:' + ride.users[i].email + '">' + ride.users[i].email + '</a></div></div></div>'));
-                        } else {
-                            $('#view-ride .passengers').append($('<div class="seat"><div class="picture-container" onclick="showUserProfile(' + ride.users[i].id + ')"><img src="img/person.png"/></div><div class="user-info"><div>' + ride.users[i].first_name + '</div><div><a href="mailto:' + ride.users[i].email + '">' + ride.users[i].email + '</a></div></div></div>'));
+                        if (ride.users[i].avatar) {
+                            $('#view-ride .passengers').append($('<div class="seat"><div class="picture-container" onclick="showUserProfile(' + ride.users[i].id + ')"><img src="' + 'http://166.78.117.195' + ride.users[i].avatar + '"/></div><div class="user-info"><div>' + ride.users[i].first_name + '</div><div><a href="mailto:' + ride.users[i].email + '">' + ride.users[i].email + '</a></div></div></div>'));
                         }
                     } else {
-                        $('#view-ride .passengers').append($('<div class="seat"><div class="picture-container"><img src="img/person_grey.png"/></div><div class="user-info">Disponible</div></div>'));
+                        $('#view-ride .passengers').append($('<div class="seat"><div class="picture-container"><img src="http://166.78.117.195/users/avatars/default_grey.png"/></div><div class="user-info">Disponible</div></div>'));
                     }
                 }
 
+                var totalImages = $('#view-ride .picture-container img').length;
+                var loadedImages = 0;
                 $('#view-ride .picture-container img').each(function() {
                     var image = $(this);
                     $("<img/>")
                         .attr("src", image.attr('src'))
                         .load(function () {
-                            if(this.width > this.height) {
-                                image.css('height', '40px');
-                            } else {
-                                image.css('width', '40px');
+                            loadedImages++;
+
+                            if (loadedImages >= totalImages) {
+                                hideLoader();
                             }
                         })
                         .error(function () {
-                            image.css('height', '40px');
-                            image.css('width', '40px');
+                            hideLoader();
                         });
                 });
 
+                if (ride.cost == 0) {
+                    $('#view-ride .cost').html('Sin costo');
+                } else {
+                    $('#view-ride .cost').html('$' + ride.cost.toFixed(2));
+                }
 
-
-                $('#view-ride .cost').html('$' + ride.cost.toFixed(2));
                 $('#view-ride .notes').html(ride.notes);
 
                 var showAcceptRideButton = true;
@@ -1118,17 +1147,20 @@ function showUserProfile(userId) {
             if(response.id) {
                 var user = response;
 
-                if (user.picture) {
-                    $('#user-profile .profile-picture').html('<img src="' + user.picture + '"/>');
-                } else {
-                    $('#user-profile .profile-picture').html('<img src="img/person.png"/>');
+                if (user.avatar) {
+                    $('<img/>')
+                        .attr('src', 'http://166.78.117.195' + user.avatar)
+                        .load(function(){
+                            $('#user-profile .profile-picture').html('<img src="http://166.78.117.195' + user.avatar + '"/>');
+                            hideLoader();
+                        })
+                        .error(function(){
+                            hideLoader();
+                        });
                 }
 
                 $('#user-profile .profile-name').html(user.first_name + ' ' + user.last_name);
                 $('#user-profile .profile-email').html('<a mailto:"' + user.email + '">' + user.email + '</a>');
-
-
-                hideLoader();
             } else {
                 window.scrollTo(0,0);
                 $.mobile.changePage($('#view-ride'), {transition: 'slide'});
@@ -1144,7 +1176,7 @@ function showUserProfile(userId) {
 }
 
 function confirmDeleteVehicle(vehiclePlateNumber) {
-    showConfirmation('Eliminar Vehículo',
+    showDialog('Eliminar Vehículo',
         '¿Estás seguro que deseas eliminar el vehículo?',
         function() {
             var user = getCache('user');
@@ -1174,7 +1206,7 @@ function confirmDeleteVehicle(vehiclePlateNumber) {
                 },
                 error: function(error) {
                     hideLoader();
-                    showAlert('Eliminar Vehículo', response.message);
+                    showAlert('Eliminar Vehículo', 'Ocurrió un error al eliminar el vehículo. Intenta nuevamente.');
                 }
             });
         }
@@ -1214,17 +1246,17 @@ function addRide() {
                 "agreement_id": user.agreement_id,
                 "user_id": user.id,
                 "ride_when": $('#add_ride_datetime').val(),
-                "cost": $('#add_ride_cost').val(),
+                "cost": (($('#add_ride_cost').val().length > 0) ? $('#add_ride_cost').val() : 0),
                 "seats": $('#add_ride_seats').val(),
                 "origin": $('#add_ride_origin').val(),
-                "destination": $('#add_ride_destination').val(),
+                "destination": $('#add_ride_destination').val()
             }
         };
 
         if ($('#add_ride_vehicle_plates').val()) {
-            ride.ride.notes = $('#add_ride_notes').val() + '<br>Placas del vehículo: ' + $('#add_ride_vehicle_plates').val();
+            ride.ride.notes = $('#add_ride_notes').val() + '<div>Placas del vehículo: ' + $('#add_ride_vehicle_plates').val() + '</div>';
         } else {
-            ride.ride.notes = $('#add_ride_notes').val() + '<br>No se especifican las placas del vehículo.';
+            ride.ride.notes = $('#add_ride_notes').val() + '<div>No se especifican las placas del vehículo.</div>';
         }
 
         showLoader();
@@ -1246,7 +1278,7 @@ function addRide() {
             },
             error: function(error) {
                 hideLoader();
-                showAlert('Publicar viaje', response.message);
+                showAlert('Publicar viaje', 'Ocurrió un error al publicar el viaje. Intenta nuevamente.');
             }
         });
     }
@@ -1342,11 +1374,61 @@ function createDateFromMysql(mysql_string) {
 
 function getDateFromMysql(dateString) {
     var date = createDateFromMysql(dateString);
-    return days[date.getDay()-1] + ' ' + date.getDate() + ' ' + months[date.getMonth()];
+    return days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()];
 }
 
 function getTimeFromMysql(dateString) {
     var date = createDateFromMysql(dateString);
     return (date.getHours()<10?'0':'') + date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes() + ' hrs';
 
+}
+
+function numberLetterPattern(e) {
+    var key;
+    var keychar;
+
+    if (window.event)
+        key = window.event.keyCode;
+    else if (e)
+        key = e.which;
+    else
+        return true;
+    keychar = String.fromCharCode(key);
+    keychar = keychar.toLowerCase();
+
+// control keys
+    if ((key==null) || (key==0) || (key==8) ||
+        (key==9) || (key==13) || (key==27) )
+        return true;
+
+// alphas and numbers
+    else if ((("abcdefghijklmnopqrstuvwxyz0123456789").indexOf(keychar) > -1))
+        return true;
+    else
+        return false;
+}
+
+function numberPattern(e) {
+    var key;
+    var keychar;
+
+    if (window.event)
+        key = window.event.keyCode;
+    else if (e)
+        key = e.which;
+    else
+        return true;
+    keychar = String.fromCharCode(key);
+    keychar = keychar.toLowerCase();
+
+// control keys
+    if ((key==null) || (key==0) || (key==8) ||
+        (key==9) || (key==13) || (key==27) )
+        return true;
+
+// alphas and numbers
+    else if ((("0123456789").indexOf(keychar) > -1))
+        return true;
+    else
+        return false;
 }

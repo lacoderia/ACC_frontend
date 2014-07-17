@@ -41,34 +41,58 @@
             app.initialize();
         </script>
     </head>
-    <body onload="initHeaderAndFooter()">
-    
-    	<div class="overlay" style="display: none" onclick="hideMenu()"></div>
+    <body>
+
+        <div class="overlay" style="display: none" onclick="hideMenu()"></div>
         <div id="loader" style="display: none">
             <img src="img/ajax-loader.gif"/>
         </div>
         
-        <!-- Start of solicitar-servicio -->
-        <div id="solicitar-servicio" style="display:none">
-            
-            <div role="main" class="ui-content">
-            	<form id="solicitar-servicio-form">
-	            	Favor de proporcionar la siguiente información.
-	            	<input type="text" id="servicio_nombre" placeholder="Nombre Completo" class="required" />
-	            	<br/>
-	            	<input type="text" id="servicio_telefono" placeholder="Telefono" class="required" />
-	            	<br/>
-	            	<input type="text" id="servicio_placas" placeholder="Placas del vehículo" class="required" />
-	            	<br/>
-	            	<button type="button" onclick="enviar()">Enviar</button>
-	            	<button type="button" onclick="hideSolicitarServicio()">Cancelar</button>
-	            </form>
-            </div><!-- /content -->
-        </div><!-- /solicitar-servicio -->
-        
-        <div id="menu-principal">
+        <div id="menu-principal" class="menu dismissable" onclick="exitMenu(event)">
+            <div id="menu-principal-container" class="menu-container">
+                <div class="row">
+                    <div onclick="solicitarServicio('desvare')"><img src="img/Botones/desvare.png" /></div>
+                    <div onclick="solicitarServicio('grua')"><img src="img/Botones/grua.png" /></div>
+                    <div onclick="showEmergencias()"><img src="img/Botones/emergencias.png" /></div>
+                </div>
+                <div class="row">
+                    <div><img src="img/Botones/acc.png" /></div>
+                    <div><img src="img/Botones/descuentos.png" /></div>
+                    <div><img src="img/Botones/trafico.png" /></div>
+                </div>
+                <div class="row">
+                    <div><img src="img/Botones/parqueaderos.png" /></div>
+                    <div><img src="img/Botones/gasolineras.png" /></div>
+                    <div><img src="img/Botones/diversion.png" /></div>
+                </div>
+            </div>
 	    </div>
-        
+
+        <div id="menu-emergencias" class="menu dismissable" onclick="exitMenu(event)">
+            <div id="menu-emergencias-container" class="menu-container">
+                <div class="row">
+                    <div><img src="img/Botones/ambulancia.png" /></div>
+                    <div><img src="img/Botones/policia.png" /></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="menu-servicio" class="menu dismissable" onclick="exitMenu(event)">
+            <div id="menu-servicio-container" class="menu-container">
+                <form id="menu-servicio-form">
+                    Favor de proporcionar la siguiente información.
+                    <input type="text" id="servicio_nombre" placeholder="Nombre Completo" class="required" />
+                    <br/>
+                    <input type="text" id="servicio_telefono" placeholder="Telefono" class="required" />
+                    <br/>
+                    <input type="text" id="servicio_placas" placeholder="Placas del vehículo" class="required" />
+                    <br/>
+                    <button type="button" onclick="enviarSolicitudServicio()">Enviar</button>
+                    <button type="button" onclick="hideMenu()">Cancelar</button>
+                </form>
+            </div>
+        </div>
+
     	<!-- Start of dashboard -->
         <div data-role="page" id="dashboard">
         
@@ -79,9 +103,9 @@
 	         		23° C <a>i</a>
 	         	</p>
 	        	</div>
-	        	<ul class="menu" id="menu-lateral">
+	        	<ul id="menu-lateral">
 	        		<li><a>Principal</a></li>
-	        		<li><a href="#mi-cuenta" data-prefetch="true" data-transition="slide" >Mi cuenta</a></li>
+	        		<li><a href="#mi-cuenta" data-transition="slide" >Mi cuenta</a></li>
 	        		<li><a>Geocerca</a></li>
 	        		<li><a>Descuentos</a></li>
 	        		<li><a>Configuración</a></li>
@@ -93,16 +117,18 @@
 	        	</div>
 	        </div><!-- /menu-lateral -->
         
-            <div class="header" data-role="header">
-            </div><!-- /header -->
-            
             <div role="main" class="ui-content">
+                <div class="header">
+                    <span id="nombre">Bienvenido(a) <span id ="contenedor_nombre"></span></span>
+                    <!--span id="placa">Pico y placa <span id="contenedor_placa" style="display:none;"></span></span-->
+                </div>
             	<div id="map_canvas"></div>
+                <div class="footer">
+                    <div id="btn-menu-lateral"><img src="img/Botones/menu-lateral.png" onclick="showMenuLateral()"></div>
+                    <div id="btn-menu-popup"><img src="img/Botones/menu-popup.png" onclick="showMenu()"></div>
+                </div>
             </div><!-- /content -->
             
-            <div class="footer">
-			</div>
-						
         </div><!-- /dashboard -->
         
         <!-- Start of login -->
@@ -132,30 +158,7 @@
                 </div>
             </div><!-- /content -->
         </div><!-- /page login-->
-        
-        <!-- Start of menu-popup -->
-        <!--div id="menu-popup">
-            <div class="menu-principal" id="menu-popup">
-				    <a href="" onclick="validarSocio()" data-prefetch="true"><img src="img/Botones/desvare.png" /></a>
-				    <a href="" onclick="validarSocio()" data-prefetch="true"><img src="img/Botones/grua.png" /></a>
-				    <a href="" onclick="showMenu('emergencias')" data-prefetch="true"><img src="img/Botones/emergencias.png" /></a>
-				    <a href=""><img src="img/Botones/acc.png" /></a>
-				    <a href="" data-prefetch="true"><img src="img/Botones/descuentos.png" /></a>
-				    <a href="" data-prefetch="true"><img src="img/Botones/trafico.png" /></a>
-				    <a href="" data-prefetch="true"><img src="img/Botones/parqueaderos.png" /></a>
-				    <a href="" data-prefetch="true"><img src="img/Botones/gasolineras.png" /></a>
-				    <a href=""><img src="img/Botones/diversion.png" /></a>
-			    </div>
-        </div--><!-- /menu-popup -->
-        
-        <!-- Start of emergencias -->
-        <div data-role="page" id="emergencias">
-            	<div class="menu-principal">
-            		<a><img src="img/Botones/ambulancia.png" /></a>
-	            	<a><img src="img/Botones/policia.png" /></a>
-            	</div>			
-        </div><!-- /emergencias -->
-        
+
         <!-- Start of mi-cuenta -->
         <div data-role="page" id="mi-cuenta">
             

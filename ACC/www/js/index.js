@@ -33,45 +33,39 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
+        var iOS7 = window.device
+            && window.device.platform
+            && window.device.platform.toLowerCase() == "ios"
+            && parseFloat(window.device.version) >= 7.0;
+
+        if (iOS7) {
+            StatusBar.hide();
+        }
+
+        navigator.splashscreen.hide();
+
+        showLoader();
+        setHeader();
+
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
 };
 
-var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId, timeOutAlert=200;
+var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId;
 var sesion, pagina;
 
 function setHeader(){
-	var head = '<div id="nombre"><p>Bienvenido </p><div id ="contenedor_nombre"></div></div>';
-    
     var user = getCache("user");
     if(user != undefined){
-    	head += '<div id="placa"><p>Pico y placa </p><p id="contenedor_placa"></p></div>';
     	$('#contenedor_nombre').html(user.first_name);
     	$('#contenedor_placa').html(user.placas);
+        $('#contenedor_placa').show();
     	
     	$('#boton-cerrar-sesion').show();
     }else{
     	$('#boton-cerrar-sesion').hide();
+        $('#contenedor_placa').show();
     }
-    
-    var elemArray = document.getElementsByClassName('header');
-    for(var i = 0; i < elemArray.length; i++){
-        var elem = elemArray[i];
-        elem.innerHTML = head;
-    }
-}
-
-function initHeaderAndFooter(){
-	
-	setHeader();
-    
-	var foot = '<a onclick="showMenuLateral()" data-prefetch="true"><img src="img/Botones/menu-lateral.png"></a>';
-	foot += '<a onclick="showMenu()"><img src="img/Botones/menu-popup.png"></a>';
-	var elemArray = document.getElementsByClassName('footer');
-    for(var i = 0; i < elemArray.length; i++){
-    	var elem = elemArray[i];
-        elem.innerHTML = foot;
-    }
-    initMap();
 }
 
 function loadMapScript() {
@@ -115,11 +109,12 @@ function initializeMap(mapOptions) {
 		map.panTo(GeoMarker.getPosition());
 		GeoMarker.setCircleOptions({'visible':true});
 	});
-	
+
+    hideLoader();
 }
 
 function onError(){
-	
+	showAlert('Error', 'Hubo un error al cargar el mapa. Intenta nuevamente');
 }
 
 function onSuccess(position) {
@@ -129,64 +124,54 @@ function onSuccess(position) {
 	}
 }
 
-function initMap(){
-	navigator.geolocation.getCurrentPosition(onSuccess, onError);
-}
-
-function validarSocio(page){
-	hideMenu();
-	pagina = page;
-	
+function solicitarServicio(pagina){
+    hideMenu();
 	setCache("servicio", pagina);
 	
-	$('#popupDialog').remove();
 	var user = getCache("user");
 	if(user != undefined){
-		solicitarServicio();
-	}else{
-		setTimeout(function() {
-			var message = 'Presiona "Si" para iniciar sesion o presiona "No" para continuar como invitado.';
-			var title = "Es socio de ACC?";
-			showAlert(title, message, {"true":"Si","false":"No"});
-		}, timeOutAlert);
+        showServicios();
+	} else {
+        if(sesion != undefined || sesion != null || sesion != ""){
+            var title = "¿Es socio de ACC?";
+            var message = 'Presiona "Si" para iniciar sesion o presiona "No" para continuar como invitado.';
+            showDialog(
+                title,
+                message,
+                function(){
+                    $.mobile.changePage($('#login'));
+                },
+                function(){
+                    showServicios();
+                }
+            );
+        }
 	}
-}
-
-function showEmergencias() {
-	var menuEmergencias = '<div data-role="popup" id="popupDialog2" data-overlay-theme="none" data-theme="a" data-dismissible="true">'+
-					'<a><img src="img/Botones/ambulancia.png" /></a>'+
-					'<a><img src="img/Botones/policia.png" /></a>'+
-				'</div>';
-	$('#menu-principal').empty();
-	$(menuEmergencias).appendTo('#menu-principal');
-}
-
-function showMenu() {
-    var menu = '<a href="" onclick=validarSocio("desvare") data-prefetch="true"><img src="img/Botones/desvare.png" /></a>'+
-			    '<a href="" onclick=validarSocio("grua") data-prefetch="true"><img src="img/Botones/grua.png" /></a>'+
-			    '<a href="" onclick="showEmergencias()" data-prefetch="true"><img src="img/Botones/emergencias.png" /></a>'+
-			    '<a href=""><img src="img/Botones/acc.png" /></a>'+
-			    '<a href="" data-prefetch="true"><img src="img/Botones/descuentos.png" /></a>'+
-			    '<a href="" data-prefetch="true"><img src="img/Botones/trafico.png" /></a>'+
-			    '<a href="" data-prefetch="true"><img src="img/Botones/parqueaderos.png" /></a>'+
-			    '<a href="" data-prefetch="true"><img src="img/Botones/gasolineras.png" /></a>'+
-			    '<a href=""><img src="img/Botones/diversion.png" /></a>';
-
-    $('#menu-principal').empty();
-    $(menu).appendTo('#menu-principal');
-    
-    $('.overlay').addClass("dismissable");
-    $('.overlay').show();
-    $('#menu-principal').show();
-    
 }
 
 function hideMenu(){
-	var dismissable = $('.overlay').hasClass("dismissable");
-	if(dismissable){
-		$('.overlay').hide();
-	}
-    $('#menu-principal').hide();
+    $('.menu').hide();
+}
+
+function exitMenu(e) {
+    if ($(e.target).hasClass('menu') && $(e.target).hasClass('dismissable') ) {
+        hideMenu();
+    }
+}
+
+function showMenu() {
+    hideMenu();
+    $('#menu-principal').show();
+}
+
+function showEmergencias() {
+    hideMenu();
+    $('#menu-emergencias').show();
+}
+
+function showServicios() {
+    hideMenu();
+    $('#menu-servicio').show();
 }
 
 function showMenuLateral(){
@@ -197,27 +182,15 @@ function hideMenuLateral(){
 	$('#panel-menu-lateral').panel('close');
 }
 
-function showAlert(title, message){
-	showAlert(title, message, null);
-}
-
-function showAlert(title, message, buttons) {
-    var popUp = '<div data-role="popup" id="popupAlert" data-overlay-theme="none" data-theme="a" data-dismissible="true">' +
+function showAlert(title, message) {
+    var popUp = '<div data-role="popup" id="popupAlert" data-overlay-theme="b" data-theme="a" data-dismissible="true">' +
                     '<div data-role="header" data-theme="a">' +
                         '<h1>' + title + '</h1>' +
                     '</div>' +
                     '<div class="popup-content">' +
                         '<p>' + message + '</p>' +
-                    '</div>';
-    
-				    if(buttons && (sesion != undefined || sesion != null || sesion != "")){
-				    	popUp += '<div class="popup-content">' +
-				    	'<input type="button" onclick=redirige("#login") value="'+buttons['true']+'"/>'+
-				    	'<input type="button" onclick="solicitarServicio(true)" value="'+buttons['false']+'"/>'+
-				    	'</div>';
-				    }
-				    
-			popUp += '</div>';
+                    '</div>' +
+                '</div>';
 
     $(popUp).appendTo($.mobile.pageContainer);
 
@@ -230,25 +203,62 @@ function showAlert(title, message, buttons) {
         transition: 'pop'
     });
     $('#popupAlert').popup('open');
-    $('.overlay').removeClass("dismissable");
+    $('.overlay').show();
 }
 
-function redirige(pagina){
-	window.location=pagina;
+function showDialog(title, message, acceptFunction, cancelFunction) {
+    var popUp = '<div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="a" data-dismissible="false">' +
+                    '<div data-role="header" data-theme="a">' +
+                        '<h1>' + title + '</h1>' +
+                    '</div>' +
+                    '<div class="popup-content">' +
+                        '<p>' + message + '</p>' +
+                        '<div class="confirmation-buttons">' +
+                            '<a href="#" class="cancel" data-role="button" data-inline="true" data-theme="a">No</a>' +
+                            '<a href="#" class="ok" data-role="button" data-inline="true" data-theme="a">Si</a>' +
+                        '</div>'+
+                    '</div>' +
+                '</div>';
+
+    $(popUp).appendTo($.mobile.pageContainer);
+
+    $('#popupDialog').trigger('create');
+
+    $('#popupDialog').popup({
+        afterclose: function( event, ui ) {
+            $('#popupDialog').remove();
+        },
+        transition: 'pop'
+    });
+
+    $('#popupDialog a.ok').off('click');
+    $('#popupDialog a.ok').on('click', function(){
+        acceptFunction();
+        $('#popupDialog').popup('close');
+    });
+
+    $('#popupDialog a.cancel').off('click');
+    $('#popupDialog a.cancel').on('click', function(){
+        cancelFunction();
+        $('#popupDialog').popup('close');
+    });
+
+    $('#popupDialog').popup('open');
 }
 
-function enviar(){
+function enviarSolicitudServicio(){
 	console.log(currentLocation.coords.latitude +","+ currentLocation.coords.longitude);
-	$('.overlay').hide();
-    $('#solicitar-servicio').hide();
-    
-    /*var data = {
-    		"nombre": $('#servicio_nombre').html(),
-    		"telefono": $('#servicio_telefono').html(),
-    		"placas": $('#servicio_placas').html()
-    };*/
+	hideMenu();
     
     var servicio = getCache("servicio");
+
+    /*var data = {
+     "nombre": $('#servicio_nombre').html(),
+     "telefono": $('#servicio_telefono').html(),
+     "placas": $('#servicio_placas').html(),
+     "servicio": servicio
+     };*/
+
     var data = {
     		"nombre": "Alberto",
     		"telefono": "12345678",
@@ -266,36 +276,18 @@ function enviar(){
         success: function(response) {
             if (response.success == true) {
                 hideLoader();
-                
                 showAlert('Solicitud Realizada', response.message);
                 
             } else {
                 hideLoader();
-                showAlert('Error', 'Respuesta invalida: ' + response.message);
+                showAlert('Error', response.message);
             }
         },
         error: function(error) {
-            showAlert('Error', 'No se pudo solicitar el servicio');
+            showAlert('Error', 'No se pudo solicitar el servicio. Intenta nuevamente.');
             hideLoader();
         }
     });
-    
-    
-}
-
-function solicitarServicio(hay_alerta) {
-	if(hay_alerta){
-		$("#popupAlert").popup("close");
-	}
-	$.mobile.changePage("#dashboard");
-	$('.overlay').show();
-	$('#solicitar-servicio').show();
-}
-
-function hideSolicitarServicio(){
-	$('.overlay').addClass("dismissable");
-	$('.overlay').hide();
-    $('#solicitar-servicio').hide();
 }
 
 function logIn(documentType, documentId, password) {
@@ -305,7 +297,13 @@ function logIn(documentType, documentId, password) {
     password = password || $('#login-password').val();
 
     var rememberMe = $("#login-remember-me").is(':checked');
-    
+
+    /*var data = {
+        "document_type": documentType,
+        "document_id": documentId,
+        "password": password
+    };*/
+
     var data = {
         "document_type": 'CC',
         "document_id": '123',
@@ -332,7 +330,6 @@ function logIn(documentType, documentId, password) {
                 
                 setHeader();
                 $('#menu-lateral').show();
-                solicitarServicio();
             } else {
                 hideLoader();
                 showAlert('Iniciar sesión', response.message);
@@ -361,6 +358,7 @@ function logOut() {
             if (response.success == true) {
                 hideLoader();
                 clearCache();
+                setHeader();
                 window.scrollTo(0,0);
                 $('#boton-cerrar-sesion').hide();
                 $.mobile.changePage($('#login'), {transition: 'none'});

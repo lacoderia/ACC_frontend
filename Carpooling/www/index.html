@@ -5,7 +5,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-
         <link rel="stylesheet" href="jquery/jquery.mobile-1.4.2.min.css" />
         <link rel="stylesheet" href="css/themes/carpooling.css" />
         <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
@@ -82,7 +81,11 @@
         
         <!-- Start of sign-up -->
         <div data-role="page" id="sign-up">
-            
+
+            <div class="fake-background-acc">
+                <img src="img/background_logo.png"/>
+            </div>
+
             <div data-role="header">
                 <span class="acc-btn-back icon-arrow-left2" previous-page="login"></span>
                 <h1>Registro</h1>
@@ -147,7 +150,7 @@
                         <input type="text" name="sign_up_vehicle_document_id" id="sign_up_vehicle_document_id" placeholder="Identificación del dueño"/>
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="text" name="sign_up_vehicle_plates" id="sign_up_vehicle_plates" placeholder="Placas"/>
+                        <input type="text" name="sign_up_vehicle_plates" id="sign_up_vehicle_plates" placeholder="Placas" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" style="text-transform:uppercase;"/>
                     </div>
                     <div data-role="fieldcontainer">
                         <input type="date" name="sign_up_vehicle_soat" id="sign_up_vehicle_soat" placeholder="Fecha de vencimiento SOAT:">
@@ -162,6 +165,10 @@
 
         <!-- Start of forgot -->
         <div data-role="page" id="forgot">
+
+            <div class="fake-background-acc">
+                <img src="img/background_logo.png"/>
+            </div>
 
             <div data-role="header">
                 <span class="acc-btn-back icon-arrow-left2" previous-page="login"></span>
@@ -190,7 +197,11 @@
         
         <!-- Start of dashboard -->
         <div data-role="page" id="dashboard">
-            
+
+            <div class="fake-background">
+                <img/>
+            </div>
+
             <div data-role="header">
                 <span id="acc-btn-menu" class="acc-btn-menu icon-menu"></span>
 		        <h1>Inicio</h1>
@@ -219,6 +230,10 @@
                 <p><ul data-role="listview" id="list-my-rides" class="rides-list" data-divider-theme="a"></ul></p>
                 <p><ul data-role="listview" id="list-next-rides" class="rides-list" data-divider-theme="a"></ul></p>
             </div><!-- /content -->
+
+            <div class="footer">
+                <div class="footer-container"><img/></div>
+            </div>
             
         </div><!-- /page -->
 
@@ -232,7 +247,8 @@
 
             <div role="main" class="ui-content">
                 <div class="row">
-                    <span class="profile-picture"></span>
+                    <span class="profile-picture" onclick="getPicture()">
+                    </span>
                 </div>
                 <div class="row">
                     <span class="profile-name"></span>
@@ -274,7 +290,7 @@
                         <input type="text" name="add_vehicle_document_id" id="add_vehicle_document_id" placeholder="Identificación del dueño" class="required"/>
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="text" name="add_vehicle_plates" id="add_vehicle_plates" placeholder="Placas" class="required"/>
+                        <input type="text" name="add_vehicle_plates" id="add_vehicle_plates" placeholder="Placas" class="required" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" style="text-transform:uppercase;"/>
                     </div>
                     <div data-role="fieldcontainer">
                         <input type="date" name="add_vehicle_soat" id="add_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="required"/>
@@ -327,13 +343,13 @@
                         <select name="add_ride_vehicle_plates" id="add_ride_vehicle_plates"></select>
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="number" pattern="[0-9]*" name="add_ride_seats" id="add_ride_seats" placeholder="Asientos disponibles:" class="required" min="1">
+                        <input type="number" pattern="[0-9]*" name="add_ride_seats" id="add_ride_seats" placeholder="Asientos disponibles:" class="required" min="1" onKeyPress="return numberPattern(event)">
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="number" pattern="\d+(\.\d*)?" name="add_ride_cost" id="add_ride_cost" placeholder="Costo:" class="required">
+                        <input type="number" pattern="[0-9]*" name="add_ride_cost" id="add_ride_cost" placeholder="Costo:" onKeyPress="return numberPattern(event)">
                     </div>
                     <div data-role="fieldcontainer">
-                        <textarea name="add_ride_notes" id="add_ride_notes" placeholder="Notas:" rows="2" class="required"></textarea>
+                        <textarea name="add_ride_notes" id="add_ride_notes" placeholder="Notas:" rows="2"></textarea>
                     </div>
                 </form>
                 <p><a data-role="button" onclick="addRide()">Publicar</a></p>
@@ -344,6 +360,10 @@
         
         <!-- Start of view-ride -->
         <div data-role="page" id="view-ride">
+
+            <div class="fake-background">
+                <img/>
+            </div>
             
             <div data-role="header">
                 <span id="bnt-back-view-ride" class="acc-btn-back icon-arrow-left2"></span>
@@ -380,6 +400,10 @@
 
                 <p><a id="btn-accept-ride" data-role="button" onclick="acceptRide()" style="display:none">Reservar lugar</a></p>
             </div><!-- /content -->
+
+            <div class="footer">
+                <div class="footer-container"><img/></div>
+            </div>
         </div><!-- /page -->
 
         <!-- Start of profile -->
