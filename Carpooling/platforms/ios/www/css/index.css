@@ -276,7 +276,7 @@ label.error {
     color: red;
     padding-top: .2em;
     vertical-align: top;
-    font-weight:bold
+    font-weight: bold;
 }
 
 /** Splash screen **/

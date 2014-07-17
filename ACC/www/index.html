@@ -27,7 +27,8 @@
         
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <link rel="stylesheet" href="jquery/jquery.mobile-1.4.2.min.css" />
-        
+        <link rel="stylesheet" type="text/css" href="css/icomoon-style.css" />
+
         <script src="jquery/jquery-2.1.1.min.js"></script>
         <script src="jquery/jquery.mobile-1.4.2.min.js"></script>
         <script src="jquery/jquery-validation/jquery.validate.min.js"></script>
@@ -56,9 +57,9 @@
                     <div onclick="showEmergencias()"><img src="img/Botones/emergencias.png" /></div>
                 </div>
                 <div class="row">
-                    <div><img src="img/Botones/acc.png" /></div>
+                    <div><a href="tel:12345678"><img src="img/Botones/acc.png" /></a></div>
                     <div><img src="img/Botones/descuentos.png" /></div>
-                    <div><img src="img/Botones/trafico.png" /></div>
+                    <div onclick="toggleTraffic()"><img src="img/Botones/trafico.png" /></div>
                 </div>
                 <div class="row">
                     <div><img src="img/Botones/parqueaderos.png" /></div>
@@ -71,25 +72,29 @@
         <div id="menu-emergencias" class="menu dismissable" onclick="exitMenu(event)">
             <div id="menu-emergencias-container" class="menu-container">
                 <div class="row">
-                    <div><img src="img/Botones/ambulancia.png" /></div>
-                    <div><img src="img/Botones/policia.png" /></div>
+                    <div><a href="tel:12345678"><img src="img/Botones/ambulancia.png" /></a></div>
+                    <div><a href="tel:12345678"><img src="img/Botones/policia.png" /></a></div>
                 </div>
             </div>
         </div>
 
         <div id="menu-servicio" class="menu dismissable" onclick="exitMenu(event)">
             <div id="menu-servicio-container" class="menu-container">
+                <h1>Solicitar Servicio</h1>
+                <p>Favor de proporcionar la siguiente información.</p>
                 <form id="menu-servicio-form">
-                    Favor de proporcionar la siguiente información.
-                    <input type="text" id="servicio_nombre" placeholder="Nombre Completo" class="required" />
-                    <br/>
-                    <input type="text" id="servicio_telefono" placeholder="Telefono" class="required" />
-                    <br/>
-                    <input type="text" id="servicio_placas" placeholder="Placas del vehículo" class="required" />
-                    <br/>
-                    <button type="button" onclick="enviarSolicitudServicio()">Enviar</button>
-                    <button type="button" onclick="hideMenu()">Cancelar</button>
+                    <div data-role="fieldcontainer">
+                        <input type="text" id="servicio_nombre" name="servicio_nombre" placeholder="Nombre Completo" class="required" />
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" id="servicio_telefono" name="servicio_telefono" placeholder="Telefono" class="required" />
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" id="servicio_placas" name="servicio_placas" placeholder="Placas del vehículo" class="required" />
+                    </div>
                 </form>
+                <button type="button" onclick="hideMenu()">Cancelar</button>
+                <button type="button" onclick="enviarSolicitudServicio()">Enviar</button>
             </div>
         </div>
 
@@ -98,13 +103,11 @@
         
         	<!-- Start of menu-lateral -->
 	        <div data-role="panel" data-display="overlay" id="panel-menu-lateral">
-	        	<ul class="menu" id="menu-lateral">
+	        	<ul id="menu-lateral">
 	        		<li><a>Principal</a></li>
-	        		<li><a href="#mi-cuenta" data-transition="slide" >Mi cuenta</a></li>
-	        		<li><a>Geocerca</a></li>
+	        		<li><a href="#mi-cuenta">Mi cuenta</a></li>
 	        		<li><a>Descuentos</a></li>
-	        		<li><a>Configuración</a></li>
-	        		<li><a>Tutorial</a></li>
+	        		<li><a>Ayuda</a></li>
 	        		<li id="boton-cerrar-sesion"><a onclick="hideMenuLateral();logOut()">Cerrar sesion</a></li>
 	        	</ul>
 	        </div>
@@ -142,7 +145,7 @@
                         <label class="checkbox-label-no-background"><input type="checkbox" name="login-remember-me" id="login-remember-me" data-mini="true">Recordarme</label>
                         <br/>
                         <a data-role="button" onclick="logIn()">Iniciar Sesión</a>
-                        <a data-role="button" onclick="continuarInvitado()">Quiero continuar como invitado</a>
+                        <a data-role="button" href="#dashboard">Quiero continuar como invitado</a>
                         <br/>
                         <div id="login-buttons">
                             <!--div id="login-sign-up"><a href="#sign-up" data-transition="slide">Quiero registrarme</a></div-->
@@ -157,11 +160,11 @@
         <div data-role="page" id="mi-cuenta">
             
             <div data-role="header" class="header">
-                <h1></h1>
+                <span class="acc-btn-back icon-arrow-left2" previous-page="dashboard"></span>
+                <h1>Datos personales</h1>
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
-            	<h2>Datos personales</h2>
             	<p>No. Socio: 123456</p>
             	<p>Nombre: Francisco Sagarninaga Santos</p>
             	<p>Vence: 2014/12/31</p>

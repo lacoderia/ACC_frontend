@@ -21,6 +21,13 @@ html, body {
     height : 100%;
 }
 
+.acc-btn-back {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-size: 20px;
+}
+
 .overlay {
     position: absolute;
     top: 0;
@@ -147,14 +154,12 @@ html, body {
 	color: #FFF;
 }
 
-.clima p{
-	background-color: #AAA;
-	border-radius: 5px;
-}
-
-.velocidad p{
-	background-color: #AAA;
-	border-radius: 5px;
+label.error {
+    display: block;
+    color: red;
+    padding-top: .2em;
+    vertical-align: top;
+    font-weight: bold;
 }
 
 /*Quita del mapa los links de logo de Google y terminos de uso */

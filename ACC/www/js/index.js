@@ -33,25 +33,38 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        var iOS7 = window.device
-            && window.device.platform
-            && window.device.platform.toLowerCase() == "ios"
-            && parseFloat(window.device.version) >= 7.0;
-
-        if (iOS7) {
-            StatusBar.hide();
-        }
-
         navigator.splashscreen.hide();
-
         showLoader();
-        setHeader();
 
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
+
+        $('.acc-btn-back').click(function() {
+            window.scrollTo(0,0);
+            $.mobile.changePage($('#' + $(this).attr('previous-page')));
+        });
     }
 };
 
+$(document).on('pagebeforeshow', '#dashboard', function(){
+    setHeader();
+});
+
+jQuery.extend(jQuery.validator.messages, {
+    required: "Este campo es requerido.",
+    email: "Ingresa un email válido.",
+    date: "Ingresa una fecha válida.",
+    number: "Ingresa un número válido.",
+    maxlength: jQuery.validator.format("No ingreses más de {0} caracteres."),
+    minlength: jQuery.validator.format("Ingresa al menos {0} caracteres."),
+    rangelength: jQuery.validator.format("Ingresa un valor de longitud entre {0} y {1}."),
+    range: jQuery.validator.format("Ingresa un valor entre {0} y {1}."),
+    max: jQuery.validator.format("Ingresa un valor menor o igual a {0}."),
+    min: jQuery.validator.format("Ingresa un valor mayor o igual a {0}."),
+    equalTo: jQuery.validator.format("El valor de la confirmación no es igual al de la contraseña.")
+});
+
 var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId;
+var trafficLayer, traffic_on = false;
 var sesion, pagina;
 
 function setHeader(){    
@@ -63,6 +76,7 @@ function setHeader(){
     	
     	$('#boton-cerrar-sesion').show();
     }else{
+        $('#contenedor_nombre').html('invitado(a)');
     	$('#boton-cerrar-sesion').hide();
         $('#contenedor_placa').show();
     }
@@ -110,12 +124,11 @@ function initializeMap(mapOptions) {
 		GeoMarker.setCircleOptions({'visible':true});
 	});
 
-    hideLoader();
-	
 	trafficLayer = new google.maps.TrafficLayer();
+    hideLoader();
 }
 
-function onError(){
+function onError() {
 	showAlert('Error', 'Hubo un error al cargar el mapa. Intenta nuevamente');
 }
 
@@ -126,29 +139,11 @@ function onSuccess(position) {
 	}
 }
 
-function solicitarServicio(pagina){
-    hideMenu();
-	setCache("servicio", pagina);
-	
-	var user = getCache("user");
-	if(user != undefined){
-        showServicios();
-	} else {
-        if(sesion != undefined || sesion != null || sesion != ""){
-            var title = "¿Es socio de ACC?";
-            var message = 'Presiona "Si" para iniciar sesion o presiona "No" para continuar como invitado.';
-            showDialog(
-                title,
-                message,
-                function(){
-                    $.mobile.changePage($('#login'));
-                },
-                function(){
-                    showServicios();
-                }
-            );
-        }
-	}
+function clearForm(formId) {
+    var form = $('#' + formId);
+    form.find('input[type="text"]').each(function(){
+       $(this).val('');
+    });
 }
 
 function hideMenu(){
@@ -173,7 +168,14 @@ function showEmergencias() {
 
 function showServicios() {
     hideMenu();
+    clearForm('menu-servicio-form');
     $('#menu-servicio').show();
+
+    $("#menu-servicio-form").validate({
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent().after());
+        }
+    }).reset();
 }
 
 function showMenuLateral(){
@@ -248,48 +250,76 @@ function showDialog(title, message, acceptFunction, cancelFunction) {
     $('#popupDialog').popup('open');
 }
 
-function enviarSolicitudServicio(){
-	console.log(currentLocation.coords.latitude +","+ currentLocation.coords.longitude);
-	hideMenu();
-    
-    var servicio = getCache("servicio");
+function solicitarServicio(pagina){
+    hideMenu();
+    setCache("servicio", pagina);
 
-    /*var data = {
-     "nombre": $('#servicio_nombre').html(),
-     "telefono": $('#servicio_telefono').html(),
-     "placas": $('#servicio_placas').html(),
-     "servicio": servicio
-     };*/
-
-    var data = {
-    		"nombre": "Alberto",
-    		"telefono": "12345678",
-    		"placas": "ABC-123",
-    		"servicio": servicio
-    };
-    removeCache("servicio");
-    
-    showLoader();
-    $.ajax({
-        type: "POST",
-        url: "http://166.78.117.195/servicio",
-        data: data,
-        dataType: "json",
-        success: function(response) {
-            if (response.success == true) {
-                hideLoader();
-                showAlert('Solicitud Realizada', response.message);
-                
-            } else {
-                hideLoader();
-                showAlert('Error', response.message);
-            }
-        },
-        error: function(error) {
-            showAlert('Error', 'No se pudo solicitar el servicio. Intenta nuevamente.');
-            hideLoader();
+    var user = getCache("user");
+    if(user != undefined){
+        showServicios();
+    } else {
+        if(sesion != undefined || sesion != null || sesion != ""){
+            var title = "¿Es socio de ACC?";
+            var message = 'Presiona "Si" para iniciar sesion o presiona "No" para continuar como invitado.';
+            showDialog(
+                title,
+                message,
+                function(){
+                    window.sessionStorage.previousPage = 'dashboard';
+                    $.mobile.changePage($('#login'));
+                },
+                function(){
+                    showServicios();
+                }
+            );
         }
-    });
+    }
+}
+
+function enviarSolicitudServicio(){
+	//console.log(currentLocation.coords.latitude +","+ currentLocation.coords.longitude);
+    if ( $("#menu-servicio-form").valid() ){
+        hideMenu();
+
+        var servicio = getCache("servicio");
+
+        /*var data = {
+         "nombre": $('#servicio_nombre').html(),
+         "telefono": $('#servicio_telefono').html(),
+         "placas": $('#servicio_placas').html(),
+         "servicio": servicio
+         };*/
+
+        var data = {
+            "nombre": "Alberto",
+            "telefono": "12345678",
+            "placas": "ABC-123",
+            "servicio": servicio
+        };
+        removeCache("servicio");
+
+        showLoader();
+        $.ajax({
+            type: "POST",
+            url: "http://166.78.117.195/servicio",
+            data: data,
+            dataType: "json",
+            success: function(response) {
+                if (response.success == true) {
+                    hideLoader();
+                    showAlert('Solicitud Realizada', response.message);
+
+                } else {
+                    hideLoader();
+                    showAlert('Error', response.message);
+                }
+            },
+            error: function(error) {
+                showAlert('Error', 'No se pudo solicitar el servicio. Intenta nuevamente.');
+                hideLoader();
+            }
+        });
+    }
 }
 
 function logIn(documentType, documentId, password) {
@@ -308,7 +338,7 @@ function logIn(documentType, documentId, password) {
 
     var data = {
         "document_type": 'CC',
-        "document_id": '123',
+        "document_id": '12345',
         "password": '00000000'
     };
 
@@ -328,10 +358,7 @@ function logIn(documentType, documentId, password) {
                 	setCache('user', response.user);
                 }
                 window.scrollTo(0,0);
-                $.mobile.changePage($('#dashboard'), {transition: 'none'});
-                
-                setHeader();
-                $('#menu-lateral').show();
+                $.mobile.changePage($('#'+window.sessionStorage.previousPage), {transition: 'none'});
             } else {
                 hideLoader();
                 showAlert('Iniciar sesión', response.message);
@@ -386,13 +413,9 @@ function hideLoader() {
 //Funciones para persitencia de datos
 
 function setCache(key, value) {
-	//console.log("SET CACHE " + key + " , " + value);
-	//console.log("localStorage(rememberMe) "+ window.localStorage.rememberMe);
 	if (window.localStorage.rememberMe == "true") {
-		//console.log("LOCAL");
 		window.localStorage.setItem(key, JSON.stringify(value));
 	} else {
-		//console.log("SESION");
 		window.sessionStorage.setItem(key, JSON.stringify(value));
 	}
 }
@@ -422,94 +445,6 @@ function clearCache() {
     removeCache('servicio');
     removeCache('rememberMe');
 }
-
-function logOut() {
-    showLoader();
-
-    var user = getCache('user');
-    var data = {
-        "auth_token": user.authentication_token
-    };
-    $.ajax({
-        type: "POST",
-        url: "http://166.78.117.195/logout",
-        data: data,
-        dataType: "json",
-        success: function(response) {
-            if (response.success == true) {
-                hideLoader();
-                clearCache();
-                window.scrollTo(0,0);
-                setHeader();
-                $.mobile.changePage($('#dashboard'), {transition: 'none'});
-            }
-        },
-        error: function(error) {
-            showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Intenta nuevamente.');
-            hideLoader();
-        }
-    });
-}
-
-$(document).on('pagebeforeshow', "#solicitar-servicio", function (event, data) {
-	$("#solicitar-servicio-form").validate({
-		errorPlacement: function(error, element) {
-            error.appendTo(element.parent().parent().after());
-        },
-        rules: {
-            servicio_nombre : {
-            	required: true
-            },
-            servicio_telefono : {
-            	required: true
-            },
-            servicio_placas : {
-            	required: true
-            }
-        }
-    }).resetForm();
-});
-
-function solicitarEmergencia(emergencia){
-	setCache("Emergencia", emergencia);
-	showAlert("Emergencia", "Deseas solicitar asistencia?", {"true":"Si", "false":"No", "true_func": 'llamar()', "false_func": "hideAlert()"});
-	hideMenu();
-}
-
-function llamar(){
-	var emergencia = getCache("Emergencia");
-	hideAlert();
-	if(emergencia == "ambulancia"){
-		document.location.href = 'tel:+1-800-555-1234';
-	}
-	
-	if(emergencia == "policia"){
-		document.location.href = 'tel:+1-800-555-1234';
-	}
-}
-
-$(document).on('pagebeforeshow', '#solicitar-servicio-form', function(){
-    $("#solicitar-servicio-form").validate({
-        errorPlacement: function(error, element) {
-            error.appendTo(element.parent().parent().after());
-        }
-    });
-
-});
-
-jQuery.extend(jQuery.validator.messages, {
-    required: "Este campo es requerido.",
-    email: "Ingresa un email válido.",
-    date: "Ingresa una fecha válida.",
-    number: "Ingresa un número válido.",
-    maxlength: jQuery.validator.format("No ingreses más de {0} caracteres."),
-    minlength: jQuery.validator.format("Ingresa al menos {0} caracteres."),
-    rangelength: jQuery.validator.format("Ingresa un valor de longitud entre {0} y {1}."),
-    range: jQuery.validator.format("Ingresa un valor entre {0} y {1}."),
-    max: jQuery.validator.format("Ingresa un valor menor o igual a {0}."),
-    min: jQuery.validator.format("Ingresa un valor mayor o igual a {0}."),
-    equalTo: jQuery.validator.format("El valor de la confirmación no es igual al de la contraseña.")
-});
 
 function toggleTraffic(){
 	hideMenu();
