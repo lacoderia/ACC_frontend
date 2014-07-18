@@ -133,20 +133,20 @@ html, body {
 }
 
 #menu-lateral{
-	background-color: rgba(0, 0, 88, .5);
 	list-style-type: none;
 	padding: 10px;
 }
 
 #menu-lateral li{
-	margin-top: 30px;
-	margin-bottom: 30px;
+	margin-top: 100px;
+	margin-bottom: 100px;
 	text-decoration: none;
 }
 
 #menu-lateral li a{
-	padding: 15px 30px;
+	padding: 50px 0px;
 	color: #FFF;
+	font-size: x-large;
 	text-decoration: none;
 }
 
@@ -306,3 +306,168 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
     background: none !important;
     border: none !important;
 }
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    background-color: rgba(0,0,0,0.5); /*dim the background*/
+}
+
+#loader {
+    display: inline-block;
+    width: 46px;
+    height: 46px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -23px;
+    margin-left: -23px;
+    z-index: 101;
+
+    text-align: center;
+    vertical-align: middle;
+
+    background-color: black;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#loader img {
+    width: 38px;
+    height: 38px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -19px;
+    margin-left: -19px;
+}
+
+#menu-servicio {
+    display: inline-block;
+    height: auto;
+    margin-top: -23px;
+    margin-left: -23px;
+    z-index: 101;
+
+    text-align: center;
+    vertical-align: middle;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+
+#menu-servicio-form h1{
+	font-size: xx-large;
+	margin: 50px;
+	font-weight: bold;
+}
+
+#menu-servicio-form p{
+	margin-top: 80px;
+	margin-bottom: 50px;
+	font-size: large;
+}
+
+#menu-servicio-form input{
+	width: 80%;
+	line-height: 50px;
+	font-size: xx-large;
+	margin: 10px 0;
+	vertical-align: middle;
+	border-radius: 10px;
+	border: solid 4px #DDD;
+}
+
+#menu-servicio-form button{
+	width: 80%;
+	margin-top: 5px;
+	font-size: xx-large;
+	padding: 15px;
+	background-color: #F0F0F0;
+	color: #66F;
+	border: none;
+	border-radius: 10px;
+}
+
+.vertical-space{
+	width: 100%;
+	height: 30px;
+}
+
+#mi-cuenta{
+	background-color: rgb(0, 0, 100);
+	color: white;
+}
+
+#header-mi-cuenta{
+	background-color: rgb(200, 200, 200);
+	height: 10%;
+	width: 100%;
+	font-size: 1.5em;
+}
+
+#header-mi-cuenta p{
+	display: inline-block;
+	width: 65%;
+	text-align: center;
+}
+
+#header-mi-cuenta a{
+	padding: 15px;
+	width: 10%;
+}
+
+#informacion-vehiculo{
+	position: fixed;
+	bottom: 0;
+	width: 95%;
+	text-align: center;
+}
+
+#datos-personales{
+	background-color: rgba(0,0,0,0);
+	font-size: 1.5em;
+}
+
+
+#datos-personales p{
+	display: inline-block;
+	padding: 0 .5em;
+}
+
+#vehiculo{
+	width: 300px;
+	height: auto;
+	margin: 0 30%;
+}
+
+#flecha_izq{
+	width: 100px;
+	height: auto;
+	float: left;
+	position: absolute;
+	left: 0;
+	top: 25%;
+	display: inline;
+}
+
+#flecha_der{
+	width: 100px;
+	height: auto;
+	float: right;
+	position: absolute;
+	right: 0;
+	top: 25%;
+	display: inline;
+}
+
+#panel-menu-lateral{
+	background-color: rgba(0, 0, 0, .7);
+}
+

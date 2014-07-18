@@ -158,25 +158,29 @@
 
         <!-- Start of mi-cuenta -->
         <div data-role="page" id="mi-cuenta">
+        
+        	<div id="header-mi-cuenta">
+        		<a href="#dashboard"> &lt; Regresar</a>
+        		<p>Mi Cuenta</p>
+        		<a href="" onclick="logOut()"> Salir</a>
+        	</div>
             
-            <div data-role="header" class="header">
-                <span class="acc-btn-back icon-arrow-left2" previous-page="dashboard"></span>
-                <h1>Datos personales</h1>
-            </div><!-- /header -->
-            
-            <div role="main" class="ui-content">
-            	<p>No. Socio: 123456</p>
-            	<p>Nombre: Francisco Sagarninaga Santos</p>
-            	<p>Vence: 2014/12/31</p>
+            <div role="main" class="ui-content" id="datos-personales">
+            	<h2>Datos personales</h2>
+            	<p>No. Socio: </p><p id="num-socio">123456</p><br/>
+            	<p>Nombre: </p><p id="nombre">Francisco Sagarninaga Santos</p><br/>
+            	<p>Vence: </p><p id="vencimiento">2014/12/31</p><br/>
             	<h3>Vehiculos</h3>
-            	<div>
-            		<img />
-            		<p>Placa: BLH149</p>
-            		<p>2014/04/30</p>
-            		<p>2014/12/29</p>
-            	</div>
-            	
-            	
+            	<div id="informacion-vehiculo">
+            		<img src="img/auto.png" id="vehiculo" />
+            		<img src="img/left.png" id="flecha_izq"/>
+            		<img src="img/right.png" id="flecha_der"/>
+            		<br/>
+            		<p>Placa: </p><p id="mi-cuenta-placa">BLH149</p><br/>
+            		<p>SOAT: </p><br/>
+            		<p id="soat_inicio">2014/04/30</p><br/>
+            		<p id="soat_fin">2014/12/29</p><br/>
+            	</div>            	
             </div><!-- /content -->
         </div><!-- /mi-cuenta -->
         
