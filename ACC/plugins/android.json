@@ -29,6 +29,10 @@
                         {
                             "xml": "<feature name=\"Accelerometer\"><param name=\"android-package\" value=\"org.apache.cordova.devicemotion.AccelListener\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -46,6 +50,9 @@
             "PACKAGE_NAME": "mx.coderia.ACC"
         },
         "org.apache.cordova.console": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
+        },
+        "org.apache.cordova.splashscreen": {
             "PACKAGE_NAME": "mx.coderia.ACC.ACC"
         }
     },
