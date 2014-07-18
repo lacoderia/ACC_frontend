@@ -116,7 +116,7 @@ html .ui-alt-icon .ui-btn.ui-checkbox-on:after {
     left: 0;
 }
 
-#view-ride .ui-content {
+/*#view-ride .ui-content {
     position: absolute;
     top: 40px;
     right: 0;
@@ -129,6 +129,14 @@ html .ui-alt-icon .ui-btn.ui-checkbox-on:after {
     top: 100px;
     right: 0;
     bottom: 40px;
+    left: 0;
+}*/
+
+#dashboard .ui-content {
+    position: absolute;
+    top: 100px;
+    right: 0;
+    bottom: 0px;
     left: 0;
 }
 

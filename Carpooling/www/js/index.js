@@ -359,17 +359,17 @@ function logIn(documentType, documentId, password) {
 
     var rememberMe = $("#login-remember-me").is(':checked');
 
-    /*var data = {
+    var data = {
         "document_type": documentType,
         "document_id": documentId,
         "password": password
-    };*/
+    };
 
-    var data = {
+    /*var data = {
         "document_type": 'CC',
         "document_id": '12345',
         "password": '00000000'
-    };
+    };*/
 
     showLoader();
 
@@ -387,10 +387,10 @@ function logIn(documentType, documentId, password) {
                 }
 
                 //$('#dashboard .fake-background img').attr('src', 'http://166.78.117.195' + response.user.agreement_logo);
-                $('#dashboard .fake-background img').attr('src', 'img/company/ACC.png');
-                $('#view-ride .fake-background img').attr('src', 'img/company/ACC.png');
-                $('#dashboard .footer img').attr('src','img/company/ACC.png');
-                $('#view-ride .footer img').attr('src','img/company/ACC.png');
+                //$('#dashboard .fake-background img').attr('src', 'img/company/ACC.png');
+                //$('#view-ride .fake-background img').attr('src', 'img/company/ACC.png');
+                //$('#dashboard .footer img').attr('src','img/company/ACC.png');
+                //$('#view-ride .footer img').attr('src','img/company/ACC.png');
 
                 window.scrollTo(0,0);
                 $.mobile.changePage($('#dashboard'), {transition: 'none'});
@@ -1106,15 +1106,11 @@ function getRideDetail(rideId) {
                 $('#view-ride .ui-content').show();
                 hideLoader();
             } else {
-                window.scrollTo(0,0);
-                $.mobile.changePage($('#dashboard'), {transition: 'slide'});
                 hideLoader();
                 showAlert('Detalles del viaje', 'Hubo un error al obtener los detalles del viaje. Intenta nuevamente.');
             }
         },
         error: function(error) {
-            window.scrollTo(0,0);
-            $.mobile.changePage($('#dashboard'), {transition: 'slide'});
             hideLoader();
             showAlert('Detalles del viaje', 'Hubo un error al obtener los detalles del viaje. Intenta nuevamente.');
         }

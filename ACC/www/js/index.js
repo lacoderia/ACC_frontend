@@ -49,6 +49,13 @@ $(document).on('pagebeforeshow', '#dashboard', function(){
     setHeader();
 });
 
+$(document).on('pagebeforeshow', '#mi-cuenta', function(){
+    var user = getCache("user");
+    if(user == undefined){
+        $.mobile.changePage($('#login'));
+    }
+});
+
 jQuery.extend(jQuery.validator.messages, {
     required: "Este campo es requerido.",
     email: "Ingresa un email válido.",
