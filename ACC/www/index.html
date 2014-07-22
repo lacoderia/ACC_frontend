@@ -58,7 +58,7 @@
                 </div>
                 <div class="row">
                     <div><a href="tel:12345678"><img src="img/Botones/acc.png" /></a></div>
-                    <div><img src="img/Botones/descuentos.png" /></div>
+                    <div><img onclick="toggleDescuentos()" src="img/Botones/descuentos.png" /></div>
                     <div onclick="toggleTraffic()"><img src="img/Botones/trafico.png" /></div>
                 </div>
                 <div class="row">
@@ -166,19 +166,19 @@
             
             <div role="main" class="ui-content" id="datos-personales" style="display:none">
             	<h2>Datos personales</h2>
-            	<p>No. Socio: </p><p id="num-socio">123456</p><br/>
-            	<p>Nombre: </p><p id="nombre">Francisco Sagarninaga Santos</p><br/>
-            	<p>Vence: </p><p id="vencimiento">2014/12/31</p><br/>
+            	<p>No. Socio: </p><p id="mi-cuenta-num-socio">123456</p><br/>
+            	<p>Nombre: </p><p id="mi-cuenta-nombre"></p><br/>
+            	<p>Vence: </p><p id="mi-cuenta-vencimiento">2014/12/31</p><br/>
             	<h3>Vehiculos</h3>
             	<div id="informacion-vehiculo">
-            		<img src="img/auto.png" id="vehiculo" />
+            		<img src="img/auto.png" id="mi-cuenta-vehiculo" />
             		<img src="img/left.png" id="flecha_izq"/>
             		<img src="img/right.png" id="flecha_der"/>
             		<br/>
             		<p>Placa: </p><p id="mi-cuenta-placa">BLH149</p><br/>
             		<p>SOAT: </p><br/>
-            		<p id="soat_inicio">2014/04/30</p><br/>
-            		<p id="soat_fin">2014/12/29</p><br/>
+            		<p id="mi-cuenta-soat_inicio">2014/04/30</p><br/>
+            		<p id="mi-cuenta-soat_fin">2014/12/29</p><br/>
             	</div>            	
             </div><!-- /content -->
         </div><!-- /mi-cuenta -->

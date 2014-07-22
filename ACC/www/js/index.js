@@ -37,6 +37,13 @@ var app = {
         showLoader();
 
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        
+        document.addEventListener("deviceready", onDeviceReady, false);
+	        function onDeviceReady() {
+	            document.addEventListener("backbutton", function (e) {
+	                e.preventDefault();
+	            }, false );
+	    }
 
         $('.acc-btn-back').click(function() {
             window.scrollTo(0,0);
@@ -47,6 +54,21 @@ var app = {
 
 $(document).on('pagebeforeshow', '#dashboard', function(){
     setHeader();
+});
+
+$(document).on('pagebeforeshow', '#mi-cuenta', function(){
+    var user = getCache("user");
+    if(user == undefined){
+        $.mobile.changePage($('#login'));
+    }else{
+    	//var num_socio = user.num_socio;
+    	var nombre = user.first_name + " " + user.last_name;
+    	//var vencimiento = user.vence;
+    	
+    	//$("#num-socio").html(num_socio);
+    	$("#mi-cuenta-nombre").html(nombre);
+    	//$("#vencimiento").html(vencimiento);
+    }
 });
 
 jQuery.extend(jQuery.validator.messages, {
@@ -65,6 +87,7 @@ jQuery.extend(jQuery.validator.messages, {
 
 var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId;
 var trafficLayer, traffic_on = false;
+var markers =  [], descuentos_on = false;
 var sesion, pagina;
 
 window.sessionStorage.previousPage = 'dashboard';
@@ -171,6 +194,16 @@ function showEmergencias() {
 function showServicios() {
     hideMenu();
     clearForm('menu-servicio-form');
+    
+    var user = getCache('user');
+    if(user != undefined){
+    	console.log("USER");
+    	$("#servicio-nombre").val(user.first_name);
+    	console.log("No trono");
+    	/*$("#servicio-telefono").val(user.telefono);
+    	$("#servicio-placas").val(user.placas);*/
+    }
+    
     $('#menu-servicio').show();
 
     $("#menu-servicio-form").validate({
@@ -466,4 +499,42 @@ function toggleTraffic(){
 		trafficLayer.setMap(map);
 	}
 	traffic_on = !traffic_on;
+}
+
+function getDescuentos(){
+	var descuentos = '{"desc1": {"lat": "19.422061","lng": "-99.163350","title": "Desc 1"},"desc2": {"lat": "19.415909","lng": "-99.160681","title": "Desc 2"}}';
+	
+	descuentos = JSON.parse(descuentos);
+	showMarkers(descuentos);
+}
+
+function showMarkers(object){
+	$.each(object, function(index, value) {
+		var myLatlng = new google.maps.LatLng(value.lat, value.lng);
+		var marker = new google.maps.Marker({
+		    position: myLatlng,
+		    map: map,
+		    optimized: false,
+		    title: value.title,
+		});
+		markers.push(marker);
+    });
+	markers[0].setIcon("img/tache_min.png");
+}
+
+function hideMarkers(){
+	for (var i = 0; i < markers.length; i++) {
+		markers[i].setMap(null);
+	}
+	markers = [];
+}
+
+function toggleDescuentos(){
+	hideMenu();
+	if(descuentos_on == true){
+		hideMarkers();
+	}else{
+		getDescuentos();
+	}
+	descuentos_on = !descuentos_on;
 }
