@@ -33,6 +33,11 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
+        document.addEventListener("backbutton", onBackKeyDown, false);
+        function onBackKeyDown(e) {
+            e.preventDefault();
+        }
+
         navigator.splashscreen.hide();
 
         var imgLoad = imagesLoaded('#splash_table');
@@ -204,7 +209,7 @@ $(document).on('pagebeforeshow', "#welcome", function (event, data) {
 
     $('#welcome .welcome-name').html('¡Hola ' + user.first_name + '!');
 
-    // Espera 2 segundos antes de ir al dashboard
+    // Espera 3 segundos antes de ir al dashboard
     setTimeout(function(){
         window.scrollTo(0,0);
         $.mobile.changePage($('#dashboard'), {transition: 'none'});
@@ -1118,7 +1123,7 @@ function getRideDetail(rideId) {
         success: function(response) {
             if(response.id) {
                 var ride = response;
-                $('#view-ride .name').html('<span onclick="showUserProfile(' + ride.owner.id + ')">' + ride.owner.first_name + ' ' + ride.owner.last_name + '</span>');
+                $('#view-ride .name').html('<a onclick="showUserProfile(' + ride.owner.id + ')">' + ride.owner.first_name + ' ' + ride.owner.last_name + '</a>');
 
                 var date = createDateFromMysql(ride.ride_when);
 
@@ -1225,8 +1230,6 @@ function clearUserProfile() {
 function showUserProfile(userId) {
     clearUserProfile();
     showLoader();
-    window.scrollTo(0,0);
-    $.mobile.changePage($('#user-profile'), {transition: 'slide'});
 
     $.ajax({
         type: "GET",
@@ -1248,16 +1251,18 @@ function showUserProfile(userId) {
                             hideLoader();
                         });
                 }
-
                 $('#user-profile .profile-name').html(user.first_name + ' ' + user.last_name);
                 $('#user-profile .profile-email').html('<a mailto:"' + user.email + '">' + user.email + '</a>');
+
+                window.scrollTo(0,0);
+                $.mobile.changePage($('#user-profile'), {transition: 'none'});
             } else {
                 hideLoader();
                 showAlert('Pasajero',
                           'Hubo un error al cargar los datos del pasajero. Intenta nuevamente.',
                           function(){
                               window.scrollTo(0,0);
-                              $.mobile.changePage($('#view-ride'), {transition: 'slide'});
+                              $.mobile.changePage($('#view-ride'), {transition: 'none'});
                           }
                 );
             }
