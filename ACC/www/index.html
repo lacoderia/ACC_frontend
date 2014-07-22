@@ -104,11 +104,11 @@
         	<!-- Start of menu-lateral -->
 	        <div data-role="panel" data-display="overlay" id="panel-menu-lateral">
 	        	<ul id="menu-lateral">
-	        		<li><a>Principal</a></li>
-	        		<li><a href="#mi-cuenta">Mi cuenta</a></li>
-	        		<li><a>Descuentos</a></li>
-	        		<li><a>Ayuda</a></li>
-	        		<li id="boton-cerrar-sesion"><a onclick="hideMenuLateral();logOut()">Cerrar sesion</a></li>
+	        		<li>Principal</li>
+	        		<li onclick="showMiPerfil()">Mi cuenta</li>
+	        		<li>Descuentos</li>
+	        		<li>Ayuda</li>
+	        		<li id="boton-cerrar-sesion" onclick="hideMenuLateral();logOut()">Cerrar sesion</li>
 	        	</ul>
 	        </div>
 	        <!-- /menu-lateral -->
@@ -158,14 +158,13 @@
 
         <!-- Start of mi-cuenta -->
         <div data-role="page" id="mi-cuenta">
-        
-        	<div id="header-mi-cuenta">
-        		<a href="#dashboard"> &lt; Regresar</a>
-        		<p>Mi Cuenta</p>
-        		<a href="" onclick="logOut()"> Salir</a>
-        	</div>
+
+            <div data-role="header" class="header">
+                <span class="acc-btn-back icon-arrow-left2" previous-page="dashboard"></span>
+                <h1>Mi cuenta</h1>
+            </div><!-- /header -->
             
-            <div role="main" class="ui-content" id="datos-personales">
+            <div role="main" class="ui-content" id="datos-personales" style="display:none">
             	<h2>Datos personales</h2>
             	<p>No. Socio: </p><p id="num-socio">123456</p><br/>
             	<p>Nombre: </p><p id="nombre">Francisco Sagarninaga Santos</p><br/>

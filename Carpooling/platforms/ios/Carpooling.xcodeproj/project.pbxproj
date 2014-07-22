@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -518,8 +517,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Jorge Benjamin Hernandez Zetter (U7443L5ZBL)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Jorge Benjamin Hernandez Zetter (U7443L5ZBL)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jorge Benjamin Hernandez Zetter (Z9C27FZ69G)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jorge Benjamin Hernandez Zetter (Z9C27FZ69G)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -544,7 +543,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = Carpooling;
-				PROVISIONING_PROFILE = "7CA997B3-E682-4F7F-B08D-DBC7D8A82CC5";
+				PROVISIONING_PROFILE = "5F254EA1-94D5-42B3-B4FF-109E3BDB7022";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -554,8 +553,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Jorge Benjamin Hernandez Zetter (U7443L5ZBL)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Jorge Benjamin Hernandez Zetter (U7443L5ZBL)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jorge Benjamin Hernandez Zetter (Z9C27FZ69G)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jorge Benjamin Hernandez Zetter (Z9C27FZ69G)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Carpooling/Carpooling-Prefix.pch";
@@ -578,7 +577,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = Carpooling;
-				PROVISIONING_PROFILE = "7CA997B3-E682-4F7F-B08D-DBC7D8A82CC5";
+				PROVISIONING_PROFILE = "5F254EA1-94D5-42B3-B4FF-109E3BDB7022";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

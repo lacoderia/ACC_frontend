@@ -108,9 +108,9 @@ html, body {
     width: 90%;
     vertical-align: middle;
 
-    -webkit-border-radius: 4%;
-    -moz-border-radius: 4%;
-    border-radius: 4%;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
 }
 
 .menu-container .row {
@@ -138,20 +138,8 @@ html, body {
 }
 
 #menu-lateral li{
-	margin-top: 100px;
-	margin-bottom: 100px;
-	text-decoration: none;
-}
-
-#menu-lateral li a{
-	padding: 50px 0px;
-	color: #FFF;
-	font-size: x-large;
-	text-decoration: none;
-}
-
-#menu-lateral li a:visited{
-	color: #FFF;
+    margin-bottom: 20px;
+    color: #FFF;
 }
 
 label.error {
@@ -347,23 +335,7 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
     margin-left: -19px;
 }
 
-#menu-servicio {
-    display: inline-block;
-    height: auto;
-    margin-top: -23px;
-    margin-left: -23px;
-    z-index: 101;
-
-    text-align: center;
-    vertical-align: middle;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-}
-
-
 #menu-servicio-form h1{
-	font-size: xx-large;
 	margin: 50px;
 	font-weight: bold;
 }
@@ -371,67 +343,32 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
 #menu-servicio-form p{
 	margin-top: 80px;
 	margin-bottom: 50px;
-	font-size: large;
 }
 
 #menu-servicio-form input{
 	width: 80%;
-	line-height: 50px;
-	font-size: xx-large;
 	margin: 10px 0;
 	vertical-align: middle;
-	border-radius: 10px;
-	border: solid 4px #DDD;
 }
 
 #menu-servicio-form button{
 	width: 80%;
 	margin-top: 5px;
-	font-size: xx-large;
 	padding: 15px;
-	background-color: #F0F0F0;
 	color: #66F;
-	border: none;
-	border-radius: 10px;
-}
-
-.vertical-space{
-	width: 100%;
-	height: 30px;
 }
 
 #mi-cuenta{
-	background-color: rgb(0, 0, 100);
+    background-color: #063B6A;
 	color: white;
 }
 
-#header-mi-cuenta{
-	background-color: rgb(200, 200, 200);
-	height: 10%;
-	width: 100%;
-	font-size: 1.5em;
-}
-
-#header-mi-cuenta p{
-	display: inline-block;
-	width: 65%;
-	text-align: center;
-}
-
-#header-mi-cuenta a{
-	padding: 15px;
-	width: 10%;
-}
-
 #informacion-vehiculo{
-	position: fixed;
-	bottom: 0;
 	width: 95%;
 	text-align: center;
 }
 
 #datos-personales{
-	background-color: rgba(0,0,0,0);
 	font-size: 1.5em;
 }
 

@@ -48,10 +48,7 @@ var app = {
                     clearInterval(animation);
 
                     if (getCache('rememberMe')) {
-                        //Validar al usuario nuevamente
-                        window.scrollTo(0,0);
-                        $.mobile.changePage($('#dashboard'), {transition: 'slide'});
-                        getDashboard();
+                        logIn(true);
                     } else {
                         window.scrollTo(0,0);
                         $.mobile.changePage($('#login'), {transition: 'slide'});
@@ -129,8 +126,13 @@ var app = {
         });
 
         $('.acc-btn-back').click(function() {
+            var transition = 'slide';
+            if ($(this).attr('transition')) {
+                transition = $(this).attr('transition');
+            }
+
             window.scrollTo(0,0);
-            $.mobile.changePage($('#' + $(this).attr('previous-page')), {transition: 'slide', reverse: 'true'});
+            $.mobile.changePage($('#' + $(this).attr('previous-page')), {transition: transition, reverse: 'true'});
         });
 
         $('#acc-btn-menu').click(function() {
@@ -155,9 +157,6 @@ $(document).on('pagebeforeshow', "#login", function (event, data) {
 });
 
 $(document).on('pagebeforeshow', "#sign-up", function (event, data) {
-    clearSignUp();
-    getAgreements();
-
     $("#sign-up-form").validate({
         errorPlacement: function(error, element) {
             error.appendTo(element.parent().parent().after());
@@ -177,6 +176,17 @@ $(document).on('pagebeforeshow', "#sign-up", function (event, data) {
             error.appendTo(element.parent().parent().after());
         }
     }).resetForm();
+
+    $("#sign-up-terms-form").validate({
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent().parent().after());
+        },
+        messages: {
+            sign_up_terms: {
+                required: "Debes leer y aceptar los términos y condiciones"
+            }
+        }
+    }).resetForm();
 });
 
 $(document).on('pagebeforeshow', "#forgot", function (event, data) {
@@ -187,6 +197,20 @@ $(document).on('pagebeforeshow', "#forgot", function (event, data) {
             error.appendTo(element.parent().parent().after());
         }
     }).reset();
+});
+
+$(document).on('pagebeforeshow', "#welcome", function (event, data) {
+    var user = getCache('user');
+
+    $('#welcome .welcome-name').html('¡Hola ' + user.first_name + '!');
+
+    // Espera 3 segundos antes de ir al dashboard
+    setTimeout(function(){
+        window.scrollTo(0,0);
+        $.mobile.changePage($('#dashboard'), {transition: 'none'});
+        getDashboard();
+    }, 3000);
+
 });
 
 $(document).on('pagebeforeshow', '#profile', function(){
@@ -285,7 +309,7 @@ function hideLoader() {
     $('#loader').hide();
 }
 
-function showAlert(title, message) {
+function showAlert(title, message, onCloseFunction) {
     var popUp = '<div data-role="popup" id="popupAlert" data-overlay-theme="a" data-theme="a" data-dismissible="true">' +
                     '<div data-role="header" data-theme="a">' +
                         '<h1>' + title + '</h1>' +
@@ -302,6 +326,9 @@ function showAlert(title, message) {
     $('#popupAlert').popup({
         afterclose: function( event, ui ) {
             $('#popupAlert').remove();
+            if (onCloseFunction !== undefined){
+                onCloseFunction();
+            }
         },
         transition: 'pop'
     });
@@ -351,25 +378,33 @@ function clearLogIn() {
     $('#login-password').val('');
 }
 
-function logIn(documentType, documentId, password) {
+function logIn(autologin) {
+    var rememberMe = false;
+    var data = {}
 
-    documentType = documentType || $('#login-tipo-identificacion').val();
-    documentId = documentId || $('#login-identificacion').val();
-    password = password || $('#login-password').val();
+    if (autologin == false) {
+        rememberMe = $("#login-remember-me").is(':checked');
 
-    var rememberMe = $("#login-remember-me").is(':checked');
+        /*data = {
+         "document_type": $('#login-tipo-identificacion').val(),
+         "document_id": $('#login-identificacion').val(),
+         "password": $('#login-password').val()
+         };*/
 
-    var data = {
-        "document_type": documentType,
-        "document_id": documentId,
-        "password": password
-    };
+        data = {
+            "document_type": 'CC',
+            "document_id": '12345',
+            "password": '00000000'
+        };
+    } else {
+        rememberMe = true;
 
-    /*var data = {
-        "document_type": 'CC',
-        "document_id": '12345',
-        "password": '00000000'
-    };*/
+        var user = getCache('user');
+        data = {
+            "user_id": user.id,
+            "auth_token" : user.authentication_token
+        };
+    }
 
     showLoader();
 
@@ -386,18 +421,32 @@ function logIn(documentType, documentId, password) {
                     setCache('user', response.user);
                 }
 
-                //$('#dashboard .fake-background img').attr('src', 'http://166.78.117.195' + response.user.agreement_logo);
-                //$('#dashboard .fake-background img').attr('src', 'img/company/ACC.png');
-                //$('#view-ride .fake-background img').attr('src', 'img/company/ACC.png');
-                //$('#dashboard .footer img').attr('src','img/company/ACC.png');
-                //$('#view-ride .footer img').attr('src','img/company/ACC.png');
+                // Precargar la imagen de #welcome antes de redirigir al usuario
 
-                window.scrollTo(0,0);
-                $.mobile.changePage($('#dashboard'), {transition: 'none'});
-                getDashboard();
+                $('<img/>')
+                    .attr('src', 'http://166.78.117.195' + response.user.agreement_logo)
+                    .load(function(){
+                        hideLoader();
+                        $('#welcome .welcome-cell img').attr('src', 'http://166.78.117.195' + response.user.agreement_logo);
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#welcome'), {transition: 'none'});
+                    })
+                    .error(function(){
+                        hideLoader();
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#dashboard'), {transition: 'none'});
+                        getDashboard();
+                    });
+
             } else {
                 hideLoader();
-                showAlert('Iniciar sesión', response.message);
+                showAlert('Iniciar sesión',
+                          response.message,
+                          function(){
+                              window.scrollTo(0,0);
+                              $.mobile.changePage($('#login'), {transition: 'none'});
+                          }
+                );
             }
         },
         error: function(error) {
@@ -412,7 +461,8 @@ function logOut() {
 
     var user = getCache('user');
     var data = {
-        "auth_token": user.authentication_token
+        "auth_token": user.authentication_token,
+        "user_id": user.id
     };
     $.ajax({
         type: "POST",
@@ -436,12 +486,21 @@ function logOut() {
 
 // Funciones de Sign-up
 
+function openSignUp() {
+    clearSignUp();
+    window.scrollTo(0,0);
+    $.mobile.changePage($('#sign-up'), {transition: 'none'});
+    getAgreements();
+}
+
 function clearSignUp() {
     $('#sign_up_domain').val('');
     $('#sign_up_agreement').html('<option value="">Selecciona tu empresa</option>');
     $('#sign_up_agreement').val('');
+    $('#sign_up_agreement').selectmenu();
     $('#sign_up_agreement').selectmenu('refresh', true);
     $('#sign_up_document_type').val('');
+    $('#sign_up_document_type').selectmenu();
     $('#sign_up_document_type').selectmenu('refresh', true);
     $('#sign_up_document_id').val('');
     $('#sign_up_first_name').val('');
@@ -450,16 +509,19 @@ function clearSignUp() {
     $('#sign_up_password').val('');
     $('#sign_up_password_confirmation').val('');
 
-
-
     if ($("#sign_up_add_vehicle").is(':checked')) {
         $("#sign_up_add_vehicle").click();
     }
 
+    $('#sign_up_vehicle_document_type').selectmenu();
     $('#sign_up_vehicle_document_type').selectmenu('refresh', true);
     $('#sign_up_vehicle_document_id').val('');
     $('#sign_up_vehicle_plates').val('');
     $('#sign_up_vehicle_soat').val('');
+
+    if ($("#sign_up_terms").is(':checked')) {
+        $("#sign_up_terms").click();
+    }
 }
 
 function getAgreements() {
@@ -493,8 +555,13 @@ function updateSelectedAgreement() {
     }
 }
 
+function openTerms() {
+    window.scrollTo(0,0);
+    $.mobile.changePage($('#terms'), {transition: 'none'});
+}
+
 function signUp() {
-    if ($("#sign-up-form").valid() & $("#sign-up-vehicle-form").valid()){
+    if ($("#sign-up-form").valid() & $("#sign-up-vehicle-form").valid() & $("#sign-up-terms-form").valid()){
 
         var data = {
             "utf8": "V",
@@ -538,9 +605,13 @@ function signUp() {
             success: function(response) {
                 if (response.success == true) {
                     hideLoader();
-                    window.scrollTo(0,0);
-                    $.mobile.changePage($('#login'), {transition: 'none'});
-                    showAlert('Registro', response.message);
+                    showAlert('Registro',
+                              response.message,
+                              function(){
+                                  window.scrollTo(0,0);
+                                  $.mobile.changePage($('#login'), {transition: 'none'});
+                              }
+                    );
                 } else {
                     hideLoader();
                     showAlert('Registro', response.message);
@@ -583,9 +654,13 @@ function sendMail() {
                 success: function(response) {
                     if (response.success == true) {
                         hideLoader();
-                        window.scrollTo(0,0);
-                        $.mobile.changePage($('#login'), {transition: 'none'});
-                        showAlert('Contraseña', response.message);
+                        showAlert('Contraseña',
+                                  response.message,
+                                  function(){
+                                      window.scrollTo(0,0);
+                                      $.mobile.changePage($('#login'), {transition: 'none'});
+                                  }
+                        );
                     } else {
                         hideLoader();
                         showAlert('Contraseña', response.message);
@@ -605,9 +680,13 @@ function sendMail() {
                 success: function(response) {
                     if (response.success == true) {
                         hideLoader();
-                        window.scrollTo(0,0);
-                        $.mobile.changePage($('#login'), {transition: 'none'});
-                        showAlert('Confirmación', response.message);
+                        showAlert('Confirmación',
+                                  response.message,
+                                  function(){
+                                      window.scrollTo(0,0);
+                                      $.mobile.changePage($('#login'), {transition: 'none'});
+                                  }
+                        );
                     } else {
                         hideLoader();
                         showAlert('Confirmación', response.message);
@@ -690,10 +769,14 @@ function getProfile() {
 
                 $('#btn-add-vehicle').show();
             } else {
-                window.scrollTo(0,0);
-                $.mobile.changePage($('#dashboard'), {transition: 'slide'});
                 hideLoader();
-                showAlert('Mi perfil', 'Hubo un error al cargar tu perfil. Intenta nuevamente.');
+                showAlert('Mi perfil',
+                          'Hubo un error al cargar tu perfil. Intenta nuevamente.',
+                          function() {
+                              window.scrollTo(0,0);
+                              $.mobile.changePage($('#dashboard'), {transition: 'slide'});
+                          }
+                );
             }
         },
         error: function(error) {
@@ -799,9 +882,13 @@ function addVehicle() {
                     hideLoader();
                     user.vehicles = response.vehicles;
                     setCache('user', user);
-                    window.scrollTo(0,0);
-                    $.mobile.changePage($('#profile'), {transition: 'none'});
-                    showAlert('Agregar vehículo', response.message);
+                    showAlert('Agregar vehículo',
+                              response.message,
+                              function(){
+                                  window.scrollTo(0,0);
+                                  $.mobile.changePage($('#profile'), {transition: 'none'});
+                              }
+                    );
                 } else {
                     hideLoader();
                     showAlert('Agregar vehículo', response.message);
@@ -1031,7 +1118,7 @@ function getRideDetail(rideId) {
         success: function(response) {
             if(response.id) {
                 var ride = response;
-                $('#view-ride .name').html(ride.owner.first_name + ' ' + ride.owner.last_name);
+                $('#view-ride .name').html('<span onclick="showUserProfile(' + ride.owner.id + ')">' + ride.owner.first_name + ' ' + ride.owner.last_name + '</span>');
 
                 var date = createDateFromMysql(ride.ride_when);
 
@@ -1129,7 +1216,14 @@ function clearViewRide() {
 
 // Funciones de Mi Perfil
 
+function clearUserProfile() {
+    $('#user-profile .profile-picture').html('');
+    $('#user-profile .profile-name').html('');
+    $('#user-profile .profile-email').html('');
+}
+
 function showUserProfile(userId) {
+    clearUserProfile();
     showLoader();
     window.scrollTo(0,0);
     $.mobile.changePage($('#user-profile'), {transition: 'slide'});
@@ -1158,10 +1252,14 @@ function showUserProfile(userId) {
                 $('#user-profile .profile-name').html(user.first_name + ' ' + user.last_name);
                 $('#user-profile .profile-email').html('<a mailto:"' + user.email + '">' + user.email + '</a>');
             } else {
-                window.scrollTo(0,0);
-                $.mobile.changePage($('#view-ride'), {transition: 'slide'});
                 hideLoader();
-                showAlert('Pasajero', 'Hubo un error al cargar los datos del pasajero. Intenta nuevamente.');
+                showAlert('Pasajero',
+                          'Hubo un error al cargar los datos del pasajero. Intenta nuevamente.',
+                          function(){
+                              window.scrollTo(0,0);
+                              $.mobile.changePage($('#view-ride'), {transition: 'slide'});
+                          }
+                );
             }
         },
         error: function(error) {
@@ -1263,10 +1361,14 @@ function addRide() {
             dataType: "json",
             success: function(response) {
                 if (response.success == true) {
-                    showAlert('Publicar viaje', response.message);
-                    getDashboard();
-                    window.scrollTo(0,0);
-                    $.mobile.changePage($('#dashboard'), {transition: 'none'});
+                    showAlert('Publicar viaje',
+                              response.message,
+                              function(){
+                                  window.scrollTo(0,0);
+                                  $.mobile.changePage($('#dashboard'), {transition: 'none'});
+                                  getDashboard();
+                              }
+                    );
                 } else {
                     hideLoader();
                     showAlert('Publicar viaje', response.message);

@@ -49,13 +49,6 @@ $(document).on('pagebeforeshow', '#dashboard', function(){
     setHeader();
 });
 
-$(document).on('pagebeforeshow', '#mi-cuenta', function(){
-    var user = getCache("user");
-    if(user == undefined){
-        $.mobile.changePage($('#login'));
-    }
-});
-
 jQuery.extend(jQuery.validator.messages, {
     required: "Este campo es requerido.",
     email: "Ingresa un email válido.",
@@ -73,6 +66,8 @@ jQuery.extend(jQuery.validator.messages, {
 var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId;
 var trafficLayer, traffic_on = false;
 var sesion, pagina;
+
+window.sessionStorage.previousPage = 'dashboard';
 
 function setHeader(){    
     var user = getCache("user");
@@ -214,7 +209,6 @@ function showAlert(title, message) {
         transition: 'pop'
     });
     $('#popupAlert').popup('open');
-    $('.overlay').show();
 }
 
 function showDialog(title, message, acceptFunction, cancelFunction) {
@@ -256,6 +250,17 @@ function showDialog(title, message, acceptFunction, cancelFunction) {
 
     $('#popupDialog').popup('open');
 }
+
+function showMiPerfil(){
+    var user = getCache("user");
+    if(user == undefined){
+        window.sessionStorage.previousPage = 'mi-cuenta';
+        $.mobile.changePage($('#login'));
+    } else {
+        $.mobile.changePage($('#mi-cuenta'));
+    }
+}
+
 
 function solicitarServicio(pagina){
     hideMenu();
@@ -337,17 +342,17 @@ function logIn(documentType, documentId, password) {
 
     var rememberMe = $("#login-remember-me").is(':checked');
 
-    /*var data = {
+    var data = {
         "document_type": documentType,
         "document_id": documentId,
         "password": password
-    };*/
+    };
 
-    var data = {
+    /*var data = {
         "document_type": 'CC',
         "document_id": '12345',
         "password": '00000000'
-    };
+    };*/
 
     showLoader();
 
@@ -365,7 +370,7 @@ function logIn(documentType, documentId, password) {
                 	setCache('user', response.user);
                 }
                 window.scrollTo(0,0);
-                $.mobile.changePage($('#'+window.sessionStorage.previousPage), {transition: 'none'});
+                $.mobile.changePage($('#' + window.sessionStorage.previousPage), {transition: 'none'});
             } else {
                 hideLoader();
                 showAlert('Iniciar sesión', response.message);
