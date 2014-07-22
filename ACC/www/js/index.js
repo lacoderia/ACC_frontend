@@ -43,7 +43,7 @@ var app = {
 	            document.addEventListener("backbutton", function (e) {
 	                e.preventDefault();
 	            }, false );
-	    }
+	    };
 
         $('.acc-btn-back').click(function() {
             window.scrollTo(0,0);
@@ -51,6 +51,17 @@ var app = {
         });
     }
 };
+
+$(document).on('click', '#map_canvas a[target="_blank"]', function(e){
+    e.preventDefault();
+    var url = $(this).attr('href');
+
+    if( /Android/.test(navigator.appVersion) ){
+        navigator.app.loadUrl(url, { openExternal:true });
+    }else{
+        window.open(url, '_system');
+    }
+});
 
 $(document).on('pagebeforeshow', '#dashboard', function(){
     setHeader();
@@ -197,9 +208,7 @@ function showServicios() {
     
     var user = getCache('user');
     if(user != undefined){
-    	console.log("USER");
     	$("#servicio-nombre").val(user.first_name);
-    	console.log("No trono");
     	/*$("#servicio-telefono").val(user.telefono);
     	$("#servicio-placas").val(user.placas);*/
     }
@@ -209,7 +218,13 @@ function showServicios() {
     $("#menu-servicio-form").validate({
         errorPlacement: function(error, element) {
             error.appendTo(element.parent().after());
-        }
+        }/*,
+        rules: {
+        	servicio_placas: {
+    	      minlenght:6, 
+    	      maxlength: 6
+    	    }
+        }*/
     }).reset();
 }
 
@@ -327,26 +342,38 @@ function enviarSolicitudServicio(){
         hideMenu();
 
         var servicio = getCache("servicio");
+        var is_guest = true;
+        var user_id;
+        var user = getCache('user');
+        if(user != undefined){
+        	is_guest = false;
+        	user_id = user.id;
+        }
 
+        var data = { "roadside_assistance": {
+	         "name": $('#servicio_nombre').val(),
+	         "phone_number": $('#servicio_telefono').val(),
+	         "plate_number": $('#servicio_placas').val(),
+	         "assistance_type": servicio,
+	         "lat": currentLocation.coords.latitude,
+	         "long": currentLocation.coords.longitude,
+	         "is_guest": is_guest,
+	         "user_id": user_id
+         }};
+        
+        console.log(JSON.stringify(data));
         /*var data = {
-         "nombre": $('#servicio_nombre').html(),
-         "telefono": $('#servicio_telefono').html(),
-         "placas": $('#servicio_placas').html(),
-         "servicio": servicio
-         };*/
-
-        var data = {
             "nombre": "Alberto",
             "telefono": "12345678",
             "placas": "ABC-123",
             "servicio": servicio
-        };
+        };*/
         removeCache("servicio");
 
         showLoader();
         $.ajax({
             type: "POST",
-            url: "http://166.78.117.195/servicio",
+            url: "http://166.78.117.195/roadside_assistances.json",
             data: data,
             dataType: "json",
             success: function(response) {
@@ -360,6 +387,7 @@ function enviarSolicitudServicio(){
                 }
             },
             error: function(error) {
+            	console.log(error.responseText);
                 showAlert('Error', 'No se pudo solicitar el servicio. Intenta nuevamente.');
                 hideLoader();
             }
