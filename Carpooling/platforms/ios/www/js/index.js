@@ -141,10 +141,7 @@ var app = {
         });
 
         $('#acc-btn-menu').click(function() {
-            $('#dashboard-menu').popup('open', {
-                transition: 'slidedown',
-                positionTo: '#acc-btn-menu'
-            });
+            $('#dashboard-menu').popup('open');
         });
 
         $('#acc-btn-refresh-dashboard').click(function() {
@@ -216,6 +213,10 @@ $(document).on('pagebeforeshow', "#welcome", function (event, data) {
         getDashboard();
     }, 3000);
 
+});
+
+$(document).on('pagebeforeshow', "#dashboard", function (event, data) {
+    $('#popup').popup('reposition', 'positionTo: window');
 });
 
 $(document).on('pagebeforeshow', '#profile', function(){
