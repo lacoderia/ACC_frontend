@@ -33,6 +33,11 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
+        document.addEventListener("backbutton", onBackKeyDown, false);
+        function onBackKeyDown(e) {
+            e.preventDefault();
+        }
+
         navigator.splashscreen.hide();
 
         var imgLoad = imagesLoaded('#splash_table');
@@ -72,7 +77,7 @@ var app = {
                     errorPlacement: function(error, element) {
                         error.appendTo(element.parent().parent().after());
                     }
-                }).reset();
+                }).resetForm();
             } else {
                 $('#sign-up-vehicle-form').hide();
                 $('#sign_up_vehicle_document_type').removeClass('required');
@@ -121,7 +126,7 @@ var app = {
                 errorPlacement: function(error, element) {
                     error.appendTo(element.parent().parent().after());
                 }
-            }).reset();
+            }).resetForm();
 
         });
 
@@ -136,10 +141,13 @@ var app = {
         });
 
         $('#acc-btn-menu').click(function() {
-            $('#dashboard-menu').popup('open', {
-                transition: 'slidedown',
-                positionTo: '#acc-btn-menu'
-            });
+            $('#dashboard-menu')
+                .popup("open", {
+                    x: 20,
+                    y: 20,
+                    transition: 'pop'
+                });
+
         });
 
         $('#acc-btn-refresh-dashboard').click(function() {
@@ -204,7 +212,7 @@ $(document).on('pagebeforeshow', "#forgot", function (event, data) {
         errorPlacement: function(error, element) {
             error.appendTo(element.parent().parent().after());
         }
-    }).reset();
+    }).resetForm();
 });
 
 $(document).on('pagebeforeshow', "#welcome", function (event, data) {
@@ -232,7 +240,7 @@ $(document).on('pagebeforeshow', '#add-vehicle', function(){
         errorPlacement: function(error, element) {
             error.appendTo(element.parent().parent().after());
         }
-    }).reset();
+    }).resetForm();
 
     if (!$("#add_vehicle_owner").is(':checked')) {
         $("#add_vehicle_owner").click();
@@ -393,17 +401,17 @@ function logIn(autologin) {
     if (autologin == false) {
         rememberMe = $("#login-remember-me").is(':checked');
 
-        /*data = {
+        data = {
          "document_type": $('#login-tipo-identificacion').val(),
          "document_id": $('#login-identificacion').val(),
          "password": $('#login-password').val()
-         };*/
+         };
 
-        data = {
+        /*data = {
             "document_type": 'CC',
             "document_id": '12345',
             "password": '00000000'
-        };
+        };*/
     } else {
         rememberMe = true;
 
@@ -450,7 +458,7 @@ function logIn(autologin) {
                 hideLoader();
                 showAlert('Iniciar sesión',
                           response.message,
-                          function(){
+                          function() {
                               window.scrollTo(0,0);
                               $.mobile.changePage($('#login'), {transition: 'none'});
                           }
@@ -459,12 +467,19 @@ function logIn(autologin) {
         },
         error: function(error) {
             hideLoader();
-            showAlert('Iniciar sesión', 'Hubo un error al iniciar la sesión. Intenta nuevamente.');
+            showAlert('Iniciar sesión',
+                      'Hubo un error al iniciar la sesión. Intenta nuevamente.',
+                      function() {
+                          window.scrollTo(0,0);
+                          $.mobile.changePage($('#login'), {transition: 'none'});
+                      }
+            );
         }
     });
 }
 
 function logOut() {
+    $('#dashboard-menu').popup('close');
     showLoader();
 
     var user = getCache('user');
@@ -637,6 +652,7 @@ function signUp() {
 
 function clearForgot() {
     $('#forgot_problem').val('');
+    $('#forgot_problem').selectmenu();
     $('#forgot_problem').selectmenu('refresh', true);
     $('#forgot_email').val('');
 }
@@ -850,6 +866,7 @@ function getPicture() {
 // Funciones de Add Vehicle
 
 function clearAddVehicle() {
+    $('#add_vehicle_document_type').selectmenu();
     $('#add_vehicle_document_type').selectmenu('refresh', true);
     $('#add_vehicle_document_id').val('');
     $('#add_vehicle_plates').val('');
@@ -1126,7 +1143,7 @@ function getRideDetail(rideId) {
         success: function(response) {
             if(response.id) {
                 var ride = response;
-                $('#view-ride .name').html('<span onclick="showUserProfile(' + ride.owner.id + ')">' + ride.owner.first_name + ' ' + ride.owner.last_name + '</span>');
+                $('#view-ride .name').html('<a onclick="showUserProfile(' + ride.owner.id + ')">' + ride.owner.first_name + ' ' + ride.owner.last_name + '</a>');
 
                 var date = createDateFromMysql(ride.ride_when);
 
@@ -1233,8 +1250,6 @@ function clearUserProfile() {
 function showUserProfile(userId) {
     clearUserProfile();
     showLoader();
-    window.scrollTo(0,0);
-    $.mobile.changePage($('#user-profile'), {transition: 'slide'});
 
     $.ajax({
         type: "GET",
@@ -1256,16 +1271,18 @@ function showUserProfile(userId) {
                             hideLoader();
                         });
                 }
-
                 $('#user-profile .profile-name').html(user.first_name + ' ' + user.last_name);
                 $('#user-profile .profile-email').html('<a mailto:"' + user.email + '">' + user.email + '</a>');
+
+                window.scrollTo(0,0);
+                $.mobile.changePage($('#user-profile'), {transition: 'none'});
             } else {
                 hideLoader();
                 showAlert('Pasajero',
                           'Hubo un error al cargar los datos del pasajero. Intenta nuevamente.',
                           function(){
                               window.scrollTo(0,0);
-                              $.mobile.changePage($('#view-ride'), {transition: 'slide'});
+                              $.mobile.changePage($('#view-ride'), {transition: 'none'});
                           }
                 );
             }

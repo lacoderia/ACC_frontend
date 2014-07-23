@@ -236,7 +236,7 @@
             <div id="dashboard-buttons">
                 <div class="ui-grid-a">
                     <div class="ui-block-a">
-                        <a href="#add-ride" data-role="button" data-mini="true">Publicar viaje</a>
+                        <a href="#add-ride" data-role="button" data-mini="true" data-transition="none">Publicar viaje</a>
                     </div>
                     <div class="ui-block-b">
                         <a data-role="button" data-mini="true" onclick="refreshAllRides()">Buscar viaje</a>
@@ -271,7 +271,7 @@
                 </div>
                 <br>
                 <span class="profile-vehicles"></span>
-                <br><p><a href="#add-vehicle" id="btn-add-vehicle" data-role="button" data-mini="true">Agregar vehículo</a></p>
+                <br><p><a href="#add-vehicle" id="btn-add-vehicle" data-role="button" data-mini="true" data-transition="none">Agregar vehículo</a></p>
 
             </div><!-- /content -->
 
@@ -282,7 +282,7 @@
 
             <div data-role="header">
                 <span class="acc-btn-back icon-arrow-left2" previous-page="profile"></span>
-                <h1>Agregar vehículo</h1>
+                <h1>Vehículo</h1>
             </div><!-- /header -->
 
             <div role="main" class="ui-content">
@@ -379,7 +379,9 @@
             </div><!-- /header -->
             
             <div role="main" class="ui-content">
-                <div class="row name link"></div>
+                <div class="row">
+                    <div class="name"></div>
+                </div>
                 <div class="row container-when">
                     <span><img src="img/clock.png"/></span>
                     <span class="date"></span>
@@ -405,8 +407,9 @@
                     <div><b>Pasajeros:</b></div>
                     <div class="passengers"></div>
                 </div>
-
                 <p><a id="btn-accept-ride" data-role="button" onclick="acceptRide()" style="display:none">Reservar lugar</a></p>
+            </div>
+
         </div><!-- /page -->
 
         <!-- Start of profile -->

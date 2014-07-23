@@ -77,7 +77,7 @@ var app = {
                     errorPlacement: function(error, element) {
                         error.appendTo(element.parent().parent().after());
                     }
-                }).reset();
+                }).resetForm();
             } else {
                 $('#sign-up-vehicle-form').hide();
                 $('#sign_up_vehicle_document_type').removeClass('required');
@@ -126,7 +126,7 @@ var app = {
                 errorPlacement: function(error, element) {
                     error.appendTo(element.parent().parent().after());
                 }
-            }).reset();
+            }).resetForm();
 
         });
 
@@ -141,7 +141,13 @@ var app = {
         });
 
         $('#acc-btn-menu').click(function() {
-            $('#dashboard-menu').popup('open');
+            $('#dashboard-menu')
+                .popup("open", {
+                    x: 20,
+                    y: 20,
+                    transition: 'pop'
+                });
+
         });
 
         $('#acc-btn-refresh-dashboard').click(function() {
@@ -151,6 +157,14 @@ var app = {
         $('#acc-btn-refresh-search').click(function() {
             refreshAllRides();
         });
+        
+        document.addEventListener("deviceready", onDeviceReady, false);
+	        function onDeviceReady() {
+	            document.addEventListener("backbutton", function (e) {
+	                e.preventDefault();
+	            }, false );
+	    };
+        
     }
 };
 
@@ -198,7 +212,7 @@ $(document).on('pagebeforeshow', "#forgot", function (event, data) {
         errorPlacement: function(error, element) {
             error.appendTo(element.parent().parent().after());
         }
-    }).reset();
+    }).resetForm();
 });
 
 $(document).on('pagebeforeshow', "#welcome", function (event, data) {
@@ -215,10 +229,6 @@ $(document).on('pagebeforeshow', "#welcome", function (event, data) {
 
 });
 
-$(document).on('pagebeforeshow', "#dashboard", function (event, data) {
-    $('#popup').popup('reposition', 'positionTo: window');
-});
-
 $(document).on('pagebeforeshow', '#profile', function(){
     getProfile();
 });
@@ -230,7 +240,7 @@ $(document).on('pagebeforeshow', '#add-vehicle', function(){
         errorPlacement: function(error, element) {
             error.appendTo(element.parent().parent().after());
         }
-    }).reset();
+    }).resetForm();
 
     if (!$("#add_vehicle_owner").is(':checked')) {
         $("#add_vehicle_owner").click();
@@ -391,17 +401,17 @@ function logIn(autologin) {
     if (autologin == false) {
         rememberMe = $("#login-remember-me").is(':checked');
 
-        /*data = {
+        data = {
          "document_type": $('#login-tipo-identificacion').val(),
          "document_id": $('#login-identificacion').val(),
          "password": $('#login-password').val()
-         };*/
+         };
 
-        data = {
+        /*data = {
             "document_type": 'CC',
             "document_id": '12345',
             "password": '00000000'
-        };
+        };*/
     } else {
         rememberMe = true;
 
@@ -448,7 +458,7 @@ function logIn(autologin) {
                 hideLoader();
                 showAlert('Iniciar sesión',
                           response.message,
-                          function(){
+                          function() {
                               window.scrollTo(0,0);
                               $.mobile.changePage($('#login'), {transition: 'none'});
                           }
@@ -457,12 +467,19 @@ function logIn(autologin) {
         },
         error: function(error) {
             hideLoader();
-            showAlert('Iniciar sesión', 'Hubo un error al iniciar la sesión. Intenta nuevamente.');
+            showAlert('Iniciar sesión',
+                      'Hubo un error al iniciar la sesión. Intenta nuevamente.',
+                      function() {
+                          window.scrollTo(0,0);
+                          $.mobile.changePage($('#login'), {transition: 'none'});
+                      }
+            );
         }
     });
 }
 
 function logOut() {
+    $('#dashboard-menu').popup('close');
     showLoader();
 
     var user = getCache('user');
@@ -635,6 +652,7 @@ function signUp() {
 
 function clearForgot() {
     $('#forgot_problem').val('');
+    $('#forgot_problem').selectmenu();
     $('#forgot_problem').selectmenu('refresh', true);
     $('#forgot_email').val('');
 }
@@ -848,6 +866,7 @@ function getPicture() {
 // Funciones de Add Vehicle
 
 function clearAddVehicle() {
+    $('#add_vehicle_document_type').selectmenu();
     $('#add_vehicle_document_type').selectmenu('refresh', true);
     $('#add_vehicle_document_id').val('');
     $('#add_vehicle_plates').val('');

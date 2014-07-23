@@ -24,7 +24,6 @@
 
 html, body {
     height : 100%;
-    overflow-x: hidden;
 }
 
 body {
@@ -322,7 +321,7 @@ label.error {
 }
 
 #login-forgot {
-    margin-top: 0.625px;
+    margin-top: 0.625em;
 }
 
 .login-table {

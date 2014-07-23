@@ -225,7 +225,7 @@
 		        <h1>Inicio</h1>
                 <span id="acc-btn-refresh-dashboard" class="acc-btn-refresh icon-spinner"></span>
 
-                <div data-role="popup" id="dashboard-menu" data-transition="slidedown" data-position-to="#acc-btn-menu" data-theme="a">
+                <div data-role="popup" id="dashboard-menu" data-theme="a">
                     <ul data-role="listview" data-inset="true" style="min-width:210px;">
                         <li class="ui-nodisc-icon" data-icon="user" data-iconpos="left"><a href="#profile" data-transition="slide">Mi perfil</a></li>
                         <li class="ui-nodisc-icon" data-icon="power" data-iconpos="left"><a onclick="logOut()">Cerrar sesión</a></li>
@@ -236,7 +236,7 @@
             <div id="dashboard-buttons">
                 <div class="ui-grid-a">
                     <div class="ui-block-a">
-                        <a href="#add-ride" data-role="button" data-mini="true">Publicar viaje</a>
+                        <a href="#add-ride" data-role="button" data-mini="true" data-transition="none">Publicar viaje</a>
                     </div>
                     <div class="ui-block-b">
                         <a data-role="button" data-mini="true" onclick="refreshAllRides()">Buscar viaje</a>
@@ -271,7 +271,7 @@
                 </div>
                 <br>
                 <span class="profile-vehicles"></span>
-                <br><p><a href="#add-vehicle" id="btn-add-vehicle" data-role="button" data-mini="true">Agregar vehículo</a></p>
+                <br><p><a href="#add-vehicle" id="btn-add-vehicle" data-role="button" data-mini="true" data-transition="none">Agregar vehículo</a></p>
 
             </div><!-- /content -->
 
@@ -282,7 +282,7 @@
 
             <div data-role="header">
                 <span class="acc-btn-back icon-arrow-left2" previous-page="profile"></span>
-                <h1>Agregar vehículo</h1>
+                <h1>Vehículo</h1>
             </div><!-- /header -->
 
             <div role="main" class="ui-content">
