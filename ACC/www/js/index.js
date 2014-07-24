@@ -208,6 +208,18 @@ function showServicios() {
     	$("#servicio-nombre").val(user.first_name);
     	/*$("#servicio-telefono").val(user.telefono);
     	$("#servicio-placas").val(user.placas);*/
+    	
+    	/*var vehiculos = user.vehicles;
+    	if (vehiculos){
+    		var str = '<select id="plate" onchange="changePlate('+$(this).val()+')">';
+    		str += '<option value="">Otra placa</option>';
+    		for(vehicle in vehiculos){
+    			str += '<option value="'+vehicle+'">'+vehicle+'</option>';
+    		}
+    		str += '</select>';
+    		console.log(str);
+    	}*/
+    	
     }
     
     $('#menu-servicio').show();
@@ -331,6 +343,10 @@ function solicitarServicio(pagina){
             );
         }
     }
+}
+
+function changePlate(value){
+	$("#mi-cuenta-placa").val(value);
 }
 
 function enviarSolicitudServicio(){
@@ -527,7 +543,13 @@ function toggleTraffic(){
 }
 
 function getDescuentos(){
-	var descuentos = '{"desc1": {"lat": "19.422061","lng": "-99.163350","title": "Desc 1"},"desc2": {"lat": "19.415909","lng": "-99.160681","title": "Desc 2"}}';
+	
+	var lat1 = currentLocation.coords.latitude + .000666;
+	var lat2 = currentLocation.coords.latitude - .000666;
+	var lng1 = currentLocation.coords.longitude - .000666;
+	var lng2 = currentLocation.coords.longitude + .000666;
+	
+	var descuentos = '{"desc1": {"lat": "'+lat1+'","lng": "'+lng1+'","title": "Desc 1"},"desc2": {"lat": "'+lat2+'","lng": "'+lng2+'","title": "Desc 2"}}';
 	
 	descuentos = JSON.parse(descuentos);
 	showMarkers(descuentos);
