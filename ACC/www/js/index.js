@@ -209,16 +209,20 @@ function showServicios() {
     	/*$("#servicio-telefono").val(user.telefono);
     	$("#servicio-placas").val(user.placas);*/
     	
-    	/*var vehiculos = user.vehicles;
+    	var vehiculos = user.vehicles;
+    	vehiculos = {"vehiculo1":"abc123", "vehiculo2":"def456"};
     	if (vehiculos){
-    		var str = '<select id="plate" onchange="changePlate('+$(this).val()+')">';
+    		var str = '<select id="plate" onchange="changePlate()">';
     		str += '<option value="">Otra placa</option>';
     		for(vehicle in vehiculos){
     			str += '<option value="'+vehicle+'">'+vehicle+'</option>';
     		}
     		str += '</select>';
     		console.log(str);
-    	}*/
+    		
+    		$('#menu-servicio-form').append(str);
+    		
+    	}
     	
     }
     
@@ -345,8 +349,8 @@ function solicitarServicio(pagina){
     }
 }
 
-function changePlate(value){
-	$("#mi-cuenta-placa").val(value);
+function changePlate(){
+	$("#servicio_placas").val($("#plate").val()+"");
 }
 
 function enviarSolicitudServicio(){
