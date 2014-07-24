@@ -5,6 +5,32 @@
     },
     "config_munge": {
         "files": {
+            "res/xml/config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Accelerometer\"><param name=\"android-package\" value=\"org.apache.cordova.devicemotion.AccelListener\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Compass\"><param name=\"android-package\" value=\"org.apache.cordova.deviceorientation.CompassListener\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"StatusBar\"><param name=\"android-package\" onload=\"true\" value=\"org.apache.cordova.statusbar.StatusBar\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
             "AndroidManifest.xml": {
                 "parents": {
                     "/*": [
@@ -18,41 +44,29 @@
                         }
                     ]
                 }
-            },
-            "res/xml/config.xml": {
-                "parents": {
-                    "/*": [
-                        {
-                            "xml": "<feature name=\"Compass\"><param name=\"android-package\" value=\"org.apache.cordova.deviceorientation.CompassListener\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Accelerometer\"><param name=\"android-package\" value=\"org.apache.cordova.devicemotion.AccelListener\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /></feature>",
-                            "count": 1
-                        }
-                    ]
-                }
             }
         }
     },
     "installed_plugins": {
-        "org.apache.cordova.device-orientation": {
-            "PACKAGE_NAME": "mx.coderia.ACC"
-        },
-        "org.apache.cordova.device-motion": {
-            "PACKAGE_NAME": "mx.coderia.ACC"
-        },
-        "org.apache.cordova.geolocation": {
-            "PACKAGE_NAME": "mx.coderia.ACC"
-        },
         "org.apache.cordova.console": {
             "PACKAGE_NAME": "mx.coderia.ACC.ACC"
         },
+        "org.apache.cordova.device": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
+        },
+        "org.apache.cordova.device-motion": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
+        },
+        "org.apache.cordova.device-orientation": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
+        },
+        "org.apache.cordova.geolocation": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
+        },
         "org.apache.cordova.splashscreen": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
+        },
+        "org.apache.cordova.statusbar": {
             "PACKAGE_NAME": "mx.coderia.ACC.ACC"
         }
     },

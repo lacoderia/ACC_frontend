@@ -125,10 +125,6 @@ html .ui-alt-icon .ui-btn.ui-checkbox-on:after {
     left: 0;
 }
 
-.ui-content {
-    overflow-x: hidden;
-}
-
 .fake-background img {
     position: absolute;
     right: 5%;
