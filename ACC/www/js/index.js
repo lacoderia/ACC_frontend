@@ -352,17 +352,14 @@ function solicitarServicio(pagina){
 }
 
 function changePlate(){
-	if($("#plate").val() != ""){
+	if($("#plate").val() == "otra"){
 		$('#servicio_placas').show();
-		if( $("#plate").val() == "otra"){
-			$("#servicio_placas").val("");
-			$("#servicio_placas").prop('disabled', false);
-		}else{
-			$("#servicio_placas").prop('disabled', true);
-			$("#servicio_placas").val($("#plate").val()+"");
-		}
+		$("#servicio_placas").val("");
+		$("#servicio_placas").prop('disabled', false);
 	}else{
 		$('#servicio_placas').hide();
+		$("#servicio_placas").prop('disabled', true);
+		$("#servicio_placas").val($("#plate").val()+"");
 	}
 }
 
