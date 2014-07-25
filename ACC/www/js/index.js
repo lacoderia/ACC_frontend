@@ -212,15 +212,17 @@ function showServicios() {
     	var vehiculos = user.vehicles;
     	vehiculos = {"vehiculo1":"abc123", "vehiculo2":"def456"};
     	if (vehiculos){
-    		var str = '<select id="plate" onchange="changePlate()">';
-    		str += '<option value="">Otra placa</option>';
+    		var str = '<select id="plate" style="width:80%;" onchange="changePlate()">';
+    		str += '<option value="">Selecciona una placa</option>';
     		for(vehicle in vehiculos){
     			str += '<option value="'+vehicle+'">'+vehicle+'</option>';
     		}
+    		str += '<option value="otra">Ingresa otra placa</option>';
     		str += '</select>';
     		console.log(str);
     		
-    		$('#menu-servicio-form').append(str);
+    		$('#servicio_placas').hide();
+    		$('#servicio_placas_container').html(str);
     		
     	}
     	
@@ -231,13 +233,13 @@ function showServicios() {
     $("#menu-servicio-form").validate({
         errorPlacement: function(error, element) {
             error.appendTo(element.parent().after());
-        }/*,
+        },
         rules: {
         	servicio_placas: {
-    	      minlenght:6, 
+    	      minlength:6, 
     	      maxlength: 6
     	    }
-        }*/
+        }
     }).reset();
 }
 
@@ -350,7 +352,18 @@ function solicitarServicio(pagina){
 }
 
 function changePlate(){
-	$("#servicio_placas").val($("#plate").val()+"");
+	if($("#plate").val() != ""){
+		$('#servicio_placas').show();
+		if( $("#plate").val() == "otra"){
+			$("#servicio_placas").val("");
+			$("#servicio_placas").prop('disabled', false);
+		}else{
+			$("#servicio_placas").prop('disabled', true);
+			$("#servicio_placas").val($("#plate").val()+"");
+		}
+	}else{
+		$('#servicio_placas').hide();
+	}
 }
 
 function enviarSolicitudServicio(){
