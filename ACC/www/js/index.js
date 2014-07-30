@@ -203,23 +203,29 @@ function showServicios() {
     hideMenu();
     clearForm('menu-servicio-form');
     
+    $("#menu-servicio-form").validate({
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent().after());
+        }
+    }).resetForm();
+    
+    
     var user = getCache('user');
     if(user != undefined){
-    	$("#servicio-nombre").val(user.first_name);
+    	$("#servicio_nombre").val(user.first_name + " " + user.last_name);
     	/*$("#servicio-telefono").val(user.telefono);
     	$("#servicio-placas").val(user.placas);*/
     	
     	var vehiculos = user.vehicles;
     	vehiculos = {"vehiculo1":"abc123", "vehiculo2":"def456"};
     	if (vehiculos){
-    		var str = '<select id="plate" style="width:80%;" onchange="changePlate()">';
+    		var str = '<select id="plate" style="width:80%;" class="required" onchange="changePlate()">';
     		str += '<option value="">Selecciona una placa</option>';
     		for(vehicle in vehiculos){
     			str += '<option value="'+vehicle+'">'+vehicle+'</option>';
     		}
     		str += '<option value="otra">Ingresa otra placa</option>';
     		str += '</select>';
-    		console.log(str);
     		
     		$('#servicio_placas').hide();
     		$('#servicio_placas_container').html(str);
@@ -578,6 +584,17 @@ function showMarkers(object){
 		    optimized: false,
 		    title: value.title,
 		});
+		
+		//var contentString = object.contenido;
+		var contentString = "<p>Contenido del popup</p>";
+		
+		var infowindow = new google.maps.InfoWindow({
+			content: contentString
+		});
+		google.maps.event.addListener(marker, 'click', function() {
+			infowindow.open(map,marker);
+		});
+		
 		markers.push(marker);
     });
 	markers[0].setIcon("img/tache_min.png");
@@ -598,4 +615,29 @@ function toggleDescuentos(){
 		getDescuentos();
 	}
 	descuentos_on = !descuentos_on;
+}
+
+function numberLetterPattern(e) {
+    var key;
+    var keychar;
+
+    if (window.event)
+        key = window.event.keyCode;
+    else if (e)
+        key = e.which;
+    else
+        return true;
+    keychar = String.fromCharCode(key);
+    keychar = keychar.toLowerCase();
+
+// control keys
+    if ((key==null) || (key==0) || (key==8) ||
+        (key==9) || (key==13) || (key==27) )
+        return true;
+
+// alphas and numbers
+    else if ((("abcdefghijklmnopqrstuvwxyz0123456789").indexOf(keychar) > -1))
+        return true;
+    else
+        return false;
 }

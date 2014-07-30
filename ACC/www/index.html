@@ -91,7 +91,7 @@
                     <div data-role="fieldcontainer" id="servicio_placas_container">
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="text" id="servicio_placas" name="servicio_placas" placeholder="Placas del vehículo" class="required" />
+                        <input type="text" id="servicio_placas" name="servicio_placas" placeholder="Placas del vehículo" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" class="required" />
                     </div>
                 </form>
                 <button type="button" onclick="hideMenu()">Cancelar</button>

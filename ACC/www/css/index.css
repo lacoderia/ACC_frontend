@@ -408,3 +408,6 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
 	background-color: rgba(0, 0, 0, .7);
 }
 
+#servicio_placas{
+	text-transform: uppercase;
+}
