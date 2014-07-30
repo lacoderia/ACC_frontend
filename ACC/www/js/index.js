@@ -657,6 +657,23 @@ function showMarkers(markerType, newMarkers){
 		    html: contentString
 		});
 		
+		/*var tipo = value.location_type_id;
+		switch(tipo){
+		case 1:
+			icon = "img/descuentos.png";
+			break;
+		case 2:
+			icon = "img/gasolineras.png";
+			break;
+		case 3:
+			icon = "img/parqueaderos.png";
+			break;
+		case 4:
+			icon = "img/diversion.png";
+			break;
+		}
+		marker.setIcon(icon);*/
+		
 		infowindow = new google.maps.InfoWindow({
 			content: "",
 			maxWidth: 150
