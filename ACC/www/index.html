@@ -57,13 +57,13 @@
                 </div>
                 <div class="row">
                     <div><a href="tel:12345678"><img src="img/Botones/acc.png" /></a></div>
-                    <div><img onclick="toggleDescuentos()" src="img/Botones/descuentos.png" /></div>
-                    <div onclick="toggleTraffic()"><img src="img/Botones/trafico.png" /></div>
+                    <div onclick="toggleDiscounts()"><img src="img/Botones/descuentos.png" /></div>
+                    <div onclick="toggleTrafficLayer()"><img src="img/Botones/trafico.png" /></div>
                 </div>
                 <div class="row">
-                    <div><img src="img/Botones/parqueaderos.png" /></div>
-                    <div><img src="img/Botones/gasolineras.png" /></div>
-                    <div><img src="img/Botones/diversion.png" /></div>
+                    <div onclick="toggleParking()"><img src="img/Botones/parqueaderos.png" /></div>
+                    <div onclick="toggleGas()"><img src="img/Botones/gasolineras.png" /></div>
+                    <div onclick="toggleFun()"><img src="img/Botones/diversion.png" /></div>
                 </div>
             </div>
 	    </div>
@@ -79,21 +79,23 @@
 
         <div id="menu-servicio" class="menu dismissable" onclick="exitMenu(event)">
             <div id="menu-servicio-container" class="menu-container">
-                <h1>Solicitar Servicio</h1>
-                <p>Favor de proporcionar la siguiente información.</p>
-                <form id="menu-servicio-form">
-                    <div data-role="fieldcontainer">
-                        <input type="text" id="servicio_nombre" name="servicio_nombre" placeholder="Nombre Completo" class="required" />
-                    </div>
-                    <div data-role="fieldcontainer">
-                        <input type="text" id="servicio_telefono" name="servicio_telefono" placeholder="Telefono" class="required" />
-                    </div>
-                    <div data-role="fieldcontainer">
-                        <input type="text" id="servicio_placas" name="servicio_placas" placeholder="Placas del vehículo" class="required" />
-                    </div>
-                </form>
-                <button type="button" onclick="hideMenu()">Cancelar</button>
-                <button type="button" onclick="enviarSolicitudServicio()">Enviar</button>
+                <div class="ui-content">
+                    <div id="menu-servicio-titulo">Solicitar Servicio</div>
+                    <div>Favor de proporcionar la siguiente información.</div>
+                    <form id="menu-servicio-form">
+                        <div data-role="fieldcontainer">
+                            <input type="text" id="servicio_nombre" name="servicio_nombre" placeholder="Nombre Completo" class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset required" />
+                        </div>
+                        <div data-role="fieldcontainer">
+                            <input type="text" id="servicio_telefono" name="servicio_telefono" placeholder="Telefono" class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset required" />
+                        </div>
+                        <div data-role="fieldcontainer">
+                            <input type="text" id="servicio_placas" name="servicio_placas" placeholder="Placas del vehículo" class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset required" />
+                        </div>
+                        <a class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a" onclick="hideMenu()">Cancelar</a>
+                        <a class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a" onclick="enviarSolicitudServicio()">Enviar</a>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -103,7 +105,7 @@
         	<!-- Start of menu-lateral -->
 	        <div data-role="panel" data-display="overlay" id="panel-menu-lateral">
 	        	<ul id="menu-lateral">
-	        		<li>Principal</li>
+	        		<li onclick="showPrincipal()">Principal</li>
 	        		<li onclick="showMiPerfil()">Mi cuenta</li>
 	        		<li>Descuentos</li>
 	        		<li>Ayuda</li>
@@ -113,13 +115,14 @@
 	        <!-- /menu-lateral -->
         
             <div role="main" class="ui-content">
-                <div class="header">
-                    <span id="nombre">Bienvenido(a) <span id ="contenedor_nombre"></span></span>
+                <div class="header" id="dashboard-header">
+                    <span id="nombre_usuario">Hola <span id="contenedor_nombre"></span></span>
                     <!--span id="placa">Pico y placa <span id="contenedor_placa" style="display:none;"></span></span-->
                 </div>
             	<div id="map_canvas"></div>
-                <div class="footer">
+                <div class="footer" id="dashboard-footer">
                     <div id="btn-menu-lateral"><img src="img/Botones/menu-lateral.png" onclick="showMenuLateral()"></div>
+                    <!--div id="btn-follow-me"><img src="img/Botones/menu-popup.png" onclick="toggleFollowMe()"></div-->
                     <div id="btn-menu-popup"><img src="img/Botones/menu-popup.png" onclick="showMenu()"></div>
                 </div>
             </div><!-- /content -->
@@ -163,7 +166,7 @@
                 <h1>Mi cuenta</h1>
             </div><!-- /header -->
             
-            <div role="main" class="ui-content" id="datos-personales" style="display:none">
+            <div role="main" class="ui-content" id="datos-personales">
             	<h2>Datos personales</h2>
             	<p>No. Socio: </p><p id="mi-cuenta-num-socio">123456</p><br/>
             	<p>Nombre: </p><p id="mi-cuenta-nombre"></p><br/>

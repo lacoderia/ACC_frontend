@@ -502,7 +502,18 @@ function logOut() {
         },
         error: function(error) {
             hideLoader();
-            showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Intenta nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Intenta nuevamente.');
+            }
         }
     });
 }
@@ -565,7 +576,18 @@ function getAgreements() {
         },
         error: function(error) {
             hideLoader();
-            showAlert('Registro', 'Hubo un error al obtener las empresas con convenio. Intenta nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Registro', 'Hubo un error al obtener las empresas con convenio. Intenta nuevamente.');
+            }
         }
     });
 }
@@ -642,7 +664,18 @@ function signUp() {
             },
             error: function(error) {
                 hideLoader();
-                showAlert('Registro', 'Ocurrió un error al intentar registrarte. Intenta nuevamente.');
+
+                if (error.status && error.status == 401) {
+                    showAlert('Error',
+                        error.responseJSON.error,
+                        function() {
+                            window.scrollTo(0,0);
+                            $.mobile.changePage($('#login'), {transition: 'none'});
+                        }
+                    );
+                } else {
+                    showAlert('Registro', 'Ocurrió un error al intentar registrarte. Intenta nuevamente.');
+                }
             }
         });
     }
@@ -692,7 +725,7 @@ function sendMail() {
                 },
                 error: function(error) {
                     hideLoader();
-                    showAlert('Contraseña', "El correo con las intrucciones para recuperar tu contraseña no pudo ser enviado.");
+                    showAlert('Contraseña', "El correo con las instrucciones para recuperar tu contraseña no pudo ser enviado.");
                 }
             });
         } else if ($('#forgot_problem').val() == 'confirmation') {
@@ -855,7 +888,18 @@ function getPicture() {
                 },
                 error: function(error) {
                     hideLoader();
-                    showAlert('Mi perfil', 'Ocurrió un error al cambiar la foto de tu perfil. Intenta nuevamente.');
+
+                    if (error.status && error.status == 401) {
+                        showAlert('Error',
+                            error.responseJSON.error,
+                            function() {
+                                window.scrollTo(0,0);
+                                $.mobile.changePage($('#login'), {transition: 'none'});
+                            }
+                        );
+                    } else {
+                        showAlert('Mi perfil', 'Ocurrió un error al cambiar la foto de tu perfil. Intenta nuevamente.');
+                    }
                 }
             });
         },
@@ -932,7 +976,18 @@ function addVehicle() {
             },
             error: function(error) {
                 hideLoader();
-                showAlert('Agregar Vehículo', 'Ocurrió un error al agregar el vehículo. Intenta nuevamente.');
+
+                if (error.status && error.status == 401) {
+                    showAlert('Error',
+                        error.responseJSON.error,
+                        function() {
+                            window.scrollTo(0,0);
+                            $.mobile.changePage($('#login'), {transition: 'none'});
+                        }
+                    );
+                } else {
+                    showAlert('Agregar Vehículo', 'Ocurrió un error al agregar el vehículo. Intenta nuevamente.');
+                }
             }
         });
     }
@@ -959,7 +1014,18 @@ function getDashboard() {
         },
         error: function(error) {
             hideLoader();
-            showAlert('Inicio', 'Hubo un error al obtener la información de los viajes publicados y reservados. Intenta Nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Inicio', 'Hubo un error al obtener la información de los viajes publicados y reservados. Intenta Nuevamente.');
+            }
         }
     });
 
@@ -1053,6 +1119,15 @@ function compareAllRides() {
             setCache('carpooling_allRidesHash', response.hash);
         },
         error: function(error) {
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            }
         }
     });
 
@@ -1078,7 +1153,18 @@ function getAllRides() {
         },
         error: function(error) {
             hideLoader();
-            showAlert('Buscar viajes', 'Hubo un error al obtener la información de los viajes disponibles. Intenta nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Buscar viajes', 'Hubo un error al obtener la información de los viajes disponibles. Intenta nuevamente.');
+            }
         }
     });
 }
@@ -1235,7 +1321,18 @@ function getRideDetail(rideId) {
         },
         error: function(error) {
             hideLoader();
-            showAlert('Detalles del viaje', 'Hubo un error al obtener los detalles del viaje. Intenta nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Detalles del viaje', 'Hubo un error al obtener los detalles del viaje. Intenta nuevamente.');
+            }
         }
     });
 }
@@ -1300,7 +1397,18 @@ function showUserProfile(userId) {
         },
         error: function(error) {
             hideLoader();
-            showAlert('Pasajero', 'Hubo un error al cargar los datos del pasajero. Intenta nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Pasajero', 'Hubo un error al cargar los datos del pasajero. Intenta nuevamente.');
+            }
         }
     });
 }
@@ -1336,7 +1444,18 @@ function confirmDeleteVehicle(vehiclePlateNumber) {
                 },
                 error: function(error) {
                     hideLoader();
-                    showAlert('Eliminar Vehículo', 'Ocurrió un error al eliminar el vehículo. Intenta nuevamente.');
+
+                    if (error.status && error.status == 401) {
+                        showAlert('Error',
+                            error.responseJSON.error,
+                            function() {
+                                window.scrollTo(0,0);
+                                $.mobile.changePage($('#login'), {transition: 'none'});
+                            }
+                        );
+                    } else {
+                        showAlert('Eliminar Vehículo', 'Ocurrió un error al eliminar el vehículo. Intenta nuevamente.');
+                    }
                 }
             });
         }
@@ -1412,7 +1531,18 @@ function addRide() {
             },
             error: function(error) {
                 hideLoader();
-                showAlert('Publicar viaje', 'Ocurrió un error al publicar el viaje. Intenta nuevamente.');
+
+                if (error.status && error.status == 401) {
+                    showAlert('Error',
+                        error.responseJSON.error,
+                        function() {
+                            window.scrollTo(0,0);
+                            $.mobile.changePage($('#login'), {transition: 'none'});
+                        }
+                    );
+                } else {
+                    showAlert('Publicar viaje', 'Ocurrió un error al publicar el viaje. Intenta nuevamente.');
+                }
             }
         });
     }
@@ -1450,7 +1580,18 @@ function acceptRide() {
         error: function(error) {
             $('#btn-accept-ride').removeClass('ui-disabled');
             hideLoader();
-            showAlert('Reservar lugar', 'El viaje no se pudo reservar. Intenta nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Reservar lugar', 'El viaje no se pudo reservar. Intenta nuevamente.');
+            }
         }
     });
 }

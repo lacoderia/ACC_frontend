@@ -16,6 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId;
+var trafficLayer,
+    showingtrafficLayer = false;
+
+var sesion, pagina;
+var followMe = true;
+
+var discountMarkers =  new Array(),
+    gasMarkers = new Array(),
+    parkingMarkers = new Array(),
+    funMarkers = new Array();
+
+var showingDiscount = false,
+    showingGas = false,
+    showingParking = false,
+    showingFun = false;
+
+var markerConstants = {
+    'DISCOUNTS' : 1,
+    'GAS' : 2,
+    'PARKING' : 3,
+    'FUN' : 4
+}
+
+
+window.sessionStorage.previousPage = 'dashboard';
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -42,6 +70,20 @@ var app = {
 
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
 
+
+        $("#panel-menu-lateral").panel({ swipeClose: false });
+
+        $("#panel-menu-lateral").panel({
+            open: function( event, ui ) {
+                $('#dashboard-header').slideUp(100);
+                $('#dashboard-footer').slideUp(100);
+            },
+            close: function( event, ui ) {
+                $('#dashboard-header').slideDown(100);
+                $('#dashboard-footer').slideDown(100);
+            }
+        });
+
         $('.acc-btn-back').click(function() {
             window.scrollTo(0,0);
             $.mobile.changePage($('#' + $(this).attr('previous-page')));
@@ -62,6 +104,10 @@ $(document).on('click', '#map_canvas a[target="_blank"]', function(e){
 
 $(document).on('pagebeforeshow', '#dashboard', function(){
     setHeader();
+});
+
+$(document).on('pageshow', '#dashboard', function(){
+    $('#dashboard-header').slideDown(100);
 });
 
 $(document).on('pagebeforeshow', '#mi-cuenta', function(){
@@ -93,27 +139,20 @@ jQuery.extend(jQuery.validator.messages, {
     equalTo: jQuery.validator.format("El valor de la confirmación no es igual al de la contraseña.")
 });
 
-var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId;
-var trafficLayer, traffic_on = false;
-var markers =  [], descuentos_on = false;
-var sesion, pagina;
+/** Loader **/
 
-window.sessionStorage.previousPage = 'dashboard';
-
-function setHeader(){    
-    var user = getCache("user");
-    if(user != undefined){
-    	$('#contenedor_nombre').html(user.first_name);
-    	$('#contenedor_placa').html(user.placas);
-        $('#contenedor_placa').show();
-    	
-    	$('#boton-cerrar-sesion').show();
-    }else{
-        $('#contenedor_nombre').html('invitado(a)');
-    	$('#boton-cerrar-sesion').hide();
-        $('#contenedor_placa').show();
-    }
+function showLoader() {
+    $('.overlay').show();
+    $('#loader').show();
 }
+
+function hideLoader() {
+    $('.overlay').hide();
+    $('#loader').hide();
+}
+
+
+/** Funciones de Google Maps **/
 
 function loadMapScript() {
 	var script = document.createElement("script");
@@ -128,12 +167,14 @@ function initializeMap(mapOptions) {
 	var myLatlng = new google.maps.LatLng(currentLocation.coords.latitude, currentLocation.coords.longitude);
 	var mapOptions = {
 		center : myLatlng,
-		zoom : 16,
+		zoom : 4,
+        minZoom: 4,
+        maxZoom: 16,
 		enableHighAccuracy: true,
 		disableDefaultUI: true,
 		mapTypeId : google.maps.MapTypeId.ROADMAP
 	};
-	
+
 	map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 	
 	 var markerOpts = {
@@ -150,13 +191,33 @@ function initializeMap(mapOptions) {
 	GeoMarker.setMap(map);
 	
 	google.maps.event.trigger(map, 'resize');
-	
-	google.maps.event.addListener(GeoMarker, 'position_changed', function() {
-		GeoMarker.setCircleOptions({'visible':false});
-		map.panTo(GeoMarker.getPosition());
-		GeoMarker.setCircleOptions({'visible':true});
-	});
 
+    /*google.maps.event.addListener(GeoMarker, 'position_changed', function() {
+        GeoMarker.setCircleOptions({'visible':false});
+        map.panTo(GeoMarker.getPosition());
+        GeoMarker.setCircleOptions({'visible':true});
+    });*/
+
+    // Limitamos el panning a las máximas coordenadas del mundo
+    /*var allowedBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(85, -180),
+        new google.maps.LatLng(-85, 180)
+    );
+    var lastValidCenter = map.getCenter();
+
+    google.maps.event.addListener(map, 'center_changed', function() {
+        console.log(map.getCenter());
+        if (allowedBounds.contains(map.getCenter())) {
+            // still within valid bounds, so save the last valid position
+            lastValidCenter = map.getCenter();
+            return;
+        }
+
+        // not valid anymore => return to last valid position
+        alert('a')
+        map.panTo(lastValidCenter);
+    });*/
+	
 	trafficLayer = new google.maps.TrafficLayer();
     hideLoader();
 }
@@ -237,12 +298,21 @@ function showServicios() {
     }).reset();
 }
 
-function showMenuLateral(){
-	$('#panel-menu-lateral').panel('open');
-}
+function toggleFollowMe(){
 
-function hideMenuLateral(){
-	$('#panel-menu-lateral').panel('close');
+    if (followMe) {
+        google.maps.event.clearListeners(map, 'position_changed');
+        followMe = false;
+        alert('don\'t follow me!');
+    } else {
+        google.maps.event.addListener(GeoMarker, 'position_changed', function() {
+            GeoMarker.setCircleOptions({'visible':false});
+            map.panTo(GeoMarker.getPosition());
+            GeoMarker.setCircleOptions({'visible':true});
+            followMe = true;
+        });
+        alert('follow me!');
+    }
 }
 
 function showAlert(title, message) {
@@ -308,105 +378,8 @@ function showDialog(title, message, acceptFunction, cancelFunction) {
     $('#popupDialog').popup('open');
 }
 
-function showMiPerfil(){
-    var user = getCache("user");
-    if(user == undefined){
-        window.sessionStorage.previousPage = 'mi-cuenta';
-        $.mobile.changePage($('#login'));
-    } else {
-        $.mobile.changePage($('#mi-cuenta'));
-    }
-}
 
-
-function solicitarServicio(pagina){
-    hideMenu();
-    setCache("servicio", pagina);
-
-    var user = getCache("user");
-    if(user != undefined){
-        showServicios();
-    } else {
-        if(sesion != undefined || sesion != null || sesion != ""){
-            var title = "¿Es socio de ACC?";
-            var message = 'Presiona "Si" para iniciar sesion o presiona "No" para continuar como invitado.';
-            showDialog(
-                title,
-                message,
-                function(){
-                    window.sessionStorage.previousPage = 'dashboard';
-                    $.mobile.changePage($('#login'));
-                },
-                function(){
-                    showServicios();
-                }
-            );
-        }
-    }
-}
-
-function changePlate(value){
-	$("#mi-cuenta-placa").val(value);
-}
-
-function enviarSolicitudServicio(){
-	//console.log(currentLocation.coords.latitude +","+ currentLocation.coords.longitude);
-    if ( $("#menu-servicio-form").valid() ){
-        hideMenu();
-
-        var servicio = getCache("servicio");
-        var is_guest = true;
-        var user_id;
-        var user = getCache('user');
-        if(user != undefined){
-        	is_guest = false;
-        	user_id = user.id;
-        }
-
-        var data = { "roadside_assistance": {
-	         "name": $('#servicio_nombre').val(),
-	         "phone_number": $('#servicio_telefono').val(),
-	         "plate_number": $('#servicio_placas').val(),
-	         "assistance_type": servicio,
-	         "lat": currentLocation.coords.latitude,
-	         "long": currentLocation.coords.longitude,
-	         "is_guest": is_guest,
-	         "user_id": user_id
-         }};
-        
-        console.log(JSON.stringify(data));
-        /*var data = {
-            "nombre": "Alberto",
-            "telefono": "12345678",
-            "placas": "ABC-123",
-            "servicio": servicio
-        };*/
-        removeCache("servicio");
-
-        showLoader();
-        $.ajax({
-            type: "POST",
-            url: "http://166.78.117.195/roadside_assistances.json",
-            data: data,
-            dataType: "json",
-            success: function(response) {
-                if (response.success == true) {
-                    hideLoader();
-                    showAlert('Solicitud Realizada', response.message);
-
-                } else {
-                    hideLoader();
-                    showAlert('Error', response.message);
-                }
-            },
-            error: function(error) {
-            	console.log(error.responseText);
-                showAlert('Error', 'No se pudo solicitar el servicio. Intenta nuevamente.');
-                hideLoader();
-            }
-        });
-    }
-}
+/** Funciones de sesión del usuario **/
 
 function logIn(documentType, documentId, password) {
 
@@ -486,36 +459,357 @@ function logOut() {
     });
 }
 
-function showLoader() {
-    $('.overlay').show();
-    $('#loader').show();
+/** Funciones del dashboard **/
+
+function setHeader(){
+    var user = getCache("user");
+    if(user != undefined){
+        $('#contenedor_nombre').html(user.first_name);
+        $('#contenedor_placa').html(user.placas);
+        $('#contenedor_placa').show();
+
+        $('#boton-cerrar-sesion').show();
+    }else{
+        $('#contenedor_nombre').html('invitado(a)');
+        $('#boton-cerrar-sesion').hide();
+        $('#contenedor_placa').show();
+    }
 }
 
-function hideLoader() {
-    $('.overlay').hide();
-    $('#loader').hide();
+
+/** Funciones del menu lateral **/
+
+function showMenuLateral(){
+    $('#panel-menu-lateral').panel('open');
 }
 
-//Funciones para persitencia de datos
+function hideMenuLateral(){
+    $('#panel-menu-lateral').panel('close');
+}
 
-function setCache(key, value) {
-	if (window.localStorage.rememberMe == "true") {
-		window.localStorage.setItem(key, JSON.stringify(value));
-	} else {
-		window.sessionStorage.setItem(key, JSON.stringify(value));
+function showMiPerfil(){
+    var user = getCache("user");
+    if(user == undefined){
+        window.sessionStorage.previousPage = 'mi-cuenta';
+        $.mobile.changePage($('#login'));
+    } else {
+        $.mobile.changePage($('#mi-cuenta'));
+    }
+}
+
+function showPrincipal(){
+    $( "#panel-menu-lateral" ).panel('close');
+    $.mobile.changePage($('#dashboard'));
+}
+
+
+/** Funciones del menu emergente **/
+
+/** Solicitud de servicio **/
+
+function solicitarServicio(pagina){
+    hideMenu();
+    setCache("servicio", pagina);
+
+    var user = getCache("user");
+    if(user != undefined){
+        showServicios();
+    } else {
+        if(sesion != undefined || sesion != null || sesion != ""){
+            var title = "¿Es socio de ACC?";
+            var message = 'Presiona "Si" para iniciar sesion o presiona "No" para continuar como invitado.';
+            showDialog(
+                title,
+                message,
+                function(){
+                    window.sessionStorage.previousPage = 'dashboard';
+                    $.mobile.changePage($('#login'));
+                },
+                function(){
+                    showServicios();
+                }
+            );
+        }
+    }
+}
+
+function changePlate(value){
+    $("#mi-cuenta-placa").val(value);
+}
+
+function enviarSolicitudServicio(){
+    //console.log(currentLocation.coords.latitude +","+ currentLocation.coords.longitude);
+    if ( $("#menu-servicio-form").valid() ){
+        hideMenu();
+
+        var servicio = getCache("servicio");
+        var is_guest = true;
+        var user_id;
+        var user = getCache('user');
+        if(user != undefined){
+            is_guest = false;
+            user_id = user.id;
+        }
+
+        var data = { "roadside_assistance": {
+            "name": $('#servicio_nombre').val(),
+            "phone_number": $('#servicio_telefono').val(),
+            "plate_number": $('#servicio_placas').val(),
+            "assistance_type": servicio,
+            "lat": currentLocation.coords.latitude,
+            "long": currentLocation.coords.longitude,
+            "is_guest": is_guest,
+            "user_id": user_id
+        }};
+
+        /*var data = {
+         "nombre": "Alberto",
+         "telefono": "12345678",
+         "placas": "ABC-123",
+         "servicio": servicio
+         };*/
+        removeCache("servicio");
+
+        showLoader();
+        $.ajax({
+            type: "POST",
+            url: "http://166.78.117.195/roadside_assistances.json",
+            data: data,
+            dataType: "json",
+            success: function(response) {
+                if (response.success == true) {
+                    hideLoader();
+                    showAlert('Solicitud Realizada', response.message);
+
+                } else {
+                    hideLoader();
+                    showAlert('Error', response.message);
+                }
+            },
+            error: function(error) {
+                console.log(error.responseText);
+                showAlert('Error', 'No se pudo solicitar el servicio. Intenta nuevamente.');
+                hideLoader();
+            }
+        });
+    }
+}
+
+
+/** Tráfico **/
+
+function toggleTrafficLayer(){
+	hideMenu();
+	if(showingtrafficLayer == true){
+		trafficLayer.setMap(null);
+	}else{
+		trafficLayer.setMap(map);
+	}
+    showingtrafficLayer = !showingtrafficLayer;
+}
+
+
+/** Marcadores **/
+
+function showMarkers(markerType, newMarkers){
+    var markers = new Array();
+
+	$.each(newMarkers, function(index, value) {
+		var myLatlng = new google.maps.LatLng(value.lat, value.long);
+		var marker = new google.maps.Marker({
+		    position: myLatlng,
+		    map: map,
+		    optimized: false,
+		    title: value.name
+		});
+        markers.push(marker);
+    });
+
+    switch (markerType) {
+        case markerConstants.DISCOUNTS:
+            discountMarkers = markers;
+            break;
+        case markerConstants.GAS:
+            gasMarkers = markers;
+            break;
+        case markerConstants.PARKING:
+            parkingMarkers = markers;
+            break;
+        case markerConstants.FUN:
+            funMarkers = markers;
+            break;
+        default:
+            break;
+    }
+}
+
+function hideMarkers(markerType){
+    var markers = new Array();
+
+    switch (markerType) {
+        case markerConstants.DISCOUNTS:
+            markers = discountMarkers;
+            break;
+        case markerConstants.GAS:
+            markers = gasMarkers;
+            break;
+        case markerConstants.PARKING:
+            markers = parkingMarkers;
+            break;
+        case markerConstants.FUN:
+            markers = funMarkers;
+            break;
+        default:
+            break;
+    }
+
+	for (var i = 0; i < markers.length; i++) {
+		markers[i].setMap(null);
 	}
 }
 
+/** Descuentos **/
+
+function getDiscounts(){
+    showLoader();
+    $.ajax({
+        type: "GET",
+        url: " http://166.78.117.195/locations.json?type_id=" + markerConstants.DISCOUNTS,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(response) {
+            hideLoader();
+            showMarkers(markerConstants.DISCOUNTS, response);
+        },
+        error: function(error) {
+            hideLoader();
+            showAlert('Error', 'Hubo un error al obtener los descuentos cercanos.');
+        }
+    });
+}
+
+function toggleDiscounts(){
+	hideMenu();
+	if(showingDiscount == true){
+		hideMarkers(markerConstants.DISCOUNTS);
+	}else{
+        getDiscounts();
+	}
+    showingDiscount = !showingDiscount;
+}
+
+
+/** Parqueaderos **/
+
+function getParking(){
+    showLoader();
+    $.ajax({
+        type: "GET",
+        url: " http://166.78.117.195/locations.json?type_id=" + markerConstants.PARKING,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(response) {
+            hideLoader();
+            showMarkers(markerConstants.PARKING, response);
+        },
+        error: function(error) {
+            hideLoader();
+            showAlert('Error', 'Hubo un error al obtener los parqueaderos cercanos.');
+        }
+    });
+}
+
+function toggleParking(){
+    hideMenu();
+    if(showingParking == true){
+        hideMarkers(markerConstants.PARKING);
+    }else{
+        getParking();
+    }
+    showingParking = !showingParking;
+}
+
+/** Gasolineras **/
+
+function getGas(){
+    showLoader();
+    $.ajax({
+        type: "GET",
+        url: " http://166.78.117.195/locations.json?type_id=" + markerConstants.GAS,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(response) {
+            hideLoader();
+            showMarkers(markerConstants.GAS, response);
+        },
+        error: function(error) {
+            hideLoader();
+            showAlert('Error', 'Hubo un error al obtener las gasolineras cercanos.');
+        }
+    });
+}
+
+function toggleGas(){
+    hideMenu();
+    if(showingGas == true){
+        hideMarkers(markerConstants.GAS);
+    }else{
+        getGas();
+    }
+    showingGas = !showingGas;
+}
+
+/** Diversión **/
+
+function getFun(){
+    showLoader();
+    $.ajax({
+        type: "GET",
+        url: " http://166.78.117.195/locations.json?type_id=" + markerConstants.FUN,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(response) {
+            hideLoader();
+            showMarkers(markerConstants.FUN, response);
+        },
+        error: function(error) {
+            hideLoader();
+            showAlert('Error', 'Hubo un error al obtener los puntos de diversión cercanos.');
+        }
+    });
+}
+
+function toggleFun(){
+    hideMenu();
+    if(showingFun == true){
+        hideMarkers(markerConstants.FUN);
+    }else{
+        getFun();
+    }
+    showingFun = !showingFun;
+}
+
+
+/** Funciones para persitencia de datos **/
+
+function setCache(key, value) {
+    if (window.localStorage.rememberMe == "true") {
+        window.localStorage.setItem(key, JSON.stringify(value));
+    } else {
+        window.sessionStorage.setItem(key, JSON.stringify(value));
+    }
+}
+
 function getCache(key) {
-  if (window.localStorage.rememberMe == "true") {
-      return JSON.parse(window.localStorage.getItem(key));
-  } else {
-      return JSON.parse(window.sessionStorage.getItem(key));
-  }
+    if (window.localStorage.rememberMe == "true") {
+        return JSON.parse(window.localStorage.getItem(key));
+    } else {
+        return JSON.parse(window.sessionStorage.getItem(key));
+    }
 }
 
 function isCache(key) {
-  return window.localStorage.getItem(key) !== null && window.localStorage.getItem(key) !== undefined;
+    return window.localStorage.getItem(key) !== null && window.localStorage.getItem(key) !== undefined;
 }
 
 function removeCache(key) {
@@ -530,58 +824,4 @@ function clearCache() {
     removeCache('user');
     removeCache('servicio');
     removeCache('rememberMe');
-}
-
-function toggleTraffic(){
-	hideMenu();
-	if(traffic_on == true){
-		trafficLayer.setMap(null);
-	}else{
-		trafficLayer.setMap(map);
-	}
-	traffic_on = !traffic_on;
-}
-
-function getDescuentos(){
-	
-	var lat1 = currentLocation.coords.latitude + .000666;
-	var lat2 = currentLocation.coords.latitude - .000666;
-	var lng1 = currentLocation.coords.longitude - .000666;
-	var lng2 = currentLocation.coords.longitude + .000666;
-	
-	var descuentos = '{"desc1": {"lat": "'+lat1+'","lng": "'+lng1+'","title": "Desc 1"},"desc2": {"lat": "'+lat2+'","lng": "'+lng2+'","title": "Desc 2"}}';
-	
-	descuentos = JSON.parse(descuentos);
-	showMarkers(descuentos);
-}
-
-function showMarkers(object){
-	$.each(object, function(index, value) {
-		var myLatlng = new google.maps.LatLng(value.lat, value.lng);
-		var marker = new google.maps.Marker({
-		    position: myLatlng,
-		    map: map,
-		    optimized: false,
-		    title: value.title,
-		});
-		markers.push(marker);
-    });
-	markers[0].setIcon("img/tache_min.png");
-}
-
-function hideMarkers(){
-	for (var i = 0; i < markers.length; i++) {
-		markers[i].setMap(null);
-	}
-	markers = [];
-}
-
-function toggleDescuentos(){
-	hideMenu();
-	if(descuentos_on == true){
-		hideMarkers();
-	}else{
-		getDescuentos();
-	}
-	descuentos_on = !descuentos_on;
 }

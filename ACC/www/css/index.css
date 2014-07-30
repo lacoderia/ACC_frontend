@@ -21,6 +21,31 @@ html, body {
     height : 100%;
 }
 
+/** Overwrite jquery mobile style **/
+
+.ui-panel {
+    width: 13em;
+}
+.ui-panel-position-left {
+    left: -13em;
+}
+/* positioning: content wrap, fixed toolbars and dismiss */
+/* panel left open */
+.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open,
+.ui-panel-content-wrap-position-left.ui-panel-content-wrap-open,
+.ui-panel-dismiss-position-left.ui-panel-dismiss-open {
+    left: 13em;
+}
+/* animated: panel left open (for reveal and push) */
+.ui-panel-animate.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-reveal,
+.ui-panel-animate.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push,
+.ui-panel-animate.ui-panel-content-wrap-position-left.ui-panel-content-wrap-open.ui-panel-content-wrap-display-reveal,
+.ui-panel-animate.ui-panel-content-wrap-position-left.ui-panel-content-wrap-open.ui-panel-content-wrap-display-push {
+    -webkit-transform: translate3d(13em,0,0);
+    -moz-transform: translate3d(13em,0,0);
+    transform: translate3d(13em,0,0);
+}
+
 .acc-btn-back {
     position: absolute;
     left: 10px;
@@ -132,14 +157,50 @@ html, body {
     margin-right: 0;
 }
 
+.menu-container .row div img {
+    display: inline-block;
+    width: 100%;
+}
+
+#menu-servicio .ui-content {
+    padding: 1em;
+    padding-left: 2em;
+    padding-right: 2em;
+    text-align: left;
+}
+
+#menu-servicio-form {
+    width: 100%;
+    text-align: center;
+    margin-top: 1em;
+}
+
+#menu-servicio-form input {
+    width: 80%;
+}
+
+#menu-servicio-titulo {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+}
+
+#panel-menu-lateral {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
 #menu-lateral{
 	list-style-type: none;
 	padding: 10px;
 }
 
 #menu-lateral li{
-    margin-bottom: 20px;
     color: #FFF;
+    text-shadow: none;
+    font: 1.2em;
+    margin-bottom: 1.5em;
 }
 
 label.error {
@@ -195,16 +256,22 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
 
 #dashboard .header {
     color: #FFF;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.7);
     position: absolute;
     top: 0;
     width: 100%;
     z-index: 50;
+    text-shadow: none;
+    padding: 0.5em;
 }
 
 #dashboard .header div {
     display: inline-block;
     width: 50%;
+}
+
+#dashboard-header {
+    display: none;
 }
 
 #dashboard #map_canvas {
@@ -234,6 +301,12 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
 #btn-menu-popup {
     float: right;
     margin-right: 5%;
+    margin-bottom: 5%;
+}
+
+#btn-follow-me {
+    float: left;
+    margin-left: 5%;
     margin-bottom: 5%;
 }
 
@@ -335,29 +408,6 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
     margin-left: -19px;
 }
 
-#menu-servicio-form h1{
-	margin: 50px;
-	font-weight: bold;
-}
-
-#menu-servicio-form p{
-	margin-top: 80px;
-	margin-bottom: 50px;
-}
-
-#menu-servicio-form input{
-	width: 80%;
-	margin: 10px 0;
-	vertical-align: middle;
-}
-
-#menu-servicio-form button{
-	width: 80%;
-	margin-top: 5px;
-	padding: 15px;
-	color: #66F;
-}
-
 #mi-cuenta{
     background-color: #063B6A;
 	color: white;
@@ -402,9 +452,5 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
 	right: 0;
 	top: 25%;
 	display: inline;
-}
-
-#panel-menu-lateral{
-	background-color: rgba(0, 0, 0, .7);
 }
 
