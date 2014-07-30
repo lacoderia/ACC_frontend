@@ -89,8 +89,10 @@
                         <div data-role="fieldcontainer">
                             <input type="text" id="servicio_telefono" name="servicio_telefono" placeholder="Telefono" class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset required" />
                         </div>
+                        <div data-role="fieldcontainer" id="servicio_placas_container">
+	                    </div>
                         <div data-role="fieldcontainer">
-                            <input type="text" id="servicio_placas" name="servicio_placas" placeholder="Placas del vehículo" class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset required" />
+                            <input type="text" id="servicio_placas" name="servicio_placas" placeholder="Placas del vehículo" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset required" />
                         </div>
                         <a class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a" onclick="hideMenu()">Cancelar</a>
                         <a class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a" onclick="enviarSolicitudServicio()">Enviar</a>

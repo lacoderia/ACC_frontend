@@ -626,18 +626,46 @@ function toggleTrafficLayer(){
     };
 
 /** Marcadores **/
-
+var infowindow;
 function showMarkers(markerType, newMarkers){
     var markers = new Array();
 
 	$.each(newMarkers, function(index, value) {
 		var myLatlng = new google.maps.LatLng(value.lat, value.long);
+		var contentString = '';
+		var nombre = value.name;
+		if(nombre != undefined){
+			contentString += '<p>'+nombre+'</p>';
+		}
+		var direccion = value.address;
+		if(direccion != undefined){
+			contentString += '<p>'+direccion+'</p>';
+		}
+		var telefono = value.phone;
+		if(telefono != undefined){
+			contentString += '<p>Tel: '+telefono+'</p>';
+		}
+		var description = value.description;
+		if(description != undefined){
+			contentString += '<p>'+description+'</p>';
+		}
 		var marker = new google.maps.Marker({
 		    position: myLatlng,
 		    map: map,
 		    optimized: false,
-		    title: value.name
+		    title: value.name,
+		    html: contentString
 		});
+		
+		infowindow = new google.maps.InfoWindow({
+			content: "",
+			maxWidth: 150
+		});
+		google.maps.event.addListener(marker, 'click', function() {
+			infowindow.setContent(this.html);
+			infowindow.open(map,marker);
+		});
+		
         markers.push(marker);
     });
 
