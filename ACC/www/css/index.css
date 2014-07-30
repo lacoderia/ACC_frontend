@@ -454,3 +454,6 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
 	display: inline;
 }
 
+#servicio_placas{
+	text-transform: uppercase;
+}

@@ -264,22 +264,34 @@ function showServicios() {
     hideMenu();
     clearForm('menu-servicio-form');
     
+    $("#menu-servicio-form").validate({
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent().after());
+        }
+    }).resetForm();
+    
+    
     var user = getCache('user');
     if(user != undefined){
-    	$("#servicio-nombre").val(user.first_name);
+    	$("#servicio_nombre").val(user.first_name + " " + user.last_name);
     	/*$("#servicio-telefono").val(user.telefono);
     	$("#servicio-placas").val(user.placas);*/
     	
-    	/*var vehiculos = user.vehicles;
+    	var vehiculos = user.vehicles;
+    	vehiculos = {"vehiculo1":"abc123", "vehiculo2":"def456"};
     	if (vehiculos){
-    		var str = '<select id="plate" onchange="changePlate('+$(this).val()+')">';
-    		str += '<option value="">Otra placa</option>';
+    		var str = '<select id="plate" style="width:80%;" class="required" onchange="changePlate()">';
+    		str += '<option value="">Selecciona una placa</option>';
     		for(vehicle in vehiculos){
     			str += '<option value="'+vehicle+'">'+vehicle+'</option>';
     		}
+    		str += '<option value="otra">Ingresa otra placa</option>';
     		str += '</select>';
-    		console.log(str);
-    	}*/
+    		
+    		$('#servicio_placas').hide();
+    		$('#servicio_placas_container').html(str);
+    		
+    	}
     	
     }
     
@@ -288,13 +300,13 @@ function showServicios() {
     $("#menu-servicio-form").validate({
         errorPlacement: function(error, element) {
             error.appendTo(element.parent().after());
-        }/*,
+        },
         rules: {
         	servicio_placas: {
-    	      minlenght:6, 
+    	      minlength:6, 
     	      maxlength: 6
     	    }
-        }*/
+        }
     }).reset();
 }
 
@@ -497,15 +509,6 @@ function showMiPerfil(){
     }
 }
 
-function showPrincipal(){
-    $( "#panel-menu-lateral" ).panel('close');
-    $.mobile.changePage($('#dashboard'));
-}
-
-
-/** Funciones del menu emergente **/
-
-/** Solicitud de servicio **/
 
 function solicitarServicio(pagina){
     hideMenu();
@@ -533,8 +536,16 @@ function solicitarServicio(pagina){
     }
 }
 
-function changePlate(value){
-    $("#mi-cuenta-placa").val(value);
+function changePlate(){
+	if($("#plate").val() == "otra"){
+		$('#servicio_placas').show();
+		$("#servicio_placas").val("");
+		$("#servicio_placas").prop('disabled', false);
+	}else{
+		$('#servicio_placas').hide();
+		$("#servicio_placas").prop('disabled', true);
+		$("#servicio_placas").val($("#plate").val()+"");
+	}
 }
 
 function enviarSolicitudServicio(){
@@ -608,6 +619,11 @@ function toggleTrafficLayer(){
     showingtrafficLayer = !showingtrafficLayer;
 }
 
+    var data = {
+        "document_type": documentType,
+        "document_id": documentId,
+        "password": password
+    };
 
 /** Marcadores **/
 
@@ -824,4 +840,31 @@ function clearCache() {
     removeCache('user');
     removeCache('servicio');
     removeCache('rememberMe');
+}
+
+/** Funciones generales **/
+
+function numberLetterPattern(e) {
+    var key;
+    var keychar;
+
+    if (window.event)
+        key = window.event.keyCode;
+    else if (e)
+        key = e.which;
+    else
+        return true;
+    keychar = String.fromCharCode(key);
+    keychar = keychar.toLowerCase();
+
+// control keys
+    if ((key==null) || (key==0) || (key==8) ||
+        (key==9) || (key==13) || (key==27) )
+        return true;
+
+// alphas and numbers
+    else if ((("abcdefghijklmnopqrstuvwxyz0123456789").indexOf(keychar) > -1))
+        return true;
+    else
+        return false;
 }
