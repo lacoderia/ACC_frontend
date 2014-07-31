@@ -22,7 +22,7 @@ var trafficLayer,
     showingtrafficLayer = false;
 
 var sesion, pagina;
-var followMe = true;
+var followMe = false;
 
 var discountMarkers =  new Array(),
     gasMarkers = new Array(),
@@ -313,7 +313,7 @@ function showServicios() {
 function toggleFollowMe(){
 
     if (followMe) {
-        google.maps.event.clearListeners(map, 'position_changed');
+        google.maps.event.clearListeners(GeoMarker, 'position_changed');
         followMe = false;
         alert('don\'t follow me!');
     } else {
@@ -358,8 +358,8 @@ function showDialog(title, message, acceptFunction, cancelFunction) {
                     '<div class="popup-content">' +
                         '<p>' + message + '</p>' +
                         '<div class="confirmation-buttons">' +
+                        	'<a href="#" class="ok" data-role="button" data-inline="true" data-theme="a">S&iacute;</a>' +
                             '<a href="#" class="cancel" data-role="button" data-inline="true" data-theme="a">No</a>' +
-                            '<a href="#" class="ok" data-role="button" data-inline="true" data-theme="a">Si</a>' +
                         '</div>'+
                     '</div>' +
                 '</div>';
@@ -520,7 +520,7 @@ function solicitarServicio(pagina){
     } else {
         if(sesion != undefined || sesion != null || sesion != ""){
             var title = "¿Es socio de ACC?";
-            var message = 'Presiona "Si" para iniciar sesion o presiona "No" para continuar como invitado.';
+            var message = 'Presiona "S&iacute;" para iniciar sesi&oacute;n o presiona "No" para continuar como invitado.';
             showDialog(
                 title,
                 message,
