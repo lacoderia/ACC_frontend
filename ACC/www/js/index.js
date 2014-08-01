@@ -42,7 +42,7 @@ var markerConstants = {
 }
 
 
-window.sessionStorage.previousPage = 'dashboard';
+window.sessionStorage.acc_previousPage = 'dashboard';
 
 var app = {
     // Application Constructor
@@ -61,7 +61,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        showLoader();
+        //showLoader();
 
         document.addEventListener("backbutton", onBackKeyDown, false);
         function onBackKeyDown(e) {
@@ -110,19 +110,50 @@ $(document).on('pageshow', '#dashboard', function(){
     $('#dashboard-header').slideDown(100);
 });
 
-$(document).on('pagebeforeshow', '#mi-cuenta', function(){
-    var user = getCache("user");
-    if(user == undefined){
-        $.mobile.changePage($('#login'));
-    }else{
-    	//var num_socio = user.num_socio;
-    	var nombre = user.first_name + " " + user.last_name;
-    	//var vencimiento = user.vence;
-    	
-    	//$("#num-socio").html(num_socio);
-    	$("#mi-cuenta-nombre").html(nombre);
-    	//$("#vencimiento").html(vencimiento);
+$(document).on('pagebeforeshow', '#profile', function(){
+    var user = getCache('acc_user');
+
+    clearProfile();
+
+    $('#profile .profile-name').html(user.first_name + ' ' + user.last_name);
+    $('#profile .profile-email').html(user.email);
+
+    if (user.is_member) {
+        var vehicleHTML = '<b>Mis vehículos</b><hr class="separator">';
+
+        if (user.vehicles.length) {
+            vehicleHTML += '<p>';
+
+            for (var i=0; i<user.vehicles.length; i++) {
+                var date = createDateFromMysql(user.vehicles[i].soat_date);
+                vehicleHTML += '<div class="vehicle-item">' +
+                    '<div class="vehicle-info">' +
+                    '<div>Placas: ' + user.vehicles[i].plate_number + '</div>' +
+                    '<div>Vencimiento SOAT: ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</div>' +
+                    '</div>' +
+                    '<div class="vehicle-actions">' +
+                    '<div class="delete-btn icon-cancel-circle" onclick="confirmDeleteVehicle(\'' + user.vehicles[i].plate_number + '\')"></div>' +
+                    '</div>' +
+                    '</div><hr>';
+            }
+
+            vehicleHTML += '</p>';
+        } else {
+            vehicleHTML += 'Actualmente no cuentas con vehículos registrados';
+        }
+
+        $('#profile .profile-vehicles').html(vehicleHTML);
+    } else {
+        var becomeMember = '<b>Hazte miembro de ACC</b><hr class="separator">'+
+                '<p>Hemos detectado que no eres miembro de ACC, para volverte miembro por favor comunicate con nosotros.</p>' +
+                '<p><a id="btn_call_acc" data-role="button" href="tel:0314895050" rel="external">Llamar a ACC</a></p>';
+
+        $('#profile .profile-vehicles').html(becomeMember);
+
+        $('#btn_call_acc').button();
     }
+
+
 });
 
 jQuery.extend(jQuery.validator.messages, {
@@ -167,8 +198,8 @@ function initializeMap(mapOptions) {
 	var myLatlng = new google.maps.LatLng(currentLocation.coords.latitude, currentLocation.coords.longitude);
 	var mapOptions = {
 		center : myLatlng,
-		zoom : 4,
-        minZoom: 4,
+		zoom : 16,
+        minZoom: 6,
         maxZoom: 16,
 		enableHighAccuracy: true,
 		disableDefaultUI: true,
@@ -214,7 +245,6 @@ function initializeMap(mapOptions) {
         }
 
         // not valid anymore => return to last valid position
-        alert('a')
         map.panTo(lastValidCenter);
     });*/
 	
@@ -271,28 +301,24 @@ function showServicios() {
     }).resetForm();
     
     
-    var user = getCache('user');
+    var user = getCache('acc_user');
     if(user != undefined){
     	$("#servicio_nombre").val(user.first_name + " " + user.last_name);
-    	/*$("#servicio-telefono").val(user.telefono);
-    	$("#servicio-placas").val(user.placas);*/
     	
     	var vehiculos = user.vehicles;
-    	vehiculos = {"vehiculo1":"abc123", "vehiculo2":"def456"};
-    	if (vehiculos){
-    		var str = '<select id="plate" style="width:80%;" class="required" onchange="changePlate()">';
+
+    	if (vehiculos && vehiculos.length && user.is_member){
+    		var str = '<select id="plate" class="ui-select required" onchange="changePlate()">';
     		str += '<option value="">Selecciona una placa</option>';
-    		for(vehicle in vehiculos){
-    			str += '<option value="'+vehicle+'">'+vehicle+'</option>';
+    		for(var i in vehiculos){
+    			str += '<option value="' + vehiculos[i].plate_number + '">' + vehiculos[i].plate_number + '</option>';
     		}
     		str += '<option value="otra">Ingresa otra placa</option>';
     		str += '</select>';
     		
     		$('#servicio_placas').hide();
     		$('#servicio_placas_container').html(str);
-    		
     	}
-    	
     }
     
     $('#menu-servicio').show();
@@ -332,7 +358,7 @@ function showAlert(title, message) {
                     '<div data-role="header" data-theme="a">' +
                         '<h1>' + title + '</h1>' +
                     '</div>' +
-                    '<div class="popup-content">' +
+                    '<div class="ui-content">' +
                         '<p>' + message + '</p>' +
                     '</div>' +
                 '</div>';
@@ -355,11 +381,12 @@ function showDialog(title, message, acceptFunction, cancelFunction) {
                     '<div data-role="header" data-theme="a">' +
                         '<h1>' + title + '</h1>' +
                     '</div>' +
-                    '<div class="popup-content">' +
+                    '<div class="ui-content">' +
                         '<p>' + message + '</p>' +
+                        '<br>' +
                         '<div class="confirmation-buttons">' +
-                            '<a href="#" class="cancel" data-role="button" data-inline="true" data-theme="a">No</a>' +
-                            '<a href="#" class="ok" data-role="button" data-inline="true" data-theme="a">Si</a>' +
+                            '<a href="#" class="ok" data-role="button" data-theme="a">Iniciar sesión</a>' +
+                            '<a href="#" class="cancel" data-role="button" data-theme="a">Continuar como invitado</a>' +
                         '</div>'+
                     '</div>' +
                 '</div>';
@@ -424,12 +451,11 @@ function logIn(documentType, documentId, password) {
             if (response.success == true) {
                 hideLoader();
                 if(typeof(Storage)!=="undefined") {
-                	window.localStorage.rememberMe = rememberMe;
-                	//console.log("LOGIN rememberMe: "+ window.localStorage.rememberMe);
-                	setCache('user', response.user);
+                	window.localStorage.acc_rememberMe = rememberMe;
+                	setCache('acc_user', response.user);
                 }
                 window.scrollTo(0,0);
-                $.mobile.changePage($('#' + window.sessionStorage.previousPage), {transition: 'none'});
+                $.mobile.changePage($('#' + window.sessionStorage.acc_previousPage), {transition: 'none'});
             } else {
                 hideLoader();
                 showAlert('Iniciar sesión', response.message);
@@ -445,8 +471,9 @@ function logIn(documentType, documentId, password) {
 function logOut() {
     showLoader();
 
-    var user = getCache('user');
+    var user = getCache('acc_user');
     var data = {
+        "user_id": user.id,
         "auth_token": user.authentication_token
     };
     $.ajax({
@@ -455,14 +482,12 @@ function logOut() {
         data: data,
         dataType: "json",
         success: function(response) {
-            if (response.success == true) {
-                hideLoader();
-                clearCache();
-                setHeader();
-                window.scrollTo(0,0);
-                $('#boton-cerrar-sesion').hide();
-                $.mobile.changePage($('#login'), {transition: 'none'});
-            }
+            hideLoader();
+            clearCache();
+            setHeader();
+            window.scrollTo(0,0);
+            $('#boton-cerrar-sesion').hide();
+            $.mobile.changePage($('#dashboard'), {transition: 'none'});
         },
         error: function(error) {
             showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Intenta nuevamente.');
@@ -474,17 +499,13 @@ function logOut() {
 /** Funciones del dashboard **/
 
 function setHeader(){
-    var user = getCache("user");
+    var user = getCache("acc_user");
     if(user != undefined){
         $('#contenedor_nombre').html(user.first_name);
-        $('#contenedor_placa').html(user.placas);
-        $('#contenedor_placa').show();
-
         $('#boton-cerrar-sesion').show();
     }else{
         $('#contenedor_nombre').html('invitado(a)');
         $('#boton-cerrar-sesion').hide();
-        $('#contenedor_placa').show();
     }
 }
 
@@ -499,33 +520,46 @@ function hideMenuLateral(){
     $('#panel-menu-lateral').panel('close');
 }
 
-function showMiPerfil(){
-    var user = getCache("user");
-    if(user == undefined){
-        window.sessionStorage.previousPage = 'mi-cuenta';
+
+/** Mi cuenta **/
+
+function showProfile(){
+    var user = getCache("acc_user");
+
+    if (user == undefined){
+        window.sessionStorage.acc_previousPage = 'profile';
         $.mobile.changePage($('#login'));
     } else {
-        $.mobile.changePage($('#mi-cuenta'));
+        $.mobile.changePage($('#profile'));
     }
 }
+
+function clearProfile() {
+    $('#profile .profile-picture').html('');
+    $('#profile .profile-name').html('');
+    $('#profile .profile-email').html('');
+    $('#profile .profile-vehicles').html('');
+}
+
+/** Funciones del menu emergente **/
 
 
 function solicitarServicio(pagina){
     hideMenu();
-    setCache("servicio", pagina);
+    setCache("acc_servicio", pagina);
 
-    var user = getCache("user");
+    var user = getCache("acc_user");
     if(user != undefined){
         showServicios();
     } else {
         if(sesion != undefined || sesion != null || sesion != ""){
-            var title = "¿Es socio de ACC?";
-            var message = 'Presiona "Si" para iniciar sesion o presiona "No" para continuar como invitado.';
+            var title = "¿Eres socio de ACC?";
+            var message = 'Si eres socio puedes iniciar sesión, si aun no lo eres puedes continuar como invitado.';
             showDialog(
                 title,
                 message,
                 function(){
-                    window.sessionStorage.previousPage = 'dashboard';
+                    window.sessionStorage.acc_previousPage = 'dashboard';
                     $.mobile.changePage($('#login'));
                 },
                 function(){
@@ -549,14 +583,13 @@ function changePlate(){
 }
 
 function enviarSolicitudServicio(){
-    //console.log(currentLocation.coords.latitude +","+ currentLocation.coords.longitude);
     if ( $("#menu-servicio-form").valid() ){
         hideMenu();
 
-        var servicio = getCache("servicio");
+        var servicio = getCache("acc_servicio");
         var is_guest = true;
         var user_id;
-        var user = getCache('user');
+        var user = getCache('acc_user');
         if(user != undefined){
             is_guest = false;
             user_id = user.id;
@@ -573,13 +606,7 @@ function enviarSolicitudServicio(){
             "user_id": user_id
         }};
 
-        /*var data = {
-         "nombre": "Alberto",
-         "telefono": "12345678",
-         "placas": "ABC-123",
-         "servicio": servicio
-         };*/
-        removeCache("servicio");
+        removeCache("acc_servicio");
 
         showLoader();
         $.ajax({
@@ -598,7 +625,6 @@ function enviarSolicitudServicio(){
                 }
             },
             error: function(error) {
-                console.log(error.responseText);
                 showAlert('Error', 'No se pudo solicitar el servicio. Intenta nuevamente.');
                 hideLoader();
             }
@@ -609,12 +635,14 @@ function enviarSolicitudServicio(){
 
 /** Tráfico **/
 
-function toggleTrafficLayer(){
+function toggleTrafficLayer(event){
 	hideMenu();
 	if(showingtrafficLayer == true){
+        $(event.target).closest('.menu-button').removeClass('active');
 		trafficLayer.setMap(null);
 	}else{
 		trafficLayer.setMap(map);
+        $(event.target).closest('.menu-button').addClass('active');
 	}
     showingtrafficLayer = !showingtrafficLayer;
 }
@@ -626,8 +654,28 @@ function toggleTrafficLayer(){
     };
 
 /** Marcadores **/
+
 var infowindow;
 function showMarkers(markerType, newMarkers){
+
+    var iconURL = '';
+    switch (markerType) {
+        case markerConstants.DISCOUNTS:
+            iconURL = 'img/markers/pin-descuentos.png';
+            break;
+        case markerConstants.GAS:
+            iconURL = 'img/markers/pin-gas.png';
+            break;
+        case markerConstants.PARKING:
+            iconURL = 'img/markers/pin-parqueaderos.png';
+            break;
+        case markerConstants.FUN:
+            iconURL = 'img/markers/pin-diversion.png';
+            break;
+        default:
+            break;
+    }
+
     var markers = new Array();
 
 	$.each(newMarkers, function(index, value) {
@@ -641,20 +689,26 @@ function showMarkers(markerType, newMarkers){
 		if(direccion != undefined){
 			contentString += '<p>'+direccion+'</p>';
 		}
-		var telefono = value.phone;
-		if(telefono != undefined){
-			contentString += '<p>Tel: '+telefono+'</p>';
-		}
+        var telefono = value.phone;
+        if(telefono != undefined){
+            contentString += '<p>Tel: <a href="tel:'+telefono+'">'+telefono+'</a></p>';
+        }
 		var description = value.description;
 		if(description != undefined){
 			contentString += '<p>'+description+'</p>';
 		}
+        var icon = {
+            url: iconURL,
+            scaledSize: new google.maps.Size(20, 33)
+        };
+
 		var marker = new google.maps.Marker({
 		    position: myLatlng,
 		    map: map,
 		    optimized: false,
 		    title: value.name,
-		    html: contentString
+		    html: contentString,
+            icon: icon
 		});
 		
 		infowindow = new google.maps.InfoWindow({
@@ -735,8 +789,10 @@ function getDiscounts(){
 function toggleDiscounts(){
 	hideMenu();
 	if(showingDiscount == true){
-		hideMarkers(markerConstants.DISCOUNTS);
+        $(event.target).closest('.menu-button').removeClass('active');
+        hideMarkers(markerConstants.DISCOUNTS);
 	}else{
+        $(event.target).closest('.menu-button').addClass('active');
         getDiscounts();
 	}
     showingDiscount = !showingDiscount;
@@ -766,8 +822,10 @@ function getParking(){
 function toggleParking(){
     hideMenu();
     if(showingParking == true){
+        $(event.target).closest('.menu-button').removeClass('active');
         hideMarkers(markerConstants.PARKING);
     }else{
+        $(event.target).closest('.menu-button').addClass('active');
         getParking();
     }
     showingParking = !showingParking;
@@ -796,8 +854,10 @@ function getGas(){
 function toggleGas(){
     hideMenu();
     if(showingGas == true){
+        $(event.target).closest('.menu-button').removeClass('active');
         hideMarkers(markerConstants.GAS);
     }else{
+        $(event.target).closest('.menu-button').addClass('active');
         getGas();
     }
     showingGas = !showingGas;
@@ -826,8 +886,10 @@ function getFun(){
 function toggleFun(){
     hideMenu();
     if(showingFun == true){
+        $(event.target).closest('.menu-button').removeClass('active');
         hideMarkers(markerConstants.FUN);
     }else{
+        $(event.target).closest('.menu-button').addClass('active');
         getFun();
     }
     showingFun = !showingFun;
@@ -837,7 +899,7 @@ function toggleFun(){
 /** Funciones para persitencia de datos **/
 
 function setCache(key, value) {
-    if (window.localStorage.rememberMe == "true") {
+    if (window.localStorage.acc_rememberMe == "true") {
         window.localStorage.setItem(key, JSON.stringify(value));
     } else {
         window.sessionStorage.setItem(key, JSON.stringify(value));
@@ -845,7 +907,7 @@ function setCache(key, value) {
 }
 
 function getCache(key) {
-    if (window.localStorage.rememberMe == "true") {
+    if (window.localStorage.acc_rememberMe == "true") {
         return JSON.parse(window.localStorage.getItem(key));
     } else {
         return JSON.parse(window.sessionStorage.getItem(key));
@@ -857,7 +919,7 @@ function isCache(key) {
 }
 
 function removeCache(key) {
-    if (window.localStorage.rememberMe == "true") {
+    if (window.localStorage.acc_rememberMe == "true") {
         window.localStorage.removeItem(key);
     } else {
         window.sessionStorage.removeItem(key);
@@ -865,12 +927,23 @@ function removeCache(key) {
 }
 
 function clearCache() {
-    removeCache('user');
-    removeCache('servicio');
-    removeCache('rememberMe');
+    removeCache('acc_user');
+    removeCache('acc_servicio');
+    removeCache('acc_rememberMe');
 }
 
 /** Funciones generales **/
+
+function createDateFromMysql(mysql_string) {
+    if(typeof mysql_string === 'string')
+    {
+        var t = mysql_string.split(/[-:.T]/);
+
+        //when t[3], t[4] and t[5] are missing they defaults to zero
+        return new Date(t[0], t[1] - 1, t[2], t[3] || 0, t[4] || 0, t[5] || 0);
+    }
+    return null;
+}
 
 function numberLetterPattern(e) {
     var key;
