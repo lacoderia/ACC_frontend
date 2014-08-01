@@ -277,6 +277,12 @@ label.error {
     display: none;
 }
 
+#intro_message {
+    margin-top: 1em;
+    color: white;
+    text-shadow: none;
+}
+
 /** Welcome **/
 
 #welcome .ui-content {

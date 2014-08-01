@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'icomoon';
-	src:url('fonts/icomoon.eot?-8ethix');
-	src:url('fonts/icomoon.eot?#iefix-8ethix') format('embedded-opentype'),
-		url('fonts/icomoon.woff?-8ethix') format('woff'),
-		url('fonts/icomoon.ttf?-8ethix') format('truetype'),
-		url('fonts/icomoon.svg?-8ethix#icomoon') format('svg');
+	src:url('fonts/icomoon.eot?-utqapq');
+	src:url('fonts/icomoon.eot?#iefix-utqapq') format('embedded-opentype'),
+		url('fonts/icomoon.woff?-utqapq') format('woff'),
+		url('fonts/icomoon.ttf?-utqapq') format('truetype'),
+		url('fonts/icomoon.svg?-utqapq#icomoon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -23,63 +23,93 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
-.icon-home2:before {
-	content: "\e601";
-}
-.icon-coin:before {
-	content: "\e602";
-}
-.icon-envelope:before {
-	content: "\e60e";
-}
-.icon-clock:before {
-	content: "\e603";
-}
-.icon-calendar:before {
-	content: "\e60f";
-}
-.icon-user:before {
-	content: "\e604";
-}
-.icon-user2:before {
-	content: "\e605";
-}
-.icon-spinner:before {
-	content: "\e610";
-}
-.icon-search:before {
-	content: "\e606";
-}
-.icon-switch:before {
-	content: "\e607";
-}
-.icon-menu:before {
-	content: "\e608";
-}
-.icon-info:before {
-	content: "\e600";
-}
-.icon-cancel-circle:before {
-	content: "\e611";
-}
-.icon-checkmark-circle:before {
-	content: "\e612";
-}
-.icon-spam:before {
-	content: "\e613";
-}
-.icon-exit:before {
-	content: "\e609";
-}
 .icon-arrow-left:before {
-	content: "\e60a";
-}
-.icon-arrow-right:before {
-	content: "\e60b";
-}
-.icon-arrow-left2:before {
 	content: "\e60c";
 }
-.icon-uniE60D:before {
+.icon-warning:before {
+	content: "\e60f";
+}
+.icon-settings:before {
 	content: "\e60d";
+}
+.icon-medicine:before {
+	content: "\e617";
+}
+.icon-gaspump:before {
+	content: "\e610";
+}
+.icon-streetlight:before {
+	content: "\e618";
+}
+.icon-location:before {
+	content: "\e60b";
+}
+.icon-wrench:before {
+	content: "\e619";
+}
+.icon-grid:before {
+	content: "\e60a";
+}
+.icon-tag:before {
+	content: "\e61b";
+}
+.icon-ticket:before {
+	content: "\e61c";
+}
+.icon-phone:before {
+	content: "\e61d";
+}
+.icon-target:before {
+	content: "\e61f";
+}
+.icon-menu:before {
+	content: "\e620";
+}
+.icon-menu2:before {
+	content: "\e60e";
+}
+.icon-emergency7:before {
+	content: "\e600";
+}
+.icon-pharmacy3:before {
+	content: "\e611";
+}
+.icon-pins19:before {
+	content: "\e612";
+}
+.icon-hat6:before {
+	content: "\e613";
+}
+.icon-police16:before {
+	content: "\e615";
+}
+.icon-ACC:before {
+	content: "\e601";
+}
+.icon-Ambulancia:before {
+	content: "\e602";
+}
+.icon-Descuentos:before {
+	content: "\e603";
+}
+.icon-Desvare:before {
+	content: "\e604";
+}
+.icon-Diversion:before {
+	content: "\e605";
+}
+.icon-Emergencias:before {
+	content: "\e606";
+}
+.icon-Gasolineras:before {
+	content: "\e607";
+}
+.icon-Gruas:before {
+	content: "\e608";
+}
+.icon-Parqueaderos:before {
+	content: "\e609";
+}
+.icon-ambulance:before {
+	content: "\f0f9";
 }

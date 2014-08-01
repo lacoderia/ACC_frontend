@@ -51,19 +51,48 @@
         <div id="menu-principal" class="menu dismissable" onclick="exitMenu(event)">
             <div id="menu-principal-container" class="menu-container">
                 <div class="row">
-                    <div onclick="solicitarServicio('desvare')"><img src="img/Botones/desvare.png" /></div>
-                    <div onclick="solicitarServicio('grua')"><img src="img/Botones/grua.png" /></div>
-                    <div onclick="showEmergencias()"><img src="img/Botones/emergencias.png" /></div>
+                    <div class="menu-button" onclick="solicitarServicio('desvare')">
+                        <div class="icon icon-settings"></div>
+                        <div class="text">Desvare</div>
+                    </div>
+                    <div class="menu-button" onclick="solicitarServicio('grua')">
+                        <div class="icon icon-Gruas"></div>
+                        <div class="text">Grúa</div>
+                    </div>
+                    <div class="menu-button" onclick="showEmergencias()">
+                        <div class="icon icon-emergency7"></div>
+                        <div class="text">Emergencias</div>
+                    </div>
                 </div>
                 <div class="row">
-                    <div><a href="tel:12345678"><img src="img/Botones/acc.png" /></a></div>
-                    <div onclick="toggleDiscounts()"><img src="img/Botones/descuentos.png" /></div>
-                    <div onclick="toggleTrafficLayer()"><img src="img/Botones/trafico.png" /></div>
+                    <a href="tel:0314895050" rel="external">
+                        <div class="menu-button">
+                            <div class="icon icon-phone"></div>
+                            <div class="text">ACC</div>
+                        </div>
+                    </a>
+                    <div class="menu-button" onclick="toggleTrafficLayer(event)">
+                        <div class="icon icon-streetlight"></div>
+                        <div class="text">Tráfico</div>
+                    </div>
+                    <div class="menu-button" onclick="toggleDiscounts()">
+                        <div class="icon icon-tag"></div>
+                        <div class="text">Descuentos</div>
+                    </div>
                 </div>
                 <div class="row">
-                    <div onclick="toggleParking()"><img src="img/Botones/parqueaderos.png" /></div>
-                    <div onclick="toggleGas()"><img src="img/Botones/gasolineras.png" /></div>
-                    <div onclick="toggleFun()"><img src="img/Botones/diversion.png" /></div>
+                    <div class="menu-button" onclick="toggleParking()">
+                        <div class="icon icon-Parqueaderos"></div>
+                        <div class="text">Parqueaderos</div>
+                    </div>
+                    <div class="menu-button" onclick="toggleGas()">
+                        <div class="icon icon-gaspump"></div>
+                        <div class="text">Gasolineras</div>
+                    </div>
+                    <div class="menu-button" onclick="toggleFun()">
+                        <div class="icon icon-ticket"></div>
+                        <div class="text">Diversión</div>
+                    </div>
                 </div>
             </div>
 	    </div>
@@ -71,31 +100,45 @@
         <div id="menu-emergencias" class="menu dismissable" onclick="exitMenu(event)">
             <div id="menu-emergencias-container" class="menu-container">
                 <div class="row">
-                    <div><a href="tel:123"><img src="img/Botones/ambulancia.png" /></a></div>
-                    <div><a href="tel:112"><img src="img/Botones/policia.png" /></a></div>
+                    <a href="tel:123">
+                        <div class="menu-button">
+                            <div class="icon icon-police16"></div>
+                            <div class="text">Policía</div>
+                        </div>
+                    </a>
+                    <a href="tel:123">
+                        <div class="menu-button">
+                            <div class="icon icon-Ambulancia"></div>
+                            <div class="text">Ambulancia</div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
 
         <div id="menu-servicio" class="menu dismissable" onclick="exitMenu(event)">
             <div id="menu-servicio-container" class="menu-container">
+                <div class="ui-header ui-bar-a">
+                    Solicitar servicio
+                </div>
                 <div class="ui-content">
-                    <div id="menu-servicio-titulo">Solicitar Servicio</div>
                     <div>Favor de proporcionar la siguiente información.</div>
                     <form id="menu-servicio-form">
                         <div data-role="fieldcontainer">
                             <input type="text" id="servicio_nombre" name="servicio_nombre" placeholder="Nombre Completo" class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset required" />
                         </div>
                         <div data-role="fieldcontainer">
-                            <input type="text" id="servicio_telefono" name="servicio_telefono" placeholder="Telefono" class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset required" />
+                            <input type="text" id="servicio_telefono" name="servicio_telefono" placeholder="Teléfono" class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset required" />
                         </div>
                         <div data-role="fieldcontainer" id="servicio_placas_container">
 	                    </div>
                         <div data-role="fieldcontainer">
                             <input type="text" id="servicio_placas" name="servicio_placas" placeholder="Placas del vehículo" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset required" />
                         </div>
-                        <a class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a" onclick="hideMenu()">Cancelar</a>
-                        <a class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a" onclick="enviarSolicitudServicio()">Enviar</a>
+                        <div class="buttons">
+                            <a class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a" onclick="hideMenu()">Cancelar</a>
+                            <a class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a" onclick="enviarSolicitudServicio()">Enviar</a>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -107,11 +150,10 @@
         	<!-- Start of menu-lateral -->
 	        <div data-role="panel" data-display="overlay" id="panel-menu-lateral">
 	        	<ul id="menu-lateral">
-	        		<li onclick="showMiPerfil()">Mi cuenta</li>
-	        		<li>Descuentos</li>
-	        		<li>Ayuda</li>
-	        		<li id="boton-cerrar-sesion" onclick="hideMenuLateral();logOut()">Cerrar sesion</li>
-                    <li onclick="hideMenuLateral()">Cerrar Menu</li>
+	        		<li onclick="hideMenuLateral(); showProfile()">Mi cuenta</li>
+	        		<!--li>Descuentos</li-->
+	        		<!--li>Ayuda</li-->
+	        		<li id="boton-cerrar-sesion" onclick="hideMenuLateral(); logOut()">Cerrar sesion</li>
 	        	</ul>
 	        </div>
 	        <!-- /menu-lateral -->
@@ -153,37 +195,38 @@
                         <br/>
                         <div id="login-buttons">
                             <!--div id="login-sign-up"><a href="#sign-up" data-transition="slide">Quiero registrarme</a></div-->
-                            <div id="login-forgot"><a href="#forgot" data-transition="slide">No puedo iniciar sesión</a></div>
+                            <!--div id="login-forgot"><a href="#forgot" data-transition="slide">No puedo iniciar sesión</a></div-->
                         </div>
                     </div>
                 </div>
             </div><!-- /content -->
         </div><!-- /page login-->
 
-        <!-- Start of mi-cuenta -->
-        <div data-role="page" id="mi-cuenta">
+        <!-- Start of profile -->
+        <div data-role="page" id="profile">
 
-            <div data-role="header" class="header">
-                <span class="acc-btn-back icon-arrow-left2" previous-page="dashboard"></span>
+            <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left" previous-page="dashboard"></span>
                 <h1>Mi cuenta</h1>
             </div><!-- /header -->
             
-            <div role="main" class="ui-content" id="datos-personales">
-            	<h2>Datos personales</h2>
-            	<p>No. Socio: </p><p id="mi-cuenta-num-socio">123456</p><br/>
-            	<p>Nombre: </p><p id="mi-cuenta-nombre"></p><br/>
-            	<p>Vence: </p><p id="mi-cuenta-vencimiento">2014/12/31</p><br/>
-            	<h3>Vehiculos</h3>
-            	<div id="informacion-vehiculo">
-            		<img src="img/auto.png" id="mi-cuenta-vehiculo" />
-            		<img src="img/left.png" id="flecha_izq"/>
-            		<img src="img/right.png" id="flecha_der"/>
-            		<br/>
-            		<p>Placa: </p><p id="mi-cuenta-placa">BLH149</p><br/>
-            		<p>SOAT: </p><br/>
-            		<p id="mi-cuenta-soat_inicio">2014/04/30</p><br/>
-            		<p id="mi-cuenta-soat_fin">2014/12/29</p><br/>
-            	</div>            	
+            <div role="main" class="ui-content">
+                <div class="row">
+                    <b>Mis datos</b>
+                    <hr class="separator">
+                </div>
+                <div class="row">
+                    <div>Nombre:</div>
+                    <span class="profile-name"></span>
+                </div>
+                <div class="row">
+                    <div>Email:</div>
+                    <span class="profile-email"></span>
+                </div>
+                <br>
+                <div class="row">
+                    <span class="profile-vehicles"></span>
+                </div>
             </div><!-- /content -->
         </div><!-- /mi-cuenta -->
         

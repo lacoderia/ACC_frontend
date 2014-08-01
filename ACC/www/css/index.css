@@ -21,7 +21,38 @@ html, body {
     height : 100%;
 }
 
+::-webkit-input-placeholder {
+    text-transform: none;
+}
+
+:-ms-input-placeholder {
+    text-transform: none;
+}
+
+:-moz-placeholder {
+    text-transform: none;
+}
+
+::-moz-placeholder {
+    text-transform: none;
+}
+
+::-moz-placeholder {
+    text-transform: none;
+}
+
 /** Overwrite jquery mobile style **/
+
+.ui-header {
+    background-color: #063B6A !important;
+    color: white !important;
+    border: 0 !important;
+    text-shadow: none !important;
+}
+
+.ui-content {
+    text-shadow: none !important;
+}
 
 .ui-panel {
     width: 13em;
@@ -93,15 +124,20 @@ html, body {
     margin-left: -19px;
 }
 
-#popupDialog .ui-header, #popupDialog .ui-title {
-    margin-right: 0;
-    margin-left: 0;
+.ui-dialog {
+    height: auto;
 }
 
-#popupDialog .popup-content {
-    width: 270px;
-    padding-left: 15px;
-    padding-right: 15px;
+#popupDialog, #popupAlert {
+    border: 0
+}
+
+#popupDialog .ui-header,
+#popupDialog .ui-title
+#popupAlert .ui-header,
+#popupAlert .ui-title {
+    margin-right: 0;
+    margin-left: 0;
 }
 
 #popupDialog .confirmation-buttons {
@@ -130,36 +166,85 @@ html, body {
 .menu-container {
     display: inline-block;
     background-color: #FFF;
-    width: 90%;
+    width: 17.2em;
     vertical-align: middle;
 
-    -webkit-border-radius: 15px;
-    -moz-border-radius: 15px;
-    border-radius: 15px;
+    text-align: left;
+
+    -webkit-border-radius: 1em;
+    -moz-border-radius: 1em;
+    border-radius: 1em;
+
+    overflow: hidden;
+}
+
+#menu-emergencias-container {
+    width: 11.7em !important;
+}
+
+.menu-container .ui-header {
+    text-align: center;
+    height: 2em;
+    padding-top: 0.8em;
 }
 
 .menu-container .row {
-    margin-top: 5%;
+    width: 100%;
+    height: 4.8em;
+    margin-top: 0.7em;
 }
 
 .menu-container .row:last-child {
-    margin-bottom: 5%;
+    margin-bottom: 0.7em;
 }
 
-.menu-container .row div {
+.menu-container .row .menu-button {
+    position: relative;
     display: inline-block;
-    width: 25%;
-    height: 25%;
-    margin-right: 5%;
+    width: 4.8em;
+    height: 4.8em;
+    float: left;
+
+    margin-left: 0.7em;
+
+    -webkit-border-radius: 0.5em;
+    -moz-border-radius: 0.5em;
+    border-radius: 0.5em;
+
+    text-align: center;
+    color: #000;
+    background-color: #DEE0E2;
+    text-shadow: none;
 }
 
-.menu-container .row div:last-child {
-    margin-right: 0;
+.menu-container .row .menu-button.active {
+    color: #FFF;
+    background-color: #333;
 }
 
-.menu-container .row div img {
-    display: inline-block;
+.menu-container .row a,
+.menu-container .row a:visited,
+.menu-container .row a:hover,
+.menu-container .row a:active {
+    color: #000;
+    text-shadow: none;
+    text-decoration: none;
+}
+
+.menu-container .row .menu-button .icon {
+    position: absolute;
+    top: 0.5em;
+
     width: 100%;
+    font-size: 2em;
+}
+
+.menu-container .row .menu-button .text {
+    position: absolute;
+    bottom: 0.5em;
+
+    width: 100%;
+    font-size: 0.7em;
 }
 
 #menu-servicio .ui-content {
@@ -179,6 +264,10 @@ html, body {
     width: 80%;
 }
 
+#menu-servicio-form .buttons {
+    margin-top: 1em;
+}
+
 #menu-servicio-titulo {
     font-size: 1.2em;
     font-weight: bold;
@@ -186,6 +275,12 @@ html, body {
     margin-top: 0.5em;
     margin-bottom: 1em;
 }
+
+#servicio_placas{
+    text-transform: uppercase;
+}
+
+/** Menu lateral **/
 
 #panel-menu-lateral {
     background-color: rgba(0, 0, 0, 0.7);
@@ -219,26 +314,6 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
 }
 .gmnoprint div {
     background:none !important;
-}
-
-/* para menu popup */
-#popupDialog .popup-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-#popupAlert .popup-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-#popupServicio .popup-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-.ui-dialog {
-	height: auto;
 }
 
 /** Dashboard **/
@@ -282,7 +357,7 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
     right: 0;
 }
 
-#dashboard .footer {
+#dashboard-footer {
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -290,6 +365,10 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
 
     margin: 0;
     padding: 0;
+
+    color: #000;
+    font-size: 2em;
+    text-shadow: none;
 }
 
 #btn-menu-lateral {
@@ -408,52 +487,28 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
     margin-left: -19px;
 }
 
-#mi-cuenta{
-    background-color: #063B6A;
-	color: white;
+
+/** Mi cuenta **/
+
+#profile hr.separator {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #000000;
+    margin-top: 0.625em;
+    margin-bottom: 0.625em;
 }
 
-#informacion-vehiculo{
-	width: 95%;
-	text-align: center;
+#profile .row {
+    width: 100%;
+    margin-top: 0.7em;
 }
 
-#datos-personales{
-	font-size: 1.5em;
-}
-
-
-#datos-personales p{
-	display: inline-block;
-	padding: 0 .5em;
-}
-
-#vehiculo{
-	width: 300px;
-	height: auto;
-	margin: 0 30%;
-}
-
-#flecha_izq{
-	width: 100px;
-	height: auto;
-	float: left;
-	position: absolute;
-	left: 0;
-	top: 25%;
-	display: inline;
-}
-
-#flecha_der{
-	width: 100px;
-	height: auto;
-	float: right;
-	position: absolute;
-	right: 0;
-	top: 25%;
-	display: inline;
-}
-
-#servicio_placas{
-	text-transform: uppercase;
+#profile .row a,
+#profile .row a:visited,
+#profile .row a:hover,
+#profile .row a:active {
+    color: #000;
+    text-shadow: none;
+    text-decoration: none;
 }
