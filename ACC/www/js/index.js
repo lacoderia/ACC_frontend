@@ -22,7 +22,7 @@ var trafficLayer,
     showingtrafficLayer = false;
 
 var sesion, pagina;
-var followMe = true;
+var followMe = false;
 
 var discountMarkers =  new Array(),
     gasMarkers = new Array(),
@@ -61,7 +61,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        //showLoader();
+        showLoader();
 
         document.addEventListener("backbutton", onBackKeyDown, false);
         function onBackKeyDown(e) {
@@ -337,20 +337,18 @@ function showServicios() {
 }
 
 function toggleFollowMe(){
-
     if (followMe) {
-        google.maps.event.clearListeners(map, 'position_changed');
-        followMe = false;
+        google.maps.event.clearListeners(GeoMarker, 'position_changed');
         alert('don\'t follow me!');
     } else {
         google.maps.event.addListener(GeoMarker, 'position_changed', function() {
             GeoMarker.setCircleOptions({'visible':false});
             map.panTo(GeoMarker.getPosition());
             GeoMarker.setCircleOptions({'visible':true});
-            followMe = true;
         });
         alert('follow me!');
     }
+    followMe = !followMe;
 }
 
 function showAlert(title, message) {
@@ -689,10 +687,10 @@ function showMarkers(markerType, newMarkers){
 		if(direccion != undefined){
 			contentString += '<p>'+direccion+'</p>';
 		}
-        var telefono = value.phone;
-        if(telefono != undefined){
-            contentString += '<p>Tel: <a href="tel:'+telefono+'">'+telefono+'</a></p>';
-        }
+		var telefono = value.phone;
+		if(telefono != undefined){
+			contentString += '<p>Tel: '+telefono+'</p>';
+		}
 		var description = value.description;
 		if(description != undefined){
 			contentString += '<p>'+description+'</p>';
