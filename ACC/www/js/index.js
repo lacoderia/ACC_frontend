@@ -313,14 +313,12 @@ function showServicios() {
 function toggleFollowMe(){
     if (followMe) {
         google.maps.event.clearListeners(GeoMarker, 'position_changed');
-        alert('don\'t follow me!');
     } else {
         google.maps.event.addListener(GeoMarker, 'position_changed', function() {
             GeoMarker.setCircleOptions({'visible':false});
             map.panTo(GeoMarker.getPosition());
             GeoMarker.setCircleOptions({'visible':true});
         });
-        alert('follow me!');
     }
     followMe = !followMe;
 }
@@ -641,7 +639,7 @@ function showMarkers(markerType, newMarkers){
 		}
 		var telefono = value.phone;
 		if(telefono != undefined){
-			contentString += '<p>Tel: <a href="tel:'+telefono+'">'+telefono+'</a></p>';
+			contentString += '<p>Tel: <a href="tel:031'+telefono+'">'+telefono+'</a></p>';
 		}
 		var description = value.description;
 		if(description != undefined){
