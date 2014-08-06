@@ -276,6 +276,35 @@ html, body {
     margin-bottom: 1em;
 }
 
+#menu-pico-y-placa .ui-content {
+    padding: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    text-align: left;
+}
+
+#menu-pico-y-placa-form {
+    width: 100%;
+    text-align: center;
+    margin-top: 1em;
+}
+
+#menu-pico-y-placa-form select {
+    width: 80%;
+}
+
+#menu-pico-y-placa-form .buttons {
+    margin-top: 1em;
+}
+
+#menu-pico-y-placa-titulo {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+}
+
 #servicio_placas{
     text-transform: uppercase;
 }
@@ -511,4 +540,70 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
     color: #000;
     text-shadow: none;
     text-decoration: none;
+}
+
+
+.owl-carousel img{
+	width: 100%;
+	height: 100%;
+}
+
+#cerrar-ayuda{
+	border: solid 1px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin: 3%;
+	padding: 5px;
+	z-index: 9999;
+}
+
+.owl-pagination {
+	margin-top: -13%;
+	position: relative;
+}
+
+.owl-carousel p {
+	align: center;
+	position: absolute;
+	z-index: 9999;
+}
+
+#detalle-descuentos {
+	width: 100%;
+	height: 100%;
+}
+
+#detalle-descuentos button{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	width: auto;
+	margin: 3% 10px;
+}
+
+#lista-descuentos ul {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+}
+
+#lista-descuentos ul li {
+	padding: 15px 5px;
+	margin: 0;
+	width: 100%;
+	list-style-type: none;
+}
+
+#config-icon{
+	width: 22px;
+	height: 22px;
+	float: right;
+	margin: 0 10px;
+}
+
+#placa_header{
+	float: right;
+	margin-right: 15px;
 }

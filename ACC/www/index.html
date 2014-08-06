@@ -39,6 +39,11 @@
         </script>
 
         <script src="jquery/jquery.mobile-1.4.2.min.js"></script>
+        
+        <script type="text/javascript" src="js/owl-carousel/owl.carousel.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="js/owl-carousel/owl.carousel.css" />
+        <link rel="stylesheet" type="text/css" href="js/owl-carousel/owl.theme.css" />
+        <link rel="stylesheet" type="text/css" href="js/owl-carousel/owl.transitions.css" />
 
     </head>
     <body>
@@ -143,6 +148,29 @@
                 </div>
             </div>
         </div>
+        
+        <div id="menu-pico-y-placa" class="menu dismissable" onclick="exitMenu(event)">
+            <div id="menu-pico-y-placa-container" class="menu-container">
+				<div class="ui-header ui-bar-a">
+					Pico Y Placa
+				</div>
+				<div class="ui-content">
+					<form id="menu-pico-y-placa-form">
+		                <div data-role="fieldcontainer" id="pico-y-placa-ciudad-container">
+		                	<select id="pico-y-placa-ciudad" class="ui-select required">
+		                		<option value="">Selecciona tu ciudad</option>
+		                		<option value="1-3-5-7-9">Bucaramanga</option>
+		                		<option value="2-4-6-8-0">Bogota</option>
+		                	</select>
+						</div>
+						<div class="confirmation-buttons">
+							<a class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a" onclick="hideMenu()">Cancelar</a>
+							<a class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a" onclick="cambiarPicoYPlaca()">Aceptar</a>
+						</div>
+					</form>
+				</div>
+            </div>
+	    </div>
 
     	<!-- Start of dashboard -->
         <div data-role="page" id="dashboard">
@@ -151,8 +179,8 @@
 	        <div data-role="panel" data-display="overlay" id="panel-menu-lateral">
 	        	<ul id="menu-lateral">
 	        		<li onclick="hideMenuLateral(); showProfile()">Mi cuenta</li>
-	        		<!--li>Descuentos</li-->
-	        		<!--li>Ayuda</li-->
+	        		<li onclick="getDescuentos()">Descuentos</li>
+	        		<li onclick="showAyuda()">Ayuda</li>
 	        		<li id="boton-cerrar-sesion" onclick="hideMenuLateral(); logOut()">Cerrar sesion</li>
 	        	</ul>
 	        </div>
@@ -160,8 +188,8 @@
         
             <div role="main" class="ui-content">
                 <div class="header" id="dashboard-header">
-                    <span id="nombre_usuario">Hola <span id="contenedor_nombre"></span></span>
-                    <!--span id="placa">Pico y placa <span id="contenedor_placa" style="display:none;"></span></span-->
+                    <span id="nombre_usuario_header">Hola <span id="contenedor_nombre"></span></span>
+                    <span id="placa_header">Pico y placa <span id="contenedor_placa"></span><img id="config-icon" onclick="showPicoYPlaca()" src="img/engrane.png"/></span>
                 </div>
             	<div id="map_canvas"></div>
                 <div class="footer" id="dashboard-footer">
@@ -232,23 +260,40 @@
         
         <!-- Start of lista-descuentos -->
         <div data-role="page" id="lista-descuentos">
-            
-            <div data-role="header" class="header">
+        	<div data-role="header">
+                <span class="acc-btn-back icon-arrow-left" previous-page="dashboard"></span>
+                <h1>Descuentos</h1>
+            </div><!-- /header -->
+            <div role="main" class="ui-content">
+            	<ul id="contenido-lista-descuentos">
+            	</ul>
+            </div><!-- /content -->
+        </div><!-- /lista-descuentos -->
+        
+        <!-- Start of detalle-descuentos -->
+        <div data-role="page" id="detalle-descuentos">
+        	<div data-role="header">
+                <span class="acc-btn-back icon-arrow-left" previous-page="lista-descuentos"></span>
                 <h1></h1>
             </div><!-- /header -->
             
-            <div role="main" class="ui-content">
-            	<ul>
-            		<li><a>Tecnotest Cda</a></li>
-            		<li><a>Tellantas</a></li>
-            		<li><a>Daco Trading</a></li>
-            		<li><a>Quick Battery</a></li>
-            		<li><a>FG Autolavados</a></li>
-            		<li><a>City Parking</a></li>
-            	</ul>
+            <div role="main" class="ui-content" id="contenido-detalle-descuento">
+            	
+            	<!--button type="button">Llamar</button-->
+            	
             </div><!-- /content -->
-
-        </div><!-- /lista-descuentos -->
+            
+        </div><!-- /detalle-descuentos -->
+        
+        <!-- Start of ayuda-->
+        <div data-role="page" id="ayuda">
+        		<img id="cerrar-ayuda" src="img/tache_min.png" onclick="showDashboard()" />
+	            <div id="owl-example" class="owl-carousel" >
+	            	<div><p>Aqui va una descripcion</p><img src="img/logo.png" /></div>
+	            	<div><p>Aqui va otra descripcion</p><img src="img/mapa.png" /></div>
+	            	<div><p>Aqui va una descripcion mas</p><img src="img/auto.png" /></div>
+	            </div>
+        </div><!-- /ayuda -->
         
     </body>
 </html>
