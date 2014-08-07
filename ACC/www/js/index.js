@@ -126,6 +126,7 @@ $(document).on('click', '#map_canvas a[target="_blank"]', function(e){
 
 $(document).on('pagebeforeshow', '#dashboard', function(){
     setHeader();
+    setPicoYPlaca();
 });
 
 $(document).on('pageshow', '#dashboard', function(){
@@ -549,7 +550,8 @@ function logOut() {
 function setHeader(){
     var user = getCache("acc_user");
     if(user != undefined){
-        $('#contenedor_nombre').html(user.first_name);
+    	$('#contenedor_nombre').html(user.first_name);
+    	setPicoYPlaca();
         $('#boton-cerrar-sesion').show();
     }else{
         $('#contenedor_nombre').html('invitado(a)');
@@ -694,6 +696,11 @@ function toggleTrafficLayer(event){
 	}
     showingtrafficLayer = !showingtrafficLayer;
 }
+
+
+documentType = $('#login-tipo-identificacion').val();
+documentId = $('#login-identificacion').val();
+password = $('#login-password').val();
 
     var data = {
         "document_type": documentType,
@@ -1146,4 +1153,91 @@ function numberLetterPattern(e) {
         return true;
     else
         return false;
+}
+
+
+$(document).on('pagebeforeshow', '#ayuda', function(){
+	$("#owl-example").owlCarousel({
+		itemsTablet: [$(window).width(),1], //1 items between device.width and 0
+		itemsMobile : false 
+	});
+});
+
+function showDashboard(){
+	$.mobile.changePage($('#dashboard'));
+}
+
+function showAyuda(){
+	$.mobile.changePage($('#ayuda'));
+}
+
+function getDescuentos(){
+	showLoader();
+
+    $.ajax({
+        type: "GET",
+        url: "http://166.78.117.195/perks.json",
+        dataType: "json",
+        success: function(response) {
+            hideLoader();
+            if(isCache('descuentos')){
+            	removeCache('descuentos');
+            }
+            showDescuentos(response);
+        },
+        error: function(error) {
+        	showAlert('Error', 'Hubo un error al obtener los descuentos.');
+            hideLoader();
+        }
+    });
+	
+}
+
+function showDescuentos(response){
+	setCache('descuentos', response);
+	$.mobile.changePage($('#lista-descuentos'));
+	var contentString = '';
+	$.each(response, function(index, value) {
+		contentString += '<li onclick="showDetalle('+value.id+')">'+value.name+'</li><hr/>';
+	});
+	
+	$('#contenido-lista-descuentos').html(contentString);
+}
+
+function showDetalle(id){
+	$.mobile.changePage($('#detalle-descuentos'));
+	
+	var descuentos = getCache('descuentos');
+	var contentString = '';
+	$.each(descuentos, function(index, value) {
+		if(value.id == id){
+			contentString += '<h1>'+value.name+'</h1>';
+			contentString += '<p>'+value.description+'</p>';
+		}
+	});
+	
+	$('#contenido-detalle-descuento').html(contentString);
+}
+
+function showPicoYPlaca(){
+	hideMenu();
+	$('#menu-pico-y-placa').show();
+}
+
+function cambiarPicoYPlaca(){
+	var valor = $('#pico-y-placa-ciudad').val();
+	setCache('PicoYPlaca', valor);
+	$('#contenedor_placa').html(valor);
+	hideMenu();
+}
+
+function setPicoYPlaca(){
+	if(isCache('PicoYPlaca')){
+		console.log("PicoYPlaca Cache");
+		var valor = getCache('PicoYPlaca');
+		$('#contenedor_placa').html(valor);
+	}else{
+		console.log("PicoYPlaca Default");
+		$('#contenedor_placa').html("1-3-5-7-9");
+	}
 }
