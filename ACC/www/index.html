@@ -165,9 +165,9 @@
                 </div>
             	<div id="map_canvas"></div>
                 <div class="footer" id="dashboard-footer">
-                    <div id="btn-menu-lateral"><img src="img/Botones/menu-lateral.png" onclick="showMenuLateral()"></div>
-                    <div id="btn-follow-me"><img src="img/Botones/menu-popup.png" onclick="toggleFollowMe()"></div>
-                    <div id="btn-menu-popup"><img src="img/Botones/menu-popup.png" onclick="showMenu()"></div>
+                    <div id="btn-menu-lateral"><span onclick="showMenuLateral()" class="icon-menu"></span></div>
+                    <div id="btn-follow-me"><span onclick="toggleFollowMe()" class="icon-target"></span></div>
+                    <div id="btn-menu-popup"><span onclick="showMenu()" class="icon-grid"></span></div>
                 </div>
             </div><!-- /content -->
             
@@ -190,7 +190,7 @@
                         <input placeholder="Contraseña" type="password" id="login-password" class="required"/>
                         <label class="checkbox-label-no-background"><input type="checkbox" name="login-remember-me" id="login-remember-me" data-mini="true">Recordarme</label>
                         <br/>
-                        <a data-role="button" onclick="logIn()">Iniciar Sesión</a>
+                        <a data-role="button" onclick="logIn(false)">Iniciar Sesión</a>
                         <a data-role="button" href="#dashboard">Quiero continuar como invitado</a>
                         <br/>
                         <div id="login-buttons">

@@ -41,6 +41,25 @@ var markerConstants = {
     'FUN' : 4
 }
 
+var markerActivity = {
+    'discounts' : {
+        'loadSuccess': false,
+        'loadAttemp': false
+    },
+    'gas' : {
+        'loadSuccess': false,
+        'loadAttemp': false
+    },
+    'parking' : {
+        'loadSuccess': false,
+        'loadAttemp': false
+    },
+    'fun' : {
+        'loadSuccess': false,
+        'loadAttemp': false
+    }
+}
+
 
 window.sessionStorage.acc_previousPage = 'dashboard';
 
@@ -68,8 +87,11 @@ var app = {
             e.preventDefault();
         }
 
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
-
+        if (getCache('acc_rememberMe')) {
+            logIn(true);
+        } else {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        }
 
         $("#panel-menu-lateral").panel({ swipeClose: false });
 
@@ -223,11 +245,8 @@ function initializeMap(mapOptions) {
 	
 	google.maps.event.trigger(map, 'resize');
 
-    /*google.maps.event.addListener(GeoMarker, 'position_changed', function() {
-        GeoMarker.setCircleOptions({'visible':false});
-        map.panTo(GeoMarker.getPosition());
-        GeoMarker.setCircleOptions({'visible':true});
-    });*/
+    // Activamos la función follow me
+    toggleFollowMe();
 
     // Limitamos el panning a las máximas coordenadas del mundo
     /*var allowedBounds = new google.maps.LatLngBounds(
@@ -249,7 +268,10 @@ function initializeMap(mapOptions) {
     });*/
 	
 	trafficLayer = new google.maps.TrafficLayer();
-    hideLoader();
+
+    // Obtenemos todos los puntos de interes
+
+    getAllMarkers();
 }
 
 function onError() {
@@ -338,8 +360,10 @@ function showServicios() {
 
 function toggleFollowMe(){
     if (followMe) {
+        $('#btn-follow-me').removeClass('active');
         google.maps.event.clearListeners(GeoMarker, 'position_changed');
     } else {
+        $('#btn-follow-me').addClass('active');
         google.maps.event.addListener(GeoMarker, 'position_changed', function() {
             GeoMarker.setCircleOptions({'visible':false});
             map.panTo(GeoMarker.getPosition());
@@ -416,52 +440,80 @@ function showDialog(title, message, acceptFunction, cancelFunction) {
 
 /** Funciones de sesión del usuario **/
 
-function logIn(documentType, documentId, password) {
-
-    documentType = documentType || $('#login-tipo-identificacion').val();
-    documentId = documentId || $('#login-identificacion').val();
-    password = password || $('#login-password').val();
-
-    var rememberMe = $("#login-remember-me").is(':checked');
-
-    var data = {
-        "document_type": documentType,
-        "document_id": documentId,
-        "password": password
-    };
-
-    /*var data = {
-        "document_type": 'CC',
-        "document_id": '12345',
-        "password": '00000000'
-    };*/
-
+function logIn(autologin) {
     showLoader();
 
-    $.ajax({
-        type: "POST",
-        url: "http://166.78.117.195/login",
-        data: data,
-        dataType: "json",
-        success: function(response) {
-            if (response.success == true) {
-                hideLoader();
-                if(typeof(Storage)!=="undefined") {
-                	window.localStorage.acc_rememberMe = rememberMe;
-                	setCache('acc_user', response.user);
+    var data = {}
+
+    if (autologin == false) {
+        var rememberMe = $("#login-remember-me").is(':checked');
+
+        /*data = {
+            "document_type": $('#login-tipo-identificacion').val(),
+            "document_id": $('#login-identificacion').val(),
+            "password": $('#login-password').val()
+        };*/
+
+        data = {
+            "document_type": 'CC',
+            "document_id": '12345',
+            "password": '00000000'
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "http://166.78.117.195/login",
+            data: data,
+            dataType: "json",
+            success: function(response) {
+                if (response.success == true) {
+                    hideLoader();
+                    if(typeof(Storage)!=="undefined") {
+                        window.localStorage.acc_rememberMe = rememberMe;
+                        setCache('acc_user', response.user);
+                    }
+                    window.scrollTo(0,0);
+                    $.mobile.changePage($('#' + window.sessionStorage.acc_previousPage), {transition: 'none'});
+                } else {
+                    hideLoader();
+                    showAlert('Iniciar sesión', response.message);
                 }
-                window.scrollTo(0,0);
-                $.mobile.changePage($('#' + window.sessionStorage.acc_previousPage), {transition: 'none'});
-            } else {
+            },
+            error: function(error) {
+                showAlert('Iniciar sesión', 'Hubo un error al iniciar la sesión. Intenta nuevamente.');
                 hideLoader();
-                showAlert('Iniciar sesión', response.message);
             }
-        },
-        error: function(error) {
-            showAlert('Iniciar sesión', 'Hubo un error al iniciar la sesión. Intenta nuevamente.');
-            hideLoader();
-        }
-    });
+        });
+    } else {
+        var user = getCache('acc_user');
+        data = {
+            "user_id": user.id,
+            "auth_token" : user.authentication_token
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "http://166.78.117.195/login",
+            data: data,
+            dataType: "json",
+            success: function(response) {
+                hideLoader();
+                if (response.success == true) {
+                    setCache('acc_user', response.user);
+                } else {
+                    clearCache();
+                    showAlert('Iniciar sesión', response.message);
+                }
+                navigator.geolocation.getCurrentPosition(onSuccess, onError);
+            },
+            error: function(error) {
+                hideLoader();
+                clearCache();
+                showAlert('Iniciar sesión', 'Hubo un error al iniciar la sesión. Intenta nuevamente.');
+                navigator.geolocation.getCurrentPosition(onSuccess, onError);
+            }
+        });
+    }
 }
 
 function logOut() {
@@ -651,8 +703,85 @@ function toggleTrafficLayer(event){
 
 /** Marcadores **/
 
+function getAllMarkers() {
+    showLoader();
+    $.ajax({
+        type: "GET",
+        url: "http://166.78.117.195/locations.json?type_id=" + markerConstants.DISCOUNTS,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(response) {
+            markerActivity.discounts.loadAttemp = true;
+            markerActivity.discounts.loadSuccess = true;
+            generateMarkers(markerConstants.DISCOUNTS, response);
+            checkHideLoader();
+        },
+        error: function(error) {
+            markerActivity.discounts.loadAttemp = true;
+            checkHideLoader();
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "http://166.78.117.195/locations.json?type_id=" + markerConstants.GAS,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(response) {
+            markerActivity.gas.loadAttemp = true;
+            markerActivity.gas.loadSuccess = true;
+            generateMarkers(markerConstants.GAS, response);
+            checkHideLoader();
+        },
+        error: function(error) {
+            markerActivity.gas.loadAttemp = true;
+            checkHideLoader();
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "http://166.78.117.195/locations.json?type_id=" + markerConstants.PARKING,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(response) {
+            markerActivity.parking.loadAttemp = true;
+            markerActivity.parking.loadSuccess = true;
+            generateMarkers(markerConstants.PARKING, response);
+            checkHideLoader();
+        },
+        error: function(error) {
+            markerActivity.parking.loadAttemp = true;
+            checkHideLoader();
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "http://166.78.117.195/locations.json?type_id=" + markerConstants.FUN,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(response) {
+            markerActivity.fun.loadAttemp = true;
+            markerActivity.fun.loadSuccess = true;
+            generateMarkers(markerConstants.FUN, response);
+            checkHideLoader();
+        },
+        error: function(error) {
+            markerActivity.fun.loadAttemp = true;
+            checkHideLoader();
+        }
+    });
+}
+
+function checkHideLoader() {
+    if (markerActivity.discounts.loadAttemp && markerActivity.gas.loadAttemp && markerActivity.parking.loadAttemp && markerActivity.fun.loadAttemp) {
+        hideLoader();
+    }
+}
+
 var infowindow;
-function showMarkers(markerType, newMarkers){
+function generateMarkers(markerType, newMarkers){
 
     var iconURL = '';
     switch (markerType) {
@@ -674,48 +803,48 @@ function showMarkers(markerType, newMarkers){
 
     var markers = new Array();
 
-	$.each(newMarkers, function(index, value) {
-		var myLatlng = new google.maps.LatLng(value.lat, value.long);
-		var contentString = '';
-		var nombre = value.name;
-		if(nombre != undefined){
-			contentString += '<p>'+nombre+'</p>';
-		}
-		var direccion = value.address;
-		if(direccion != undefined){
-			contentString += '<p>'+direccion+'</p>';
-		}
-		var telefono = value.phone;
-		if(telefono != undefined){
-			contentString += '<p>Tel: <a href="tel:031'+telefono+'">'+telefono+'</a></p>';
-		}
-		var description = value.description;
-		if(description != undefined){
-			contentString += '<p>'+description+'</p>';
-		}
+    $.each(newMarkers, function(index, value) {
+        var myLatlng = new google.maps.LatLng(value.lat, value.long);
+        var contentString = '';
+        var nombre = value.name;
+        if(nombre != undefined){
+            contentString += '<p>'+nombre+'</p>';
+        }
+        var direccion = value.address;
+        if(direccion != undefined){
+            contentString += '<p>'+direccion+'</p>';
+        }
+        var telefono = value.phone;
+        if(telefono != undefined){
+            contentString += '<p>Tel: <a href="tel:031'+telefono+'">'+telefono+'</a></p>';
+        }
+        var description = value.description;
+        if(description != undefined){
+            contentString += '<p>'+description+'</p>';
+        }
         var icon = {
             url: iconURL,
             scaledSize: new google.maps.Size(20, 33)
         };
 
-		var marker = new google.maps.Marker({
-		    position: myLatlng,
-		    map: map,
-		    optimized: false,
-		    title: value.name,
-		    html: contentString,
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            optimized: false,
+            title: value.name,
+            html: contentString,
+            map: null,
             icon: icon
-		});
-		
-		infowindow = new google.maps.InfoWindow({
-			content: "",
-			maxWidth: 150
-		});
-		google.maps.event.addListener(marker, 'click', function() {
-			infowindow.setContent(this.html);
-			infowindow.open(map,marker);
-		});
-		
+        });
+
+        infowindow = new google.maps.InfoWindow({
+            content: "",
+            maxWidth: 150
+        });
+        google.maps.event.addListener(marker, 'click', function() {
+            infowindow.setContent(this.html);
+            infowindow.open(map,marker);
+        });
+
         markers.push(marker);
     });
 
@@ -734,6 +863,31 @@ function showMarkers(markerType, newMarkers){
             break;
         default:
             break;
+    }
+}
+
+function showMarkers(markerType){
+    var markers = new Array();
+
+    switch (markerType) {
+        case markerConstants.DISCOUNTS:
+            markers = discountMarkers;
+            break;
+        case markerConstants.GAS:
+            markers = gasMarkers;
+            break;
+        case markerConstants.PARKING:
+            markers = parkingMarkers;
+            break;
+        case markerConstants.FUN:
+            markers = funMarkers;
+            break;
+        default:
+            break;
+    }
+
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
     }
 }
 
@@ -772,24 +926,31 @@ function getDiscounts(){
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(response) {
+            markerActivity.discounts.loadSuccess = true;
+            generateMarkers(markerConstants.DISCOUNTS, response);
+            showMarkers(markerConstants.DISCOUNTS);
             hideLoader();
-            showMarkers(markerConstants.DISCOUNTS, response);
         },
         error: function(error) {
+            showAlert('Error', 'Hubo un error al obtener los puntos de descuentos cercanos.');
             hideLoader();
-            showAlert('Error', 'Hubo un error al obtener los descuentos cercanos.');
         }
     });
 }
 
 function toggleDiscounts(){
 	hideMenu();
-	if(showingDiscount == true){
+	if (showingDiscount == true) {
         $(event.target).closest('.menu-button').removeClass('active');
         hideMarkers(markerConstants.DISCOUNTS);
-	}else{
+	} else {
         $(event.target).closest('.menu-button').addClass('active');
-        getDiscounts();
+
+        if (markerActivity.discounts.loadSuccess) {
+            showMarkers(markerConstants.DISCOUNTS);
+        } else {
+            getDiscounts();
+        }
 	}
     showingDiscount = !showingDiscount;
 }
@@ -805,24 +966,31 @@ function getParking(){
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(response) {
+            markerActivity.parking.loadSuccess = true;
+            generateMarkers(markerConstants.PARKING, response);
+            showMarkers(markerConstants.PARKING);
             hideLoader();
-            showMarkers(markerConstants.PARKING, response);
         },
         error: function(error) {
-            hideLoader();
             showAlert('Error', 'Hubo un error al obtener los parqueaderos cercanos.');
+            hideLoader();
         }
     });
 }
 
 function toggleParking(){
     hideMenu();
-    if(showingParking == true){
+    if (showingParking == true) {
         $(event.target).closest('.menu-button').removeClass('active');
         hideMarkers(markerConstants.PARKING);
-    }else{
+    } else {
         $(event.target).closest('.menu-button').addClass('active');
-        getParking();
+
+        if (markerActivity.parking.loadSuccess) {
+            showMarkers(markerConstants.PARKING);
+        } else {
+            getParking();
+        }
     }
     showingParking = !showingParking;
 }
@@ -837,24 +1005,31 @@ function getGas(){
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(response) {
+            markerActivity.gas.loadSuccess = true;
+            generateMarkers(markerConstants.GAS, response);
+            showMarkers(markerConstants.GAS);
             hideLoader();
-            showMarkers(markerConstants.GAS, response);
         },
         error: function(error) {
-            hideLoader();
             showAlert('Error', 'Hubo un error al obtener las gasolineras cercanos.');
+            hideLoader();
         }
     });
 }
 
 function toggleGas(){
     hideMenu();
-    if(showingGas == true){
+    if (showingGas == true) {
         $(event.target).closest('.menu-button').removeClass('active');
         hideMarkers(markerConstants.GAS);
-    }else{
+    } else {
         $(event.target).closest('.menu-button').addClass('active');
-        getGas();
+
+        if (markerActivity.gas.loadSuccess) {
+            showMarkers(markerConstants.GAS);
+        } else {
+            getGas();
+        }
     }
     showingGas = !showingGas;
 }
@@ -869,24 +1044,31 @@ function getFun(){
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(response) {
+            markerActivity.fun.loadSuccess = true;
+            generateMarkers(markerConstants.FUN, response);
+            showMarkers(markerConstants.FUN);
             hideLoader();
-            showMarkers(markerConstants.FUN, response);
         },
         error: function(error) {
+            showAlert('Error', 'Hubo un error al obtener las puntos de diversión cercanos.');
             hideLoader();
-            showAlert('Error', 'Hubo un error al obtener los puntos de diversión cercanos.');
         }
     });
 }
 
 function toggleFun(){
     hideMenu();
-    if(showingFun == true){
+    if (showingFun == true) {
         $(event.target).closest('.menu-button').removeClass('active');
         hideMarkers(markerConstants.FUN);
-    }else{
+    } else {
         $(event.target).closest('.menu-button').addClass('active');
-        getFun();
+
+        if (markerActivity.fun.loadSuccess) {
+            showMarkers(markerConstants.FUN);
+        } else {
+            getFun();
+        }
     }
     showingFun = !showingFun;
 }

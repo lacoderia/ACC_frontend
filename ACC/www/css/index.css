@@ -171,15 +171,20 @@ html, body {
 
     text-align: left;
 
-    -webkit-border-radius: 1em;
-    -moz-border-radius: 1em;
-    border-radius: 1em;
+    -webkit-border-radius: 0.5em;
+    -moz-border-radius: 0.5em;
+    border-radius: 0.5em;
 
     overflow: hidden;
 }
 
 #menu-emergencias-container {
     width: 11.7em !important;
+}
+
+#menu-servicio-container {
+    background-color: #FFF !important;
+    color: #000 !important;
 }
 
 .menu-container .ui-header {
@@ -207,19 +212,20 @@ html, body {
 
     margin-left: 0.7em;
 
-    -webkit-border-radius: 0.5em;
-    -moz-border-radius: 0.5em;
-    border-radius: 0.5em;
+    -webkit-border-radius: 0.3em;
+    -moz-border-radius: 0.3em;
+    border-radius: 0.3em;
 
     text-align: center;
-    color: #000;
-    background-color: #DEE0E2;
+    background-color: #0A66B6;
+    color: #FFF;
+
     text-shadow: none;
 }
 
 .menu-container .row .menu-button.active {
+    background-color: #031F37;
     color: #FFF;
-    background-color: #333;
 }
 
 .menu-container .row a,
@@ -283,7 +289,7 @@ html, body {
 /** Menu lateral **/
 
 #panel-menu-lateral {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(6, 59, 106, 0.9);
 }
 
 #menu-lateral{
@@ -329,24 +335,23 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
     padding: 0;
 }
 
-#dashboard .header {
+#dashboard-header {
+    display: none;
     color: #FFF;
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(6, 59, 106, 0.9);
     position: absolute;
     top: 0;
     width: 100%;
+    height: 1.5em;
+
     z-index: 50;
     text-shadow: none;
     padding: 0.5em;
 }
 
-#dashboard .header div {
+#dashboard-header div {
     display: inline-block;
     width: 50%;
-}
-
-#dashboard-header {
-    display: none;
 }
 
 #dashboard #map_canvas {
@@ -365,28 +370,33 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
 
     margin: 0;
     padding: 0;
+    padding-bottom: 4%;
 
-    color: #000;
+    color: #063B6A;
     font-size: 2em;
     text-shadow: none;
+
+    text-align: center;
 }
 
 #btn-menu-lateral {
+    display: inline-block;
     float: left;
     margin-left: 5%;
-    margin-bottom: 5%;
-}
-
-#btn-menu-popup {
-    float: right;
-    margin-right: 5%;
-    margin-bottom: 5%;
 }
 
 #btn-follow-me {
-    float: left;
-    margin-left: 5%;
-    margin-bottom: 5%;
+    display: inline-block;
+}
+
+#btn-menu-popup {
+    display: inline-block;
+    float: right;
+    margin-right: 5%;
+}
+
+#btn-follow-me.active {
+    color: #0A66B6;
 }
 
 /** Login **/

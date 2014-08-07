@@ -420,11 +420,11 @@ function logIn(autologin) {
          "password": $('#login-password').val()
          };
 
-        data = {
+        /*data = {
             "document_type": 'CC',
             "document_id": '12345',
             "password": '00000000'
-        };
+        };*/
     } else {
         rememberMe = true;
 
