@@ -90,6 +90,7 @@ var app = {
         if (getCache('acc_rememberMe')) {
             logIn(true);
         } else {
+            setUserName();
             navigator.geolocation.getCurrentPosition(onSuccess, onError);
         }
 
@@ -124,9 +125,19 @@ $(document).on('click', '#map_canvas a[target="_blank"]', function(e){
     }
 });
 
+
+$(document).on('pagebeforeshow', '#sign-up', function(){
+    clearSignUp();
+
+    $("#sign-up-form").validate({
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent().parent().after());
+        }
+    }).resetForm();
+});
+
 $(document).on('pagebeforeshow', '#dashboard', function(){
-    setHeader();
-    setPicoYPlaca();
+    autosetPicoYPlaca();
 });
 
 $(document).on('pageshow', '#dashboard', function(){
@@ -177,6 +188,10 @@ $(document).on('pagebeforeshow', '#profile', function(){
     }
 
 
+});
+
+$(document).on('pageshow', '#lista-descuentos', function(){
+    getDescuentos();
 });
 
 jQuery.extend(jQuery.validator.messages, {
@@ -273,6 +288,12 @@ function initializeMap(mapOptions) {
     // Obtenemos todos los puntos de interes
 
     getAllMarkers();
+
+    if(isCache('acc_PicoYPlaca')){
+        autosetPicoYPlaca();
+    } else {
+        showPicoYPlaca();
+    }
 }
 
 function onError() {
@@ -331,7 +352,7 @@ function showServicios() {
     	var vehiculos = user.vehicles;
 
     	if (vehiculos && vehiculos.length && user.is_member){
-    		var str = '<select id="plate" class="ui-select required" onchange="changePlate()">';
+    		var str = '<select id="plate" class="required" onchange="changePlate()">';
     		str += '<option value="">Selecciona una placa</option>';
     		for(var i in vehiculos){
     			str += '<option value="' + vehiculos[i].plate_number + '">' + vehiculos[i].plate_number + '</option>';
@@ -341,6 +362,7 @@ function showServicios() {
     		
     		$('#servicio_placas').hide();
     		$('#servicio_placas_container').html(str);
+            $('#servicio_placas_container').selectmenu();
     	}
     }
     
@@ -449,17 +471,17 @@ function logIn(autologin) {
     if (autologin == false) {
         var rememberMe = $("#login-remember-me").is(':checked');
 
-        /*data = {
+        data = {
             "document_type": $('#login-tipo-identificacion').val(),
             "document_id": $('#login-identificacion').val(),
             "password": $('#login-password').val()
-        };*/
+        };
 
-        data = {
+        /*data = {
             "document_type": 'CC',
             "document_id": '12345',
             "password": '00000000'
-        };
+        };*/
 
         $.ajax({
             type: "POST",
@@ -479,8 +501,10 @@ function logIn(autologin) {
                     hideLoader();
                     showAlert('Iniciar sesión', response.message);
                 }
+                setUserName();
             },
             error: function(error) {
+                setUserName();
                 showAlert('Iniciar sesión', 'Hubo un error al iniciar la sesión. Intenta nuevamente.');
                 hideLoader();
             }
@@ -505,12 +529,14 @@ function logIn(autologin) {
                     clearCache();
                     showAlert('Iniciar sesión', response.message);
                 }
+                setUserName();
                 navigator.geolocation.getCurrentPosition(onSuccess, onError);
             },
             error: function(error) {
                 hideLoader();
                 clearCache();
                 showAlert('Iniciar sesión', 'Hubo un error al iniciar la sesión. Intenta nuevamente.');
+                setUserName();
                 navigator.geolocation.getCurrentPosition(onSuccess, onError);
             }
         });
@@ -521,46 +547,147 @@ function logOut() {
     showLoader();
 
     var user = getCache('acc_user');
-    var data = {
-        "user_id": user.id,
-        "auth_token": user.authentication_token
-    };
-    $.ajax({
-        type: "POST",
-        url: "http://166.78.117.195/logout",
-        data: data,
-        dataType: "json",
-        success: function(response) {
-            hideLoader();
-            clearCache();
-            setHeader();
-            window.scrollTo(0,0);
-            $('#boton-cerrar-sesion').hide();
-            $.mobile.changePage($('#dashboard'), {transition: 'none'});
-        },
-        error: function(error) {
-            showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Intenta nuevamente.');
-            hideLoader();
-        }
-    });
+
+    if (user != undefined && user != null) {
+        var data = {
+            "user_id": user.id,
+            "auth_token": user.authentication_token
+        };
+        $.ajax({
+            type: "POST",
+            url: "http://166.78.117.195/logout",
+            data: data,
+            dataType: "json",
+            success: function(response) {
+                hideLoader();
+                clearCache();
+                setUserName();
+                window.scrollTo(0,0);
+                $('#boton-cerrar-sesion').hide();
+                $.mobile.changePage($('#dashboard'), {transition: 'none'});
+            },
+            error: function(error) {
+                setUserName();
+                showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Intenta nuevamente.');
+                hideLoader();
+            }
+        });
+    } else {
+        hideLoader();
+        clearCache();
+        setUserName();
+        window.scrollTo(0,0);
+        $('#boton-cerrar-sesion').hide();
+        $.mobile.changePage($('#dashboard'), {transition: 'none'});
+    }
+
+
 }
 
-/** Funciones del dashboard **/
 
-function setHeader(){
+/** Funciones de registro **/
+function clearSignUp() {
+    $('#sign_up_document_type').val('');
+    $('#sign_up_document_type').selectmenu();
+    $('#sign_up_document_type').selectmenu('refresh', true);
+    $('#sign_up_document_id').val('');
+    $('#sign_up_first_name').val('');
+    $('#sign_up_last_name').val('');
+    $('#sign_up_second_last_name').val('');
+    $('#sign_up_phone').val('');
+    $('#sign_up_email').val('');
+    $('#sign_up_vehicle_plates').val('');
+}
+
+function signUp() {
+    if ($("#sign-up-form").valid()){
+
+        /*var data = {
+            "utf8": "V",
+            "user": {
+                "first_name": $('#sign_up_first_name').val(),
+                "last_name": $('#sign_up_last_name').val(),
+                "document_type": $('#sign_up_document_type').val(),
+                "document_id": $('#sign_up_document_id').val(),
+                "is_member": false,
+                "agreement_id": $('#sign_up_agreement').val(),
+                "password": $('#sign_up_password').val(),
+                "password_confirmation": $('#sign_up_password_confirmation').val(),
+                "email": $('#sign_up_email').val()
+            }
+        };
+
+        if ($("#sign_up_add_vehicle").is(':checked')) {
+            if ($('#sign_up_vehicle_owner').is(':checked')) {
+                data.vehicle = {
+                    "plate_number": $('#sign_up_vehicle_plates').val().toUpperCase(),
+                    "soat_date": $('#sign_up_vehicle_soat').val(),
+                    "document_type_owner": $('#sign_up_document_type').val(),
+                    "document_id_owner": $('#sign_up_document_id').val()
+                };
+            } else {
+                data.vehicle = {
+                    "plate_number": $('#sign_up_vehicle_plates').val().toUpperCase(),
+                    "soat_date": $('#sign_up_vehicle_soat').val(),
+                    "document_type_owner": $('#sign_up_vehicle_document_type').val(),
+                    "document_id_owner": $('#sign_up_vehicle_document_id').val()
+                };
+            }
+        }
+
+        showLoader();
+        $.ajax({
+            type: "POST",
+            url: "http://166.78.117.195/users.json",
+            data: data,
+            dataType: "json",
+            success: function(response) {
+                if (response.success == true) {
+                    hideLoader();
+                    showAlert('Registro',
+                        response.message,
+                        function(){
+                            window.scrollTo(0,0);
+                            $.mobile.changePage($('#login'), {transition: 'none'});
+                        }
+                    );
+                } else {
+                    hideLoader();
+                    showAlert('Registro', response.message);
+                }
+            },
+            error: function(error) {
+                hideLoader();
+
+                if (error.status && error.status == 401) {
+                    showAlert('Error',
+                        error.responseJSON.error,
+                        function() {
+                            window.scrollTo(0,0);
+                            $.mobile.changePage($('#login'), {transition: 'none'});
+                        }
+                    );
+                } else {
+                    showAlert('Registro', 'Ocurrió un error al intentar registrarte. Intenta nuevamente.');
+                }
+            }
+        });*/
+    }
+}
+
+
+/** Funciones del menu lateral **/
+
+function setUserName(){
     var user = getCache("acc_user");
     if(user != undefined){
-    	$('#contenedor_nombre').html(user.first_name);
-    	setPicoYPlaca();
+        $('#contenedor_nombre').html(user.first_name.split(' ')[0]);
         $('#boton-cerrar-sesion').show();
     }else{
         $('#contenedor_nombre').html('invitado(a)');
         $('#boton-cerrar-sesion').hide();
     }
 }
-
-
-/** Funciones del menu lateral **/
 
 function showMenuLateral(){
     $('#panel-menu-lateral').panel('open');
@@ -1156,10 +1283,10 @@ function numberLetterPattern(e) {
 }
 
 
-$(document).on('pagebeforeshow', '#ayuda', function(){
-	$("#owl-example").owlCarousel({
+$(document).on('pagebeforeshow', '#help', function(){
+	$("#help-carousel").owlCarousel({
 		itemsTablet: [$(window).width(),1], //1 items between device.width and 0
-		itemsMobile : false 
+		itemsMobile : false
 	});
 });
 
@@ -1167,8 +1294,12 @@ function showDashboard(){
 	$.mobile.changePage($('#dashboard'));
 }
 
-function showAyuda(){
-	$.mobile.changePage($('#ayuda'));
+function showHelp(){
+	$.mobile.changePage($('#help'));
+}
+
+function goToDescuentos(){
+    $.mobile.changePage($('#lista-descuentos'));
 }
 
 function getDescuentos(){
@@ -1195,49 +1326,41 @@ function getDescuentos(){
 
 function showDescuentos(response){
 	setCache('descuentos', response);
-	$.mobile.changePage($('#lista-descuentos'));
 	var contentString = '';
 	$.each(response, function(index, value) {
-		contentString += '<li onclick="showDetalle('+value.id+')">'+value.name+'</li><hr/>';
+		contentString += '<li data-role="collapsible" data-iconpos="right" data-inset="false">' +
+                                '<h2>' + value.name + '</h2>' +
+                                '<div>' +
+                                    '<div class="logo">' +
+                                        '<img src="img/descuentos/tellantas.png"/>' +
+                                    '</div>' +
+                                    '<div class="description">' +
+                                        value.description +
+                                    '</div>' +
+                                '</div>' +
+                            '</li>';
 	});
 	
 	$('#contenido-lista-descuentos').html(contentString);
-}
-
-function showDetalle(id){
-	$.mobile.changePage($('#detalle-descuentos'));
-	
-	var descuentos = getCache('descuentos');
-	var contentString = '';
-	$.each(descuentos, function(index, value) {
-		if(value.id == id){
-			contentString += '<h1>'+value.name+'</h1>';
-			contentString += '<p>'+value.description+'</p>';
-		}
-	});
-	
-	$('#contenido-detalle-descuento').html(contentString);
+    $('#contenido-lista-descuentos li').collapsible();
+    $('#contenido-lista-descuentos li').removeClass($.mobile.activeBtnClass);
+    $('#contenido-lista-descuentos').listview('refresh');
 }
 
 function showPicoYPlaca(){
+    $('#pico-y-placa-ciudad').selectmenu();
 	hideMenu();
 	$('#menu-pico-y-placa').show();
 }
 
-function cambiarPicoYPlaca(){
-	var valor = $('#pico-y-placa-ciudad').val();
-	setCache('PicoYPlaca', valor);
-	$('#contenedor_placa').html(valor);
+function setPicoYPlaca(){
+	var ciudad = $('#pico-y-placa-ciudad').val();
+    window.localStorage.setItem('acc_PicoYPlaca', JSON.stringify(ciudad));
+	$('#contenedor_placa').html(ciudad);
 	hideMenu();
 }
 
-function setPicoYPlaca(){
-	if(isCache('PicoYPlaca')){
-		console.log("PicoYPlaca Cache");
-		var valor = getCache('PicoYPlaca');
-		$('#contenedor_placa').html(valor);
-	}else{
-		console.log("PicoYPlaca Default");
-		$('#contenedor_placa').html("1-3-5-7-9");
-	}
+function autosetPicoYPlaca(){
+    var ciudad = JSON.parse(window.localStorage.getItem('acc_PicoYPlaca'));
+    $('#contenedor_placa').html(ciudad);
 }

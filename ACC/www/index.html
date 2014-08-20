@@ -129,16 +129,16 @@
                 <div class="ui-content">
                     <div>Favor de proporcionar la siguiente información.</div>
                     <form id="menu-servicio-form">
-                        <div data-role="fieldcontainer">
-                            <input type="text" id="servicio_nombre" name="servicio_nombre" placeholder="Nombre Completo" class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset required" />
+                        <div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset">
+                            <input type="text" id="servicio_nombre" name="servicio_nombre" placeholder="Nombre Completo" class="required" />
                         </div>
-                        <div data-role="fieldcontainer">
-                            <input type="text" id="servicio_telefono" name="servicio_telefono" placeholder="Teléfono" class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset required" />
+                        <div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset">
+                            <input type="text" id="servicio_telefono" name="servicio_telefono" placeholder="Teléfono" class="required" />
                         </div>
-                        <div data-role="fieldcontainer" id="servicio_placas_container">
+                        <div id="servicio_placas_container">
 	                    </div>
-                        <div data-role="fieldcontainer">
-                            <input type="text" id="servicio_placas" name="servicio_placas" placeholder="Placas del vehículo" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset required" />
+                        <div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset">
+                            <input type="text" id="servicio_placas" name="servicio_placas" placeholder="Placas del vehículo" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" class="required" />
                         </div>
                         <div class="buttons">
                             <a class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a" onclick="hideMenu()">Cancelar</a>
@@ -149,23 +149,24 @@
             </div>
         </div>
         
-        <div id="menu-pico-y-placa" class="menu dismissable" onclick="exitMenu(event)">
+        <div id="menu-pico-y-placa" class="menu" onclick="exitMenu(event)">
             <div id="menu-pico-y-placa-container" class="menu-container">
 				<div class="ui-header ui-bar-a">
 					Pico Y Placa
 				</div>
 				<div class="ui-content">
+                    <div>Selecciona tu ciudad para obtener la información de pico y placa:</div>
 					<form id="menu-pico-y-placa-form">
-		                <div data-role="fieldcontainer" id="pico-y-placa-ciudad-container">
-		                	<select id="pico-y-placa-ciudad" class="ui-select required">
+		                <div id="pico-y-placa-ciudad-container">
+		                	<select id="pico-y-placa-ciudad" class="required">
 		                		<option value="">Selecciona tu ciudad</option>
 		                		<option value="1-3-5-7-9">Bucaramanga</option>
 		                		<option value="2-4-6-8-0">Bogota</option>
 		                	</select>
 						</div>
-						<div class="confirmation-buttons">
+						<div class="buttons">
 							<a class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a" onclick="hideMenu()">Cancelar</a>
-							<a class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a" onclick="cambiarPicoYPlaca()">Aceptar</a>
+							<a class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a" onclick="setPicoYPlaca()">Aceptar</a>
 						</div>
 					</form>
 				</div>
@@ -177,10 +178,15 @@
         
         	<!-- Start of menu-lateral -->
 	        <div data-role="panel" data-display="overlay" id="panel-menu-lateral">
+                <div class="logo-container">
+                    <img src="img/logo.png" />
+                    <div id="nombre_usuario">Hola <span id="contenedor_nombre"></span></div>
+                </div>
+                <hr>
 	        	<ul id="menu-lateral">
 	        		<li onclick="hideMenuLateral(); showProfile()">Mi cuenta</li>
-	        		<li onclick="getDescuentos()">Descuentos</li>
-	        		<li onclick="showAyuda()">Ayuda</li>
+	        		<li onclick="goToDescuentos()">Descuentos</li>
+	        		<li onclick="showHelp()">Ayuda</li>
 	        		<li id="boton-cerrar-sesion" onclick="hideMenuLateral(); logOut()">Cerrar sesion</li>
 	        	</ul>
 	        </div>
@@ -188,8 +194,12 @@
         
             <div role="main" class="ui-content">
                 <div class="header" id="dashboard-header">
-                    <span id="nombre_usuario_header">Hola <span id="contenedor_nombre"></span></span>
-                    <span id="placa_header">Pico y placa <span id="contenedor_placa"></span><img id="config-icon" onclick="showPicoYPlaca()" src="img/engrane.png"/></span>
+                    <div class='logo'><img src="img/logo.png"></div>
+                    <div id="placa_header">
+                        <span>Pico y placa </span>
+                        <span id="contenedor_placa"></span>
+                        <span id="placa-config" class="icon-cog" onclick="showPicoYPlaca()"></span>
+                    </div>
                 </div>
             	<div id="map_canvas"></div>
                 <div class="footer" id="dashboard-footer">
@@ -217,18 +227,67 @@
                         <input placeholder="Identificación" type="text" id="login-identificacion" class="required"/>
                         <input placeholder="Contraseña" type="password" id="login-password" class="required"/>
                         <label class="checkbox-label-no-background"><input type="checkbox" name="login-remember-me" id="login-remember-me" data-mini="true">Recordarme</label>
-                        <br/>
                         <a data-role="button" onclick="logIn(false)">Iniciar Sesión</a>
-                        <a data-role="button" href="#dashboard">Quiero continuar como invitado</a>
                         <br/>
                         <div id="login-buttons">
-                            <!--div id="login-sign-up"><a href="#sign-up" data-transition="slide">Quiero registrarme</a></div-->
-                            <!--div id="login-forgot"><a href="#forgot" data-transition="slide">No puedo iniciar sesión</a></div-->
+                            <div id="login-sign-up"><a href="#sign-up" data-transition="slide">Quiero registrarme</a></div>
+                            <div id="login-forgot"><a href="#dashboard" data-transition="slide">Quiero continuar como invitado</a></div>
                         </div>
                     </div>
                 </div>
             </div><!-- /content -->
         </div><!-- /page login-->
+
+        <!-- Start of sign-up -->
+        <div data-role="page" id="sign-up">
+            <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left" previous-page="login"></span>
+                <h1>Registro</h1>
+            </div><!-- /header -->
+
+            <div role="main" class="ui-content">
+
+                <p>Para registrarte como socio de ACC es necesario que llenes la siguiente forma. Posteriormente nos pondremos en contacto contigo para completar tu registro.</p>
+                <form id="sign-up-form">
+                    <div><b>Datos personales</b></div>
+                    <hr>
+                    <div data-role="fieldcontainer">
+                        <select name="sign_up_document_type" id="sign_up_document_type" class="required">
+                            <option value="">Seleccionar tipo de id</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="CE">Cédula de Extranjería</option>
+                            <option value="PS">Pasaporte</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="sign_up_document_id" id="sign_up_document_id" placeholder="Identificación" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="sign_up_first_name" id="sign_up_first_name" placeholder="Nombre" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="sign_up_last_name" id="sign_up_last_name" placeholder="Apellido paterno" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="sign_up_second_last_name" id="sign_up_second_last_name" placeholder="Apellido materno"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="number" name="sign_up_phone" id="sign_up_phone" placeholder="Teléfono" maxlength="10" minlength="10" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="email" name="sign_up_email" id="sign_up_email" placeholder="Correo electrónico"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="sign_up_vehicle_plates" id="sign_up_vehicle_plates" placeholder="Placas" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" style="text-transform:uppercase;" class="required"/>
+                    </div>
+                </form>
+                <p>La información proveída en este formulario será utilizada solamente para responder al interés comercial que el usuario expresa y no será compartida con terceros, ni utilizada para propósitos diferentes.</p>
+                <p><a data-role="button" onclick="signUp()">Registrarme</a></p>
+
+            </div><!-- /content -->
+
+        </div><!-- /page -->
 
         <!-- Start of profile -->
         <div data-role="page" id="profile">
@@ -265,34 +324,27 @@
                 <h1>Descuentos</h1>
             </div><!-- /header -->
             <div role="main" class="ui-content">
-            	<ul id="contenido-lista-descuentos">
+            	<ul id="contenido-lista-descuentos" data-role="listview" data-theme="a">
             	</ul>
             </div><!-- /content -->
         </div><!-- /lista-descuentos -->
         
-        <!-- Start of detalle-descuentos -->
-        <div data-role="page" id="detalle-descuentos">
-        	<div data-role="header">
-                <span class="acc-btn-back icon-arrow-left" previous-page="lista-descuentos"></span>
-                <h1></h1>
-            </div><!-- /header -->
-            
-            <div role="main" class="ui-content" id="contenido-detalle-descuento">
-            	
-            	<!--button type="button">Llamar</button-->
-            	
-            </div><!-- /content -->
-            
-        </div><!-- /detalle-descuentos -->
-        
-        <!-- Start of ayuda-->
-        <div data-role="page" id="ayuda">
-        		<img id="cerrar-ayuda" src="img/tache_min.png" onclick="showDashboard()" />
-	            <div id="owl-example" class="owl-carousel" >
-	            	<div><p>Aqui va una descripcion</p><img src="img/logo.png" /></div>
-	            	<div><p>Aqui va otra descripcion</p><img src="img/mapa.png" /></div>
-	            	<div><p>Aqui va una descripcion mas</p><img src="img/auto.png" /></div>
+        <!-- Start of help-->
+        <div data-role="page" id="help">
+            <div role="main" class="ui-content">
+        		<div id="cerrar-ayuda" class="icon-cancel" onclick="showDashboard()"></div>
+	            <div id="help-carousel" class="owl-carousel" >
+	            	<div>
+                        <img src="img/help/help_01.png" />
+                    </div>
+	            	<div>
+                        <img src="img/help/help_02.png" />
+                    </div>
+	            	<div>
+                        <img src="img/help/help_03.png" />
+                    </div>
 	            </div>
+            </div>
         </div><!-- /ayuda -->
         
     </body>

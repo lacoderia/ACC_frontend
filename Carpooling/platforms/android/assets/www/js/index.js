@@ -43,16 +43,20 @@ var app = {
         var imgLoad = imagesLoaded('#splash_table');
 
         imgLoad.on('always', function() {
+
+            var introMessage = introMessages[Math.floor(Math.random()*introMessages.length)];
+
             var i = 0;
             var animation = setInterval(function(){
                 if (i <= 4) {
+                    $('#intro_message').html(introMessage);
                     $('.splash-cell img').hide()
                     $('.splash-cell img[splash_frame="' + i + '"]').show();
                     i++;
                 } else {
                     clearInterval(animation);
 
-                    if (getCache('rememberMe')) {
+                    if (getCache('carpooling_rememberMe')) {
                         logIn(true);
                     } else {
                         window.scrollTo(0,0);
@@ -216,7 +220,7 @@ $(document).on('pagebeforeshow', "#forgot", function (event, data) {
 });
 
 $(document).on('pagebeforeshow', "#welcome", function (event, data) {
-    var user = getCache('user');
+    var user = getCache('carpooling_user');
 
     $('#welcome .welcome-name').html('¡Hola ' + user.first_name + '!');
 
@@ -270,8 +274,8 @@ $(document).on("pagebeforeshow", "#add-ride", function() {
 });
 
 $(document).on('pagebeforeshow', "#view-ride", function (event, data) {
-    $('#bnt-back-view-ride').attr('previous-page', sessionStorage.previousPage)
-    var rideId = sessionStorage.rideId;
+    $('#bnt-back-view-ride').attr('previous-page', sessionStorage.carpooling_previousPage)
+    var rideId = sessionStorage.carpooling_rideId;
 
     if (rideId) {
         getRideDetail(rideId);
@@ -314,6 +318,15 @@ var allRidesTimer = null;
 
 var months = new Array("Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic");
 var days = new Array("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado");
+
+var introMessages = new Array(
+    'Ahorra gasolina, mantenimiento, transporte y tiempo.',
+    'Contribuye con el aire más limpio.',
+    'Disminuye la contaminación auditiva.',
+    'Aumenta tus relaciones intercomunitarias',
+    'Mejora la movilidad en tu ciudad.',
+    'Contribuye con la sana convivencia y la productividad.'
+);
 
 function showLoader() {
     $('.overlay').show();
@@ -415,7 +428,7 @@ function logIn(autologin) {
     } else {
         rememberMe = true;
 
-        var user = getCache('user');
+        var user = getCache('carpooling_user');
         data = {
             "user_id": user.id,
             "auth_token" : user.authentication_token
@@ -433,8 +446,8 @@ function logIn(autologin) {
             if (response.success == true) {
                 hideLoader();
                 if(typeof(Storage)!=="undefined") {
-                    localStorage.rememberMe = rememberMe;
-                    setCache('user', response.user);
+                    localStorage.carpooling_rememberMe = rememberMe;
+                    setCache('carpooling_user', response.user);
                 }
 
                 // Precargar la imagen de #welcome antes de redirigir al usuario
@@ -482,7 +495,7 @@ function logOut() {
     $('#dashboard-menu').popup('close');
     showLoader();
 
-    var user = getCache('user');
+    var user = getCache('carpooling_user');
     var data = {
         "auth_token": user.authentication_token,
         "user_id": user.id
@@ -502,7 +515,18 @@ function logOut() {
         },
         error: function(error) {
             hideLoader();
-            showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Intenta nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Intenta nuevamente.');
+            }
         }
     });
 }
@@ -565,7 +589,18 @@ function getAgreements() {
         },
         error: function(error) {
             hideLoader();
-            showAlert('Registro', 'Hubo un error al obtener las empresas con convenio. Intenta nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Registro', 'Hubo un error al obtener las empresas con convenio. Intenta nuevamente.');
+            }
         }
     });
 }
@@ -642,7 +677,18 @@ function signUp() {
             },
             error: function(error) {
                 hideLoader();
-                showAlert('Registro', 'Ocurrió un error al intentar registrarte. Intenta nuevamente.');
+
+                if (error.status && error.status == 401) {
+                    showAlert('Error',
+                        error.responseJSON.error,
+                        function() {
+                            window.scrollTo(0,0);
+                            $.mobile.changePage($('#login'), {transition: 'none'});
+                        }
+                    );
+                } else {
+                    showAlert('Registro', 'Ocurrió un error al intentar registrarte. Intenta nuevamente.');
+                }
             }
         });
     }
@@ -692,7 +738,7 @@ function sendMail() {
                 },
                 error: function(error) {
                     hideLoader();
-                    showAlert('Contraseña', "El correo con las intrucciones para recuperar tu contraseña no pudo ser enviado.");
+                    showAlert('Contraseña', "El correo con las instrucciones para recuperar tu contraseña no pudo ser enviado.");
                 }
             });
         } else if ($('#forgot_problem').val() == 'confirmation') {
@@ -740,7 +786,7 @@ function clearProfile() {
 function getProfile() {
     showLoader();
     clearProfile();
-    var user = getCache('user');
+    var user = getCache('carpooling_user');
 
     $.ajax({
         type: "GET",
@@ -764,7 +810,7 @@ function getProfile() {
                 }
 
                 $('#profile .profile-name').html(user.first_name + ' ' + user.last_name);
-                $('#profile .profile-email').html('<a mailto:"' + user.email + '">' + user.email + '</a>');
+                $('#profile .profile-email').html(user.email);
 
                 var vehicleHTML = '<hr class="separator"><b>Mis vehículos</b><hr class="separator">';
 
@@ -795,17 +841,28 @@ function getProfile() {
             } else {
                 hideLoader();
                 showAlert('Mi perfil',
-                          'Hubo un error al cargar tu perfil. Intenta nuevamente.',
-                          function() {
-                              window.scrollTo(0,0);
-                              $.mobile.changePage($('#dashboard'), {transition: 'slide'});
-                          }
+                    'Hubo un error al cargar tu perfil. Intenta nuevamente.',
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#dashboard'), {transition: 'slide'});
+                    }
                 );
             }
         },
         error: function(error) {
             hideLoader();
-            showAlert('Mi perfil', 'Hubo un error al cargar tu perfil. Intenta nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Mi perfil', 'Hubo un error al cargar tu perfil. Intenta nuevamente.');
+            }
         }
     });
 }
@@ -814,7 +871,7 @@ function getPicture() {
     navigator.camera.getPicture(
         function(imageData) {
             showLoader();
-            var user = getCache('user');
+            var user = getCache('carpooling_user');
             var data = {
                 "user": {
                     "avatar": imageData
@@ -844,7 +901,18 @@ function getPicture() {
                 },
                 error: function(error) {
                     hideLoader();
-                    showAlert('Mi perfil', 'Ocurrió un error al cambiar la foto de tu perfil. Intenta nuevamente.');
+
+                    if (error.status && error.status == 401) {
+                        showAlert('Error',
+                            error.responseJSON.error,
+                            function() {
+                                window.scrollTo(0,0);
+                                $.mobile.changePage($('#login'), {transition: 'none'});
+                            }
+                        );
+                    } else {
+                        showAlert('Mi perfil', 'Ocurrió un error al cambiar la foto de tu perfil. Intenta nuevamente.');
+                    }
                 }
             });
         },
@@ -876,7 +944,7 @@ function clearAddVehicle() {
 function addVehicle() {
     if ($("#add-vehicle-form").valid()){
 
-        var user = getCache('user');
+        var user = getCache('carpooling_user');
 
         var data = {};
 
@@ -906,7 +974,7 @@ function addVehicle() {
                 if (response.success == true) {
                     hideLoader();
                     user.vehicles = response.vehicles;
-                    setCache('user', user);
+                    setCache('carpooling_user', user);
                     showAlert('Agregar vehículo',
                               response.message,
                               function(){
@@ -921,7 +989,18 @@ function addVehicle() {
             },
             error: function(error) {
                 hideLoader();
-                showAlert('Agregar Vehículo', 'Ocurrió un error al agregar el vehículo. Intenta nuevamente.');
+
+                if (error.status && error.status == 401) {
+                    showAlert('Error',
+                        error.responseJSON.error,
+                        function() {
+                            window.scrollTo(0,0);
+                            $.mobile.changePage($('#login'), {transition: 'none'});
+                        }
+                    );
+                } else {
+                    showAlert('Agregar Vehículo', 'Ocurrió un error al agregar el vehículo. Intenta nuevamente.');
+                }
             }
         });
     }
@@ -932,7 +1011,7 @@ function addVehicle() {
 function getDashboard() {
 	showLoader();
 
-    var user = getCache('user');
+    var user = getCache('carpooling_user');
 
     $.ajax({
         type: "GET",
@@ -948,7 +1027,18 @@ function getDashboard() {
         },
         error: function(error) {
             hideLoader();
-            showAlert('Inicio', 'Hubo un error al obtener la información de los viajes publicados y reservados. Intenta Nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Inicio', 'Hubo un error al obtener la información de los viajes publicados y reservados. Intenta Nuevamente.');
+            }
         }
     });
 
@@ -1026,8 +1116,8 @@ function updateDashboard() {
 // Funciones de Búsqueda de viajes
 
 function compareAllRides() {
-    var hash = getCache('allRidesHash');
-    var user = getCache('user');
+    var hash = getCache('carpooling_allRidesHash');
+    var user = getCache('carpooling_user');
 
     $.ajax({
         type: "GET",
@@ -1039,9 +1129,18 @@ function compareAllRides() {
                 $('#search-ride .refresh-notification').show();
                 clearInterval(allRidesTimer);
             }
-            setCache('allRidesHash', response.hash);
+            setCache('carpooling_allRidesHash', response.hash);
         },
         error: function(error) {
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            }
         }
     });
 
@@ -1052,7 +1151,7 @@ function getAllRides() {
     $('#search-ride .refresh-notification').hide();
     $('#search-ride .ui-content').hide();
 
-    var user = getCache('user');
+    var user = getCache('carpooling_user');
     $.ajax({
         type: "GET",
         url: "http://166.78.117.195/rides/available.json?user_id=" + user.id,
@@ -1060,14 +1159,25 @@ function getAllRides() {
         dataType: "json",
         success: function(response) {
             allRides = response.rides;
-            setCache('allRidesHash', response.hash);
+            setCache('carpooling_allRidesHash', response.hash);
             updateAllRides();
             $('#search-ride .ui-content').show();
             hideLoader();
         },
         error: function(error) {
             hideLoader();
-            showAlert('Buscar viajes', 'Hubo un error al obtener la información de los viajes disponibles. Intenta nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Buscar viajes', 'Hubo un error al obtener la información de los viajes disponibles. Intenta nuevamente.');
+            }
         }
     });
 }
@@ -1119,8 +1229,8 @@ function refreshAllRides() {
 
 function showRideDetail(rideId, previousPage) {
     if(rideId !== undefined && previousPage !== undefined) {
-        sessionStorage.rideId = rideId;
-        sessionStorage.previousPage = previousPage;
+        sessionStorage.carpooling_rideId = rideId;
+        sessionStorage.carpooling_previousPage = previousPage;
     }
     window.scrollTo(0,0);
     $.mobile.changePage($('#view-ride'), {transition: 'slide'});
@@ -1132,8 +1242,10 @@ function getRideDetail(rideId) {
     $('#view-ride .ui-content').hide();
     $('#btn-accept-ride').hide();
     $('#btn-accept-ride').addClass('ui-disabled');
+    $('#btn-email-passengers').hide();
+    $('#btn-email-passengers').addClass('ui-disabled');
 
-    var user = getCache('user');
+    var user = getCache('carpooling_user');
 
     $.ajax({
         type: "GET",
@@ -1155,11 +1267,13 @@ function getRideDetail(rideId) {
 
                 var availableSeats = ride.seats;
                 var takenSeats = ride.users.length;
+                var mailList = '';
 
                 for(var i=0; i<availableSeats; i++) {
                     if(i<takenSeats) {
                         if (ride.users[i].avatar) {
-                            $('#view-ride .passengers').append($('<div class="seat"><div class="picture-container" onclick="showUserProfile(' + ride.users[i].id + ')"><img src="' + 'http://166.78.117.195' + ride.users[i].avatar + '"/></div><div class="user-info"><div>' + ride.users[i].first_name + '</div><div><a href="mailto:' + ride.users[i].email + '">' + ride.users[i].email + '</a></div></div></div>'));
+                            $('#view-ride .passengers').append($('<div class="seat"><div class="picture-container" onclick="showUserProfile(' + ride.users[i].id + ')"><img src="' + 'http://166.78.117.195' + ride.users[i].avatar + '"/></div><div class="user-info"><div>' + ride.users[i].first_name + '</div><div><a href="mailto:' + ride.users[i].email + '">' + 'Contactar por correo' + '</a></div></div></div>'));
+                            mailList += mailList + ride.users[i].email + ',';
                         }
                     } else {
                         $('#view-ride .passengers').append($('<div class="seat"><div class="picture-container"><img src="http://166.78.117.195/users/avatars/default_grey.png"/></div><div class="user-info">Disponible</div></div>'));
@@ -1193,10 +1307,12 @@ function getRideDetail(rideId) {
                 $('#view-ride .notes').html(ride.notes);
 
                 var showAcceptRideButton = true;
+                var showContactPassengersButton = false;
 
                 // El usuario es el creador del viaje
                 if (user.id == ride.owner.id) {
                     showAcceptRideButton = false;
+                    showContactPassengersButton = true;
                 } else {
                     // El viaje va lleno
                     if (takenSeats >= availableSeats) {
@@ -1215,6 +1331,15 @@ function getRideDetail(rideId) {
                     $('#btn-accept-ride').removeClass('ui-disabled');
                     $('#btn-accept-ride').show();
                 }
+
+                if (showContactPassengersButton) {
+                    $('#btn-email-passengers').attr('href', 'mailto:' + mailList);
+                    if (mailList != '') {
+                        $('#btn-email-passengers').removeClass('ui-disabled');
+                    }
+                    $('#btn-email-passengers').show();
+                }
+
                 $('#view-ride .ui-content').show();
                 hideLoader();
             } else {
@@ -1224,7 +1349,18 @@ function getRideDetail(rideId) {
         },
         error: function(error) {
             hideLoader();
-            showAlert('Detalles del viaje', 'Hubo un error al obtener los detalles del viaje. Intenta nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Detalles del viaje', 'Hubo un error al obtener los detalles del viaje. Intenta nuevamente.');
+            }
         }
     });
 }
@@ -1272,7 +1408,7 @@ function showUserProfile(userId) {
                         });
                 }
                 $('#user-profile .profile-name').html(user.first_name + ' ' + user.last_name);
-                $('#user-profile .profile-email').html('<a mailto:"' + user.email + '">' + user.email + '</a>');
+                $('#user-profile .profile-email').html('<a href="mailto:' + user.email + '">' + user.email + '</a>');
 
                 window.scrollTo(0,0);
                 $.mobile.changePage($('#user-profile'), {transition: 'none'});
@@ -1289,7 +1425,18 @@ function showUserProfile(userId) {
         },
         error: function(error) {
             hideLoader();
-            showAlert('Pasajero', 'Hubo un error al cargar los datos del pasajero. Intenta nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Pasajero', 'Hubo un error al cargar los datos del pasajero. Intenta nuevamente.');
+            }
         }
     });
 }
@@ -1298,7 +1445,7 @@ function confirmDeleteVehicle(vehiclePlateNumber) {
     showDialog('Eliminar Vehículo',
         '¿Estás seguro que deseas eliminar el vehículo?',
         function() {
-            var user = getCache('user');
+            var user = getCache('carpooling_user');
             var vehicle = {
                 "vehicle": {
                     "plate_number": vehiclePlateNumber
@@ -1316,7 +1463,7 @@ function confirmDeleteVehicle(vehiclePlateNumber) {
                         hideLoader();
                         showAlert('Eliminar Vehículo', response.message);
                         user.vehicles = response.vehicles;
-                        setCache('user', user);
+                        setCache('carpooling_user', user);
                         getProfile();
                     } else {
                         hideLoader();
@@ -1325,7 +1472,18 @@ function confirmDeleteVehicle(vehiclePlateNumber) {
                 },
                 error: function(error) {
                     hideLoader();
-                    showAlert('Eliminar Vehículo', 'Ocurrió un error al eliminar el vehículo. Intenta nuevamente.');
+
+                    if (error.status && error.status == 401) {
+                        showAlert('Error',
+                            error.responseJSON.error,
+                            function() {
+                                window.scrollTo(0,0);
+                                $.mobile.changePage($('#login'), {transition: 'none'});
+                            }
+                        );
+                    } else {
+                        showAlert('Eliminar Vehículo', 'Ocurrió un error al eliminar el vehículo. Intenta nuevamente.');
+                    }
                 }
             });
         }
@@ -1342,7 +1500,7 @@ function clearAddRide() {
     $('#add_ride_cost').val('');
     $('#add_ride_notes').val('');
 
-    var user = getCache('user');
+    var user = getCache('carpooling_user');
 
     var vehiclesHTML = '<option value="">Selecciona placas</option>';
     if (user.vehicles && user.vehicles.length) {
@@ -1359,7 +1517,7 @@ function clearAddRide() {
 function addRide() {
 
     if ($("#add-ride-form").valid()){
-        var user = getCache('user');
+        var user = getCache('carpooling_user');
         var ride = {
             "ride": {
                 "agreement_id": user.agreement_id,
@@ -1401,7 +1559,18 @@ function addRide() {
             },
             error: function(error) {
                 hideLoader();
-                showAlert('Publicar viaje', 'Ocurrió un error al publicar el viaje. Intenta nuevamente.');
+
+                if (error.status && error.status == 401) {
+                    showAlert('Error',
+                        error.responseJSON.error,
+                        function() {
+                            window.scrollTo(0,0);
+                            $.mobile.changePage($('#login'), {transition: 'none'});
+                        }
+                    );
+                } else {
+                    showAlert('Publicar viaje', 'Ocurrió un error al publicar el viaje. Intenta nuevamente.');
+                }
             }
         });
     }
@@ -1411,8 +1580,8 @@ function acceptRide() {
     showLoader();
     $('#btn-accept-ride').addClass('ui-disabled');
 
-    var rideId = sessionStorage.rideId;
-    var user = getCache('user');
+    var rideId = sessionStorage.carpooling_rideId;
+    var user = getCache('carpooling_user');
 
     var data = {
         "user_id": user.id
@@ -1426,8 +1595,8 @@ function acceptRide() {
         success: function(response) {
             if (response.success == true) {
                 getDashboard();
-                sessionStorage.rideId = rideId;
-                sessionStorage.previousPage = 'search-ride';
+                sessionStorage.carpooling_rideId = rideId;
+                sessionStorage.carpooling_previousPage = 'search-ride';
                 window.scrollTo(0,0);
                 getRideDetail(rideId);
             }
@@ -1439,7 +1608,18 @@ function acceptRide() {
         error: function(error) {
             $('#btn-accept-ride').removeClass('ui-disabled');
             hideLoader();
-            showAlert('Reservar lugar', 'El viaje no se pudo reservar. Intenta nuevamente.');
+
+            if (error.status && error.status == 401) {
+                showAlert('Error',
+                    error.responseJSON.error,
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#login'), {transition: 'none'});
+                    }
+                );
+            } else {
+                showAlert('Reservar lugar', 'El viaje no se pudo reservar. Intenta nuevamente.');
+            }
         }
     });
 }
@@ -1448,7 +1628,7 @@ function acceptRide() {
 // Funciones para persitencia de datos
 
 function setCache(key, value) {
-  if (localStorage.rememberMe == 'true') {
+  if (localStorage.carpooling_rememberMe == 'true') {
       window.localStorage.setItem(key, JSON.stringify(value));
   } else {
       window.sessionStorage.setItem(key, JSON.stringify(value));
@@ -1457,7 +1637,7 @@ function setCache(key, value) {
 }
 
 function getCache(key) {
-  if (localStorage.rememberMe == 'true') {
+  if (localStorage.carpooling_rememberMe == 'true') {
       return JSON.parse(window.localStorage.getItem(key));
   } else {
       return JSON.parse(window.sessionStorage.getItem(key));
@@ -1469,7 +1649,7 @@ function isCache(key) {
 }
 
 function removeCache(key) {
-    if (localStorage.rememberMe == 'true') {
+    if (localStorage.carpooling_rememberMe == 'true') {
         window.localStorage.removeItem(key);
     } else {
         window.sessionStorage.removeItem(key);

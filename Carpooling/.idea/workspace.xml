@@ -4,7 +4,21 @@
     <list default="true" id="9414d5a7-90e4-4a9d-a59e-9301f995da0c" name="Default" comment="" />
     <ignored path="Carpooling.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="$PROJECT_DIR$/www/js/index.js" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1405729115859" ignored="false" />
+    <file path="$PROJECT_DIR$/platforms/ios/www/css/index.css" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408558233029" ignored="false" />
+    <file path="$PROJECT_DIR$/platforms/ios/build/emulator/Carpooling.app/www/index.html" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408558233029" ignored="false" />
+    <file path="$PROJECT_DIR$/platforms/ios/www/js/index.js" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408558233029" ignored="false" />
+    <file path="$PROJECT_DIR$/platforms/ios/build/emulator/Carpooling.app/www/css/index.css" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408558233029" ignored="false" />
+    <file path="$PROJECT_DIR$/platforms/ios/build/emulator/Carpooling.app/www/plugins/org.apache.cordova.camera/www/CameraConstants.js" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408558233029" ignored="false" />
+    <file path="$PROJECT_DIR$/platforms/ios/www/plugins/org.apache.cordova.camera/www/CameraPopoverOptions.js" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408558233029" ignored="false" />
+    <file path="$PROJECT_DIR$/platforms/ios/build/emulator/Carpooling.app/www/js/index.js" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408558233029" ignored="false" />
+    <file path="$PROJECT_DIR$/platforms/ios/build/emulator/Carpooling.app/www/jquery/jquery-2.1.1.min.js" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408558233029" ignored="false" />
+    <file path="$PROJECT_DIR$/platforms/ios/www/jquery/jquery-validation/jquery.validate.min.js" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408558233029" ignored="false" />
+    <file path="$PROJECT_DIR$/platforms/ios/www/index.html" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408558233029" ignored="false" />
+    <file path="$PROJECT_DIR$/platforms/ios/www/jquery/jquery.mobile.icons-1.4.2.css" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408558233029" ignored="false" />
+    <file path="/index.html" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408560035377" ignored="false" />
+    <file path="$PROJECT_DIR$/platforms/ios/build/emulator/Carpooling.app/config.xml" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408568721218" ignored="false" />
+    <file path="$PROJECT_DIR$/platforms/ios/Carpooling/config.xml" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408568721218" ignored="false" />
+    <file path="/index.css" changelist="9414d5a7-90e4-4a9d-a59e-9301f995da0c" time="1408559949703" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,9 +36,25 @@
   <component name="FavoritesManager">
     <favorites_list name="Carpooling" />
   </component>
+  <component name="FileEditorManager">
+    <leaf />
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="false" />
+    </FindUsagesManager>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/www/css/index.css" />
+        <option value="$PROJECT_DIR$/www/index.html" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="22" />
-    <option name="width" value="1260" />
+    <option name="width" value="1280" />
     <option name="height" value="714" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -53,6 +83,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -71,9 +102,58 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Carpooling" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Carpooling" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Carpooling" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Carpooling" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Carpooling" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Carpooling" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -84,6 +164,23 @@
     <list size="0" />
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false" SSL_PROTOCOLS="sslv3">
+    <option name="USER" value="" />
+    <option name="PASSWORD" value="" />
+    <option name="mySSHConnectionTimeout" value="30000" />
+    <option name="mySSHReadTimeout" value="30000" />
+    <option name="LAST_MERGED_REVISION" />
+    <option name="MERGE_DRY_RUN" value="false" />
+    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
+    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
+    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
+    <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
+    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
+    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
+    <option name="FORCE_UPDATE" value="false" />
+    <option name="IGNORE_EXTERNALS" value="false" />
+    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="9414d5a7-90e4-4a9d-a59e-9301f995da0c" name="Default" comment="" />
@@ -93,14 +190,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="1260" height="714" extended-state="0" />
+    <frame x="0" y="22" width="1280" height="714" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.261944" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26661265" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -174,6 +271,31 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/www/js/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="224" column="43" selection-start="8307" selection-end="8311" vertical-scroll-proportion="-40.704544">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="15" selection-start="445" selection-end="446" vertical-scroll-proportion="0.21428572">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/css/index.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="385" column="8" selection-start="8084" selection-end="8095" vertical-scroll-proportion="0.6238698">
+          <folding />
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>
 

@@ -277,6 +277,12 @@ label.error {
     display: none;
 }
 
+#intro_message {
+    margin-top: 1em;
+    color: white;
+    text-shadow: none;
+}
+
 /** Welcome **/
 
 #welcome .ui-content {
@@ -369,6 +375,16 @@ label.error {
 
 #sign-up .label-text{
     font-size: 12px;
+}
+
+/** Terms **/
+
+#terms .title {
+    text-align: center;
+}
+
+#terms .letter-list {
+    list-style-type: lower-alpha;
 }
 
 /** Profile **/

@@ -377,6 +377,16 @@ label.error {
     font-size: 12px;
 }
 
+/** Terms **/
+
+#terms .title {
+    text-align: center;
+}
+
+#terms .letter-list {
+    list-style-type: lower-alpha;
+}
+
 /** Profile **/
 
 #profile .row {
