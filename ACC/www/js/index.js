@@ -396,7 +396,7 @@ function toggleFollowMe(){
     followMe = !followMe;
 }
 
-function showAlert(title, message) {
+function showAlert(title, message, onCloseFunction) {
     var popUp = '<div data-role="popup" id="popupAlert" data-overlay-theme="b" data-theme="a" data-dismissible="true">' +
                     '<div data-role="header" data-theme="a">' +
                         '<h1>' + title + '</h1>' +
@@ -413,6 +413,9 @@ function showAlert(title, message) {
     $('#popupAlert').popup({
         afterclose: function( event, ui ) {
             $('#popupAlert').remove();
+            if (onCloseFunction !== undefined){
+                onCloseFunction();
+            }
         },
         transition: 'pop'
     });
@@ -601,6 +604,14 @@ function clearSignUp() {
 
 function signUp() {
     if ($("#sign-up-form").valid()){
+
+        showAlert('Registro',
+                  'Hemos recibido tus solicitud. Nos pondremos en contacto contigo a la brevedad.',
+                  function() {
+                      window.scrollTo(0,0);
+                      $.mobile.changePage($('#dashboard'));
+                  }
+        );
 
         /*var data = {
             "utf8": "V",
@@ -1282,6 +1293,31 @@ function numberLetterPattern(e) {
         return false;
 }
 
+function numberPattern(e) {
+    var key;
+    var keychar;
+
+    if (window.event)
+        key = window.event.keyCode;
+    else if (e)
+        key = e.which;
+    else
+        return true;
+    keychar = String.fromCharCode(key);
+    keychar = keychar.toLowerCase();
+
+// control keys
+    if ((key==null) || (key==0) || (key==8) ||
+        (key==9) || (key==13) || (key==27) )
+        return true;
+
+// alphas and numbers
+    else if ((("0123456789").indexOf(keychar) > -1))
+        return true;
+    else
+        return false;
+}
+
 
 $(document).on('pagebeforeshow', '#help', function(){
 	$("#help-carousel").owlCarousel({
@@ -1355,9 +1391,23 @@ function showPicoYPlaca(){
 
 function setPicoYPlaca(){
 	var ciudad = $('#pico-y-placa-ciudad').val();
-    window.localStorage.setItem('acc_PicoYPlaca', JSON.stringify(ciudad));
-	$('#contenedor_placa').html(ciudad);
-	hideMenu();
+
+    $.ajax({
+        type: "GET",
+        url: "http://166.78.117.195/acc/pico_placa.json?ciudad=" + ciudad,
+        data: data,
+        dataType: "json",
+        success: function(response) {
+            window.localStorage.setItem('acc_PicoYPlaca', JSON.stringify(response.pico_placa));
+            $('#contenedor_placa').html(response.pico_placa);
+            hideLoader();
+            hideMenu();
+        },
+        error: function(error) {
+            showAlert('Pico y placa', 'No se pudo obtener la información de pico y placa. Intenta nuevamente.');
+            hideLoader();
+        }
+    });
 }
 
 function autosetPicoYPlaca(){

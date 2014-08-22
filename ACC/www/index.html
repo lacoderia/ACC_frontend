@@ -160,8 +160,11 @@
 		                <div id="pico-y-placa-ciudad-container">
 		                	<select id="pico-y-placa-ciudad" class="required">
 		                		<option value="">Selecciona tu ciudad</option>
-		                		<option value="1-3-5-7-9">Bucaramanga</option>
-		                		<option value="2-4-6-8-0">Bogota</option>
+		                		<option value="1">Bogotá</option>
+		                		<option value="2">Bucaramanga</option>
+                                <option value="3">Cali</option>
+                                <option value="4">Cartagena</option>
+                                <option value="5">Medellín</option>
 		                	</select>
 						</div>
 						<div class="buttons">
@@ -273,7 +276,7 @@
                         <input type="text" name="sign_up_second_last_name" id="sign_up_second_last_name" placeholder="Apellido materno"/>
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="number" name="sign_up_phone" id="sign_up_phone" placeholder="Teléfono" maxlength="10" minlength="10" class="required"/>
+                        <input type="text" pattern="[0-9]*" name="sign_up_phone" id="sign_up_phone" placeholder="Teléfono" maxlength="10" minlength="10" onKeyPress="return numberPattern(event)" class="required"/>
                     </div>
                     <div data-role="fieldcontainer">
                         <input type="email" name="sign_up_email" id="sign_up_email" placeholder="Correo electrónico"/>
