@@ -107,6 +107,8 @@ var app = {
             }
         });
 
+        $("#panel-menu-lateral").panel('open');
+
         $('.acc-btn-back').click(function() {
             window.scrollTo(0,0);
             $.mobile.changePage($('#' + $(this).attr('previous-page')));
@@ -694,9 +696,16 @@ function setUserName(){
     if(user != undefined){
         $('#contenedor_nombre').html(user.first_name.split(' ')[0]);
         $('#boton-cerrar-sesion').show();
+
+        if(user.is_member) {
+            $('#btn_sign_up').hide();
+        } else {
+            $('#btn_sign_up').show();
+        }
     }else{
         $('#contenedor_nombre').html('invitado(a)');
         $('#boton-cerrar-sesion').hide();
+        $('#btn_sign_up').show();
     }
 }
 
@@ -1332,6 +1341,10 @@ function showDashboard(){
 
 function showHelp(){
 	$.mobile.changePage($('#help'));
+}
+
+function goToSignUp(){
+    $.mobile.changePage($('#sign-up'));
 }
 
 function goToDescuentos(){

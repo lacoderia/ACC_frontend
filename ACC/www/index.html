@@ -187,7 +187,8 @@
                 </div>
                 <hr>
 	        	<ul id="menu-lateral">
-	        		<li onclick="hideMenuLateral(); showProfile()">Mi cuenta</li>
+                    <li id="btn_sign_up" onclick="goToSignUp()">Afiliaciones ACC</li>
+                    <li onclick="hideMenuLateral(); showProfile()">Mi cuenta</li>
 	        		<li onclick="goToDescuentos()">Descuentos</li>
 	        		<li onclick="showHelp()">Ayuda</li>
 	        		<li id="boton-cerrar-sesion" onclick="hideMenuLateral(); logOut()">Cerrar sesion</li>
@@ -233,7 +234,6 @@
                         <a data-role="button" onclick="logIn(false)">Iniciar Sesión</a>
                         <br/>
                         <div id="login-buttons">
-                            <div id="login-sign-up"><a href="#sign-up" data-transition="slide">Quiero registrarme</a></div>
                             <div id="login-forgot"><a href="#dashboard" data-transition="slide">Quiero continuar como invitado</a></div>
                         </div>
                     </div>
