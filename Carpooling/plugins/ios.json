@@ -5,40 +5,6 @@
     },
     "config_munge": {
         "files": {
-            "config.xml": {
-                "parents": {
-                    "/*": [
-                        {
-                            "xml": "<feature name=\"Console\"><param name=\"ios-package\" value=\"CDVLogger\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"StatusBar\"><param name=\"ios-package\" onload=\"true\" value=\"CDVStatusBar\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<preference name=\"StatusBarOverlaysWebView\" value=\"true\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<preference name=\"StatusBarBackgroundColor\" value=\"#000000\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Camera\"><param name=\"ios-package\" value=\"CDVCamera\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        }
-                    ]
-                }
-            },
             "framework": {
                 "parents": {
                     "ImageIO.framework": [
@@ -72,23 +38,57 @@
                         }
                     ]
                 }
+            },
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"Camera\"><param name=\"ios-package\" value=\"CDVCamera\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Console\"><param name=\"ios-package\" value=\"CDVLogger\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"StatusBar\"><param name=\"ios-package\" onload=\"true\" value=\"CDVStatusBar\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"StatusBarOverlaysWebView\" value=\"true\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"StatusBarBackgroundColor\" value=\"#000000\" />",
+                            "count": 1
+                        }
+                    ]
+                }
             }
         }
     },
     "installed_plugins": {
-        "org.apache.cordova.console": {
-            "PACKAGE_NAME": "mx.coderia.Carpooling"
-        },
-        "org.apache.cordova.statusbar": {
-            "PACKAGE_NAME": "mx.coderia.Carpooling"
-        },
-        "org.apache.cordova.device": {
-            "PACKAGE_NAME": "mx.coderia.Carpooling"
-        },
         "org.apache.cordova.camera": {
             "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
         },
+        "org.apache.cordova.console": {
+            "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
+        },
+        "org.apache.cordova.device": {
+            "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
+        },
         "org.apache.cordova.splashscreen": {
+            "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
+        },
+        "org.apache.cordova.statusbar": {
             "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
         }
     },

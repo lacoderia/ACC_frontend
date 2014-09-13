@@ -607,51 +607,24 @@ function clearSignUp() {
 function signUp() {
     if ($("#sign-up-form").valid()){
 
-        showAlert('Registro',
-                  'Hemos recibido tus solicitud. Nos pondremos en contacto contigo a la brevedad.',
-                  function() {
-                      window.scrollTo(0,0);
-                      $.mobile.changePage($('#dashboard'));
-                  }
-        );
-
-        /*var data = {
+        var data = {
             "utf8": "V",
-            "user": {
-                "first_name": $('#sign_up_first_name').val(),
-                "last_name": $('#sign_up_last_name').val(),
+            "lead": {
                 "document_type": $('#sign_up_document_type').val(),
                 "document_id": $('#sign_up_document_id').val(),
-                "is_member": false,
-                "agreement_id": $('#sign_up_agreement').val(),
-                "password": $('#sign_up_password').val(),
-                "password_confirmation": $('#sign_up_password_confirmation').val(),
-                "email": $('#sign_up_email').val()
+                "first_name": $('#sign_up_first_name').val(),
+                "last_name_f": $('#sign_up_last_name').val(),
+                "last_name_m": $('#sign_up_second_last_name').val(),
+                "phone_number": $('#sign_up_phone').val(),
+                "email": $('#sign_up_email').val(),
+                "plate_number": $('#sign_up_vehicle_plates').val()
             }
         };
-
-        if ($("#sign_up_add_vehicle").is(':checked')) {
-            if ($('#sign_up_vehicle_owner').is(':checked')) {
-                data.vehicle = {
-                    "plate_number": $('#sign_up_vehicle_plates').val().toUpperCase(),
-                    "soat_date": $('#sign_up_vehicle_soat').val(),
-                    "document_type_owner": $('#sign_up_document_type').val(),
-                    "document_id_owner": $('#sign_up_document_id').val()
-                };
-            } else {
-                data.vehicle = {
-                    "plate_number": $('#sign_up_vehicle_plates').val().toUpperCase(),
-                    "soat_date": $('#sign_up_vehicle_soat').val(),
-                    "document_type_owner": $('#sign_up_vehicle_document_type').val(),
-                    "document_id_owner": $('#sign_up_vehicle_document_id').val()
-                };
-            }
-        }
 
         showLoader();
         $.ajax({
             type: "POST",
-            url: "http://166.78.117.195/users.json",
+            url: "http://166.78.117.195/leads.json",
             data: data,
             dataType: "json",
             success: function(response) {
@@ -659,32 +632,33 @@ function signUp() {
                     hideLoader();
                     showAlert('Registro',
                         response.message,
-                        function(){
+                        function() {
                             window.scrollTo(0,0);
-                            $.mobile.changePage($('#login'), {transition: 'none'});
+                            $.mobile.changePage($('#dashboard'));
                         }
                     );
                 } else {
                     hideLoader();
-                    showAlert('Registro', response.message);
+                    showAlert('Registro',
+                        response.message,
+                        function() {
+                            window.scrollTo(0,0);
+                            $.mobile.changePage($('#sign-up'));
+                        }
+                    );
                 }
             },
             error: function(error) {
                 hideLoader();
-
-                if (error.status && error.status == 401) {
-                    showAlert('Error',
-                        error.responseJSON.error,
-                        function() {
-                            window.scrollTo(0,0);
-                            $.mobile.changePage($('#login'), {transition: 'none'});
-                        }
-                    );
-                } else {
-                    showAlert('Registro', 'Ocurrió un error al intentar registrarte. Intenta nuevamente.');
-                }
+                showAlert('Registro',
+                    'Ocurrió un error con tu solicitud de registro. Intenta nuevamente.',
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#sign-up'));
+                    }
+                );
             }
-        });*/
+        });
     }
 }
 

@@ -420,19 +420,24 @@ function logIn(autologin) {
          "password": $('#login-password').val()
          };
 
-        /*data = {
-            "document_type": 'CC',
-            "document_id": '12345',
-            "password": '00000000'
-        };*/
     } else {
         rememberMe = true;
 
+        alert('b')
         var user = getCache('carpooling_user');
-        data = {
-            "user_id": user.id,
-            "auth_token" : user.authentication_token
-        };
+        if (user) {
+            data = {
+                "user_id": user.id,
+                "auth_token" : user.authentication_token
+            };
+        } else {
+            alert('a');
+
+            hideLoader();
+            window.scrollTo(0,0);
+            $.mobile.changePage($('#dashboard'), {transition: 'none'});
+            return false;
+        }
     }
 
     showLoader();
@@ -1657,9 +1662,9 @@ function removeCache(key) {
 }
 
 function clearCache() {
-    removeCache('user');
-    removeCache('allRides');
-    removeCache('rememberMe');
+    removeCache('carpooling_user');
+    removeCache('carpooling_allRidesHash');
+    removeCache('carpooling_rememberMe');
 }
 
 // Funciones generales
