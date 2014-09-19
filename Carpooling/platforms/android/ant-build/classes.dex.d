@@ -1,6 +1,6 @@
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes.dex : \
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/mx/coderia/ACC/Carpooling/BuildConfig.class \
-/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/mx/coderia/ACC/Carpooling/Carpooling.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/mx/coderia/ACC/Carpooling/CarroCompartido.class \
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/mx/coderia/ACC/Carpooling/R$attr.class \
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/mx/coderia/ACC/Carpooling/R$drawable.class \
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/mx/coderia/ACC/Carpooling/R$string.class \

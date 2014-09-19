@@ -379,6 +379,11 @@ label.error {
 
 /** Terms **/
 
+#terms {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
 #terms .title {
     text-align: center;
 }

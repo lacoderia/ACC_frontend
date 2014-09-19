@@ -1,3 +1,3 @@
 # view AndroidManifest.xml #generated:6
--keep class mx.coderia.ACC.Carpooling.Carpooling { <init>(...); }
+-keep class mx.coderia.ACC.Carpooling.CarroCompartido { <init>(...); }
 

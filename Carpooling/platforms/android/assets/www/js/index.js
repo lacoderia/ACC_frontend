@@ -419,12 +419,6 @@ function logIn(autologin) {
          "document_id": $('#login-identificacion').val(),
          "password": $('#login-password').val()
          };
-
-        /*data = {
-            "document_type": 'CC',
-            "document_id": '12345',
-            "password": '00000000'
-        };*/
     } else {
         rememberMe = true;
 
@@ -1657,9 +1651,9 @@ function removeCache(key) {
 }
 
 function clearCache() {
-    removeCache('user');
-    removeCache('allRides');
-    removeCache('rememberMe');
+    removeCache('carpooling_user');
+    removeCache('carpooling_allRidesHash');
+    removeCache('carpooling_rememberMe');
 }
 
 // Funciones generales

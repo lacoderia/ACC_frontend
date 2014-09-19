@@ -419,25 +419,14 @@ function logIn(autologin) {
          "document_id": $('#login-identificacion').val(),
          "password": $('#login-password').val()
          };
-
     } else {
         rememberMe = true;
 
-        alert('b')
         var user = getCache('carpooling_user');
-        if (user) {
-            data = {
-                "user_id": user.id,
-                "auth_token" : user.authentication_token
-            };
-        } else {
-            alert('a');
-
-            hideLoader();
-            window.scrollTo(0,0);
-            $.mobile.changePage($('#dashboard'), {transition: 'none'});
-            return false;
-        }
+        data = {
+            "user_id": user.id,
+            "auth_token" : user.authentication_token
+        };
     }
 
     showLoader();
@@ -803,6 +792,7 @@ function getProfile() {
                 var user = response;
 
                 if (user.avatar) {
+                    user.avatar = '/users/avatars/default.png';
                     $('<img/>')
                         .attr('src', 'http://166.78.117.195' + user.avatar)
                         .load(function(){
@@ -814,12 +804,12 @@ function getProfile() {
                         });
                 }
 
-                $('#profile .profile-name').html(user.first_name + ' ' + user.last_name);
-                $('#profile .profile-email').html(user.email);
+                $('#profile .profile-name').html('Nombre');
+                $('#profile .profile-email').html('Correo electrónico');
 
                 var vehicleHTML = '<hr class="separator"><b>Mis vehículos</b><hr class="separator">';
 
-                if (user.vehicles.length) {
+                if (false) {
                     vehicleHTML += '<p>';
 
                     for (var i=0; i<user.vehicles.length; i++) {
