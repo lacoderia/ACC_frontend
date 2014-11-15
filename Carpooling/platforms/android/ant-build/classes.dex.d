@@ -1,4 +1,16 @@
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes.dex : \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/com/sharinglabs/cordova/plugin/datepicker/DatePickerPlugin$1$1.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/com/sharinglabs/cordova/plugin/datepicker/DatePickerPlugin$1$2.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/com/sharinglabs/cordova/plugin/datepicker/DatePickerPlugin$1$3.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/com/sharinglabs/cordova/plugin/datepicker/DatePickerPlugin$1.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/com/sharinglabs/cordova/plugin/datepicker/DatePickerPlugin$2$1.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/com/sharinglabs/cordova/plugin/datepicker/DatePickerPlugin$2$2.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/com/sharinglabs/cordova/plugin/datepicker/DatePickerPlugin$2$3.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/com/sharinglabs/cordova/plugin/datepicker/DatePickerPlugin$2$4.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/com/sharinglabs/cordova/plugin/datepicker/DatePickerPlugin$2.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/com/sharinglabs/cordova/plugin/datepicker/DatePickerPlugin$DateSetListener.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/com/sharinglabs/cordova/plugin/datepicker/DatePickerPlugin$TimeSetListener.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/com/sharinglabs/cordova/plugin/datepicker/DatePickerPlugin.class \
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/mx/coderia/ACC/Carpooling/BuildConfig.class \
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/mx/coderia/ACC/Carpooling/CarroCompartido.class \
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/mx/coderia/ACC/Carpooling/R$attr.class \
@@ -9,6 +21,12 @@
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/org/apache/cordova/camera/CameraLauncher.class \
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/org/apache/cordova/camera/ExifHelper.class \
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/org/apache/cordova/camera/FileHelper.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/org/apache/cordova/datepicker/Datepicker$1.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/org/apache/cordova/datepicker/Datepicker$2$1.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/org/apache/cordova/datepicker/Datepicker$2.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/org/apache/cordova/datepicker/Datepicker$DateSetListener.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/org/apache/cordova/datepicker/Datepicker$TimeSetListener.class \
+/Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/org/apache/cordova/datepicker/Datepicker.class \
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/org/apache/cordova/device/Device.class \
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/classes/org/apache/cordova/splashscreen/SplashScreen.class \
 /Users/schultzRr/Documents/Proyectos/workspace/ACC_frontend/Carpooling/platforms/android/ant-build/dexedLibs/classes-5f66b7cd203635890ad5f3e829727dd3.jar \

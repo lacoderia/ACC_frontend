@@ -56,7 +56,7 @@
             <div role="main" class="ui-content">
                 <div class="login-table">
                     <div class="login-cell">
-                        <img id="login-logo" src="img/logo.png"/>
+                        <!--img id="login-logo" src="img/logo.png"/-->
                         <select name="login-tipo-identificacion" id="login-tipo-identificacion">
                             <option value="">Seleccionar tipo de id</option>
                             <option value="CC">Cédula de Ciudadanía</option>
@@ -94,20 +94,19 @@
                     <div><b>Datos personales</b></div>
                     <hr>
                     <input name="sign_up_domain" id="sign_up_domain" type="hidden" value=""/>
-                    <div data-role="fieldcontainer">
-                        <select name="sign_up_agreement" id="sign_up_agreement" class="required" onchange="updateSelectedAgreement()">
-                            <option value="">Selecciona tu empresa</option>
-                        </select>
-                    </div>
-                    <div data-role="fieldcontainer">
-                        <select name="sign_up_document_type" id="sign_up_document_type" class="required">
-                            <option value="">Seleccionar tipo de id</option>
-                            <option value="CC">Cédula de Ciudadanía</option>
-                            <option value="TI">Tarjeta de Identidad</option>
-                            <option value="CE">Cédula de Extranjería</option>
-                            <option value="PS">Pasaporte</option>
-                        </select>
-                    </div>
+                    <select name="sign_up_agreement" id="sign_up_agreement" class="required" onchange="updateSelectedAgreement()">
+                        <option value="">Selecciona tu empresa</option>
+                    </select>
+                    <input type="text" name="add_ride_date" id="add_ride_date" placeholder="Fecha:" class="datepicker required">
+                    <input type="text" name="add_ride_time" id="add_ride_time" placeholder="Hora:" class="timepicker required">
+
+                    <select name="sign_up_document_type" id="sign_up_document_type" class="required">
+                        <option value="">Seleccionar tipo de id</option>
+                        <option value="CC">Cédula de Ciudadanía</option>
+                        <option value="TI">Tarjeta de Identidad</option>
+                        <option value="CE">Cédula de Extranjería</option>
+                        <option value="PS">Pasaporte</option>
+                    </select>
                     <div data-role="fieldcontainer">
                         <input type="text" name="sign_up_document_id" id="sign_up_document_id" placeholder="Identificación" class="required"/>
                     </div>
@@ -400,10 +399,10 @@
 
                 <form id="add-ride-form">
                     <div data-role="fieldcontainer">
-                        <input type="text" name="add_ride_origin" id="add_ride_origin" placeholder="De:" class="required">
+                        <input type="text" name="add_ride_origin" id="add_ride_origin" placeholder="Desde:" class="required">
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="text" name="add_ride_destination" id="add_ride_destination" placeholder="A:" class="required">
+                        <input type="text" name="add_ride_destination" id="add_ride_destination" placeholder="Hasta:" class="required">
                     </div>
                     <div data-role="fieldcontainer">
                         <input type="datetime-local" name="add_ride_datetime" id="add_ride_datetime" placeholder="Fecha:" class="required">
@@ -444,11 +443,11 @@
                     <span class="time"></span>
                 </div>
                 <div class="row">
-                    <span>De:</span>
+                    <span>Desde:</span>
                     <span class="origin"></span>
                 </div>
                 <div class="row">
-                    <span>A:</span>
+                    <span>Hasta:</span>
                     <span class="destination"></span>
                 </div>
                 <div class="row">

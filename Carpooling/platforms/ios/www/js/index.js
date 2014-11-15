@@ -918,6 +918,7 @@ function getPicture() {
             sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
             encodingType: navigator.camera.EncodingType.PNG,
             mediaType: navigator.camera.MediaType.PICTURE,
+            correctOrientation: true,
             destinationType: navigator.camera.DestinationType.DATA_URL,
             targetWidth: 200,
             targetHeight: 200

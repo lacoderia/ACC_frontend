@@ -69,6 +69,10 @@
                         {
                             "xml": "<preference name=\"StatusBarBackgroundColor\" value=\"#000000\" />",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"DatePicker\"><param name=\"ios-package\" value=\"DatePicker\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -89,6 +93,9 @@
             "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
         },
         "org.apache.cordova.statusbar": {
+            "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
+        },
+        "com.sharinglabs.cordova.plugin.datepicker": {
             "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
         }
     },

@@ -167,7 +167,89 @@ var app = {
 	            document.addEventListener("backbutton", function (e) {
 	                e.preventDefault();
 	            }, false );
+
+                //$("select").click(function() { $(this).focus(); });
 	    };
+
+        $('.datepicker').focus(function(event) {
+            var currentField = $(this);
+            var date = new Date();
+
+            if (currentField.val()){
+                date =   new Date(currentField.val().split('/').reverse().join('/'));
+            }
+
+            // Same handling for iPhone and Android
+            datePicker.show({
+                date : date,
+                mode : 'date'
+            }, function(returnDate) {
+                if (returnDate != 'cancel') {
+                    var d = new Date(returnDate);
+
+                    var curr_date = d.getDate();
+                    var curr_month = d.getMonth();
+                    curr_month++;
+                    var curr_year = d.getFullYear();
+                    currentField.val( ('0'+curr_date).substr(-2,2) + "/" + ('0'+curr_month).substr(-2,2) + "/" + curr_year);
+                }
+
+                // This fixes the problem you mention at the bottom of this script with it not working a second/third time around, because it is in focus.
+                currentField.blur();
+            });
+        });
+
+        $('.timepicker').focus(function(event) {
+            var currentField = $(this);
+            var date = new Date();
+
+            if (currentField.val()){
+                date =   new Date('1 Jan 1900 ' + currentField.val());
+            }
+
+            // Same handling for iPhone and Android
+            datePicker.show({
+                date : date,
+                mode : 'time'
+            }, function(returnTime) {
+
+                if (returnTime != 'cancel') {
+                    var a_p = "";
+                    var d = new Date(returnTime);
+                    var curr_hour = d.getHours();
+                    if (curr_hour < 12)
+                    {
+                        a_p = "AM";
+                    }
+                    else
+                    {
+                        a_p = "PM";
+                    }
+                    if (curr_hour == 0)
+                    {
+                        curr_hour = 12;
+                    }
+                    if (curr_hour > 12)
+                    {
+                        curr_hour = curr_hour - 12;
+                    }
+
+                    var curr_min = d.getMinutes();
+
+                    curr_min = curr_min + "";
+
+                    if (curr_min.length == 1)
+                    {
+                        curr_min = "0" + curr_min;
+                    }
+
+                    currentField.val(curr_hour + ":" + curr_min + " " + a_p);
+                }
+
+                // This fixes the problem you mention at the bottom of this script with it not working a second/third time around, because it is in focus.
+                currentField.blur();
+            });
+        });
         
     }
 };
@@ -613,6 +695,9 @@ function openTerms() {
 }
 
 function signUp() {
+
+    alert($('#add_ride_date').val().split('/').reverse().join('-') + ' ' + get24Format($('#add_ride_time').val()) + ':00');
+
     if ($("#sign-up-form").valid() & $("#sign-up-vehicle-form").valid() & $("#sign-up-terms-form").valid()){
 
         var data = {
@@ -918,6 +1003,7 @@ function getPicture() {
             sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
             encodingType: navigator.camera.EncodingType.PNG,
             mediaType: navigator.camera.MediaType.PICTURE,
+            correctOrientation: true,
             destinationType: navigator.camera.DestinationType.DATA_URL,
             targetWidth: 200,
             targetHeight: 200
@@ -1516,7 +1602,7 @@ function addRide() {
             "ride": {
                 "agreement_id": user.agreement_id,
                 "user_id": user.id,
-                "ride_when": $('#add_ride_datetime').val(),
+                "ride_when": $('#add_ride_date').val() + ' ' + $('#add_ride_time').val().substr(0,4),
                 "cost": (($('#add_ride_cost').val().length > 0) ? $('#add_ride_cost').val() : 0),
                 "seats": $('#add_ride_seats').val(),
                 "origin": $('#add_ride_origin').val(),
@@ -1728,4 +1814,18 @@ function numberPattern(e) {
         return true;
     else
         return false;
+}
+
+// Converts 12 hour format to 24 hour format example: 5:12 PM -> 17:12
+function get24Format(time) {
+    var hours = Number(time.match(/^(\d+)/)[1]);
+    var minutes = Number(time.match(/:(\d+)/)[1]);
+    var AMPM = time.match(/\s(.*)$/)[1];
+    if (AMPM == "PM" && hours < 12) hours = hours + 12;
+    if (AMPM == "AM" && hours == 12) hours = hours - 12;
+    var sHours = hours.toString();
+    var sMinutes = minutes.toString();
+    if (hours < 10) sHours = "0" + sHours;
+    if (minutes < 10) sMinutes = "0" + sMinutes;
+    return sHours + ":" + sMinutes;
 }

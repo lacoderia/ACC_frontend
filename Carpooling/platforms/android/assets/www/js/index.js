@@ -56,7 +56,7 @@ var app = {
                 } else {
                     clearInterval(animation);
 
-                    if (getCache('carpooling_rememberMe')) {
+                    if (false) {
                         logIn(true);
                     } else {
                         window.scrollTo(0,0);
@@ -167,7 +167,91 @@ var app = {
 	            document.addEventListener("backbutton", function (e) {
 	                e.preventDefault();
 	            }, false );
+
+                //$("select").click(function() { $(this).focus(); });
 	    };
+
+        $('.datepicker').focus(function(event) {
+            var currentField = $(this);
+            var date = new Date();
+
+            if (currentField.val()){
+                date =   new Date(currentField.val().split('/').reverse().join('/'));
+            }
+
+            // Same handling for iPhone and Android
+            datePicker.show({
+                date : date,
+                mode : 'date'
+            }, function(returnDate) {
+                if (returnDate != 'cancel') {
+                    var d = new Date(returnDate);
+
+                    var curr_date = d.getDate();
+                    var curr_month = d.getMonth();
+                    curr_month++;
+                    var curr_year = d.getFullYear();
+                    currentField.val( ('0'+curr_date).substr(-2,2) + "/" + ('0'+curr_month).substr(-2,2) + "/" + curr_year);
+                }
+
+                // This fixes the problem you mention at the bottom of this script with it not working a second/third time around, because it is in focus.
+                currentField.blur();
+            });
+        });
+
+        // 2009-06-23T13:44:16:00
+
+        $('.timepicker').focus(function(event) {
+            var currentField = $(this);
+            var date = new Date();
+
+            if (currentField.val()){
+                date =   new Date('1 Jan 1900 ' + currentField.val());
+            }
+
+            // Same handling for iPhone and Android
+            datePicker.show({
+                date : date,
+                mode : 'time'
+            }, function(returnTime) {
+
+                if (returnTime != 'cancel') {
+                    var a_p = "";
+                    var d = new Date(returnTime);
+                    var curr_hour = d.getHours();
+                    if (curr_hour < 12)
+                    {
+                        a_p = "AM";
+                    }
+                    else
+                    {
+                        a_p = "PM";
+                    }
+                    if (curr_hour == 0)
+                    {
+                        curr_hour = 12;
+                    }
+                    if (curr_hour > 12)
+                    {
+                        curr_hour = curr_hour - 12;
+                    }
+
+                    var curr_min = d.getMinutes();
+
+                    curr_min = curr_min + "";
+
+                    if (curr_min.length == 1)
+                    {
+                        curr_min = "0" + curr_min;
+                    }
+
+                    currentField.val(curr_hour + ":" + curr_min + " " + a_p);
+                }
+
+                // This fixes the problem you mention at the bottom of this script with it not working a second/third time around, because it is in focus.
+                currentField.blur();
+            });
+        });
         
     }
 };
@@ -280,7 +364,7 @@ $(document).on('pagebeforeshow', "#view-ride", function (event, data) {
     if (rideId) {
         getRideDetail(rideId);
     } else {
-        showAlert('Detalles del viaje', 'Hubo un error al obtener los detalles del viaje. Intenta nuevamente.');
+        showAlert('Detalles del viaje', 'Hubo un error al obtener los detalles del viaje. Favor intentar nuevamente.');
     }
 });
 
@@ -475,7 +559,7 @@ function logIn(autologin) {
         error: function(error) {
             hideLoader();
             showAlert('Iniciar sesión',
-                      'Hubo un error al iniciar la sesión. Intenta nuevamente.',
+                      'Hubo un error al iniciar la sesión. Favor intentar nuevamente.',
                       function() {
                           window.scrollTo(0,0);
                           $.mobile.changePage($('#login'), {transition: 'none'});
@@ -519,7 +603,7 @@ function logOut() {
                     }
                 );
             } else {
-                showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Intenta nuevamente.');
+                showAlert('Cerrar sesión', 'Ocurrió un error al intentar cerrar la sesión. Favor intentar nuevamente.');
             }
         }
     });
@@ -593,7 +677,7 @@ function getAgreements() {
                     }
                 );
             } else {
-                showAlert('Registro', 'Hubo un error al obtener las empresas con convenio. Intenta nuevamente.');
+                showAlert('Registro', 'Hubo un error al obtener las empresas con convenio. Favor intentar nuevamente.');
             }
         }
     });
@@ -613,6 +697,9 @@ function openTerms() {
 }
 
 function signUp() {
+
+    alert($('#add_ride_date').val().split('/').reverse().join('-') + ' ' + get24Format($('#add_ride_time').val()) + ':00');
+
     if ($("#sign-up-form").valid() & $("#sign-up-vehicle-form").valid() & $("#sign-up-terms-form").valid()){
 
         var data = {
@@ -681,7 +768,7 @@ function signUp() {
                         }
                     );
                 } else {
-                    showAlert('Registro', 'Ocurrió un error al intentar registrarte. Intenta nuevamente.');
+                    showAlert('Registro', 'Ocurrió un error al intentar registrarte. Favor intentar nuevamente.');
                 }
             }
         });
@@ -835,7 +922,7 @@ function getProfile() {
             } else {
                 hideLoader();
                 showAlert('Mi perfil',
-                    'Hubo un error al cargar tu perfil. Intenta nuevamente.',
+                    'Hubo un error al cargar tu perfil. Favor intentar nuevamente.',
                     function() {
                         window.scrollTo(0,0);
                         $.mobile.changePage($('#dashboard'), {transition: 'slide'});
@@ -855,7 +942,7 @@ function getProfile() {
                     }
                 );
             } else {
-                showAlert('Mi perfil', 'Hubo un error al cargar tu perfil. Intenta nuevamente.');
+                showAlert('Mi perfil', 'Hubo un error al cargar tu perfil. Favor intentar nuevamente.');
             }
         }
     });
@@ -905,7 +992,7 @@ function getPicture() {
                             }
                         );
                     } else {
-                        showAlert('Mi perfil', 'Ocurrió un error al cambiar la foto de tu perfil. Intenta nuevamente.');
+                        showAlert('Mi perfil', 'Ocurrió un error al cambiar la foto de tu perfil. Favor intentar nuevamente.');
                     }
                 }
             });
@@ -918,6 +1005,7 @@ function getPicture() {
             sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
             encodingType: navigator.camera.EncodingType.PNG,
             mediaType: navigator.camera.MediaType.PICTURE,
+            correctOrientation: true,
             destinationType: navigator.camera.DestinationType.DATA_URL,
             targetWidth: 200,
             targetHeight: 200
@@ -993,7 +1081,7 @@ function addVehicle() {
                         }
                     );
                 } else {
-                    showAlert('Agregar Vehículo', 'Ocurrió un error al agregar el vehículo. Intenta nuevamente.');
+                    showAlert('Agregar Vehículo', 'Ocurrió un error al agregar el vehículo. Favor intentar nuevamente.');
                 }
             }
         });
@@ -1031,7 +1119,7 @@ function getDashboard() {
                     }
                 );
             } else {
-                showAlert('Inicio', 'Hubo un error al obtener la información de los viajes publicados y reservados. Intenta Nuevamente.');
+                showAlert('Inicio', 'Hubo un error al obtener la información de los viajes publicados y reservados. Favor intentar nuevamente.');
             }
         }
     });
@@ -1170,7 +1258,7 @@ function getAllRides() {
                     }
                 );
             } else {
-                showAlert('Buscar viajes', 'Hubo un error al obtener la información de los viajes disponibles. Intenta nuevamente.');
+                showAlert('Buscar viajes', 'Hubo un error al obtener la información de los viajes disponibles. Favor intentar nuevamente.');
             }
         }
     });
@@ -1338,7 +1426,7 @@ function getRideDetail(rideId) {
                 hideLoader();
             } else {
                 hideLoader();
-                showAlert('Detalles del viaje', 'Hubo un error al obtener los detalles del viaje. Intenta nuevamente.');
+                showAlert('Detalles del viaje', 'Hubo un error al obtener los detalles del viaje. Favor intentar nuevamente.');
             }
         },
         error: function(error) {
@@ -1353,7 +1441,7 @@ function getRideDetail(rideId) {
                     }
                 );
             } else {
-                showAlert('Detalles del viaje', 'Hubo un error al obtener los detalles del viaje. Intenta nuevamente.');
+                showAlert('Detalles del viaje', 'Hubo un error al obtener los detalles del viaje. Favor intentar nuevamente.');
             }
         }
     });
@@ -1409,7 +1497,7 @@ function showUserProfile(userId) {
             } else {
                 hideLoader();
                 showAlert('Pasajero',
-                          'Hubo un error al cargar los datos del pasajero. Intenta nuevamente.',
+                          'Hubo un error al cargar los datos del pasajero. Favor intentar nuevamente.',
                           function(){
                               window.scrollTo(0,0);
                               $.mobile.changePage($('#view-ride'), {transition: 'none'});
@@ -1429,7 +1517,7 @@ function showUserProfile(userId) {
                     }
                 );
             } else {
-                showAlert('Pasajero', 'Hubo un error al cargar los datos del pasajero. Intenta nuevamente.');
+                showAlert('Pasajero', 'Hubo un error al cargar los datos del pasajero. Favor intentar nuevamente.');
             }
         }
     });
@@ -1476,7 +1564,7 @@ function confirmDeleteVehicle(vehiclePlateNumber) {
                             }
                         );
                     } else {
-                        showAlert('Eliminar Vehículo', 'Ocurrió un error al eliminar el vehículo. Intenta nuevamente.');
+                        showAlert('Eliminar Vehículo', 'Ocurrió un error al eliminar el vehículo. Favor intentar nuevamente.');
                     }
                 }
             });
@@ -1516,7 +1604,7 @@ function addRide() {
             "ride": {
                 "agreement_id": user.agreement_id,
                 "user_id": user.id,
-                "ride_when": $('#add_ride_datetime').val(),
+                "ride_when": $('#add_ride_date').val() + ' ' + $('#add_ride_time').val().substr(0,4),
                 "cost": (($('#add_ride_cost').val().length > 0) ? $('#add_ride_cost').val() : 0),
                 "seats": $('#add_ride_seats').val(),
                 "origin": $('#add_ride_origin').val(),
@@ -1530,7 +1618,7 @@ function addRide() {
             ride.ride.notes = $('#add_ride_notes').val() + '<div>No se especifican las placas del vehículo.</div>';
         }
 
-        showLoader();
+        /*showLoader();
         $.ajax({
             type: "POST",
             url: "http://166.78.117.195/rides.json",
@@ -1563,10 +1651,10 @@ function addRide() {
                         }
                     );
                 } else {
-                    showAlert('Publicar viaje', 'Ocurrió un error al publicar el viaje. Intenta nuevamente.');
+                    showAlert('Publicar viaje', 'Ocurrió un error al publicar el viaje. Favor intentar nuevamente.');
                 }
             }
-        });
+        });*/
     }
 }
 
@@ -1612,7 +1700,7 @@ function acceptRide() {
                     }
                 );
             } else {
-                showAlert('Reservar lugar', 'El viaje no se pudo reservar. Intenta nuevamente.');
+                showAlert('Reservar lugar', 'El viaje no se pudo reservar. Favor intentar nuevamente.');
             }
         }
     });
@@ -1728,4 +1816,18 @@ function numberPattern(e) {
         return true;
     else
         return false;
+}
+
+// Converts 12 hour format to 24 hour format example: 5:12 PM -> 17:12
+function get24Format(time) {
+    var hours = Number(time.match(/^(\d+)/)[1]);
+    var minutes = Number(time.match(/:(\d+)/)[1]);
+    var AMPM = time.match(/\s(.*)$/)[1];
+    if (AMPM == "PM" && hours < 12) hours = hours + 12;
+    if (AMPM == "AM" && hours == 12) hours = hours - 12;
+    var sHours = hours.toString();
+    var sMinutes = minutes.toString();
+    if (hours < 10) sHours = "0" + sHours;
+    if (minutes < 10) sMinutes = "0" + sMinutes;
+    return sHours + ":" + sMinutes;
 }
