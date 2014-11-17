@@ -56,7 +56,7 @@
             <div role="main" class="ui-content">
                 <div class="login-table">
                     <div class="login-cell">
-                        <!--img id="login-logo" src="img/logo.png"/-->
+                        <img id="login-logo" src="img/logo.png"/>
                         <select name="login-tipo-identificacion" id="login-tipo-identificacion">
                             <option value="">Seleccionar tipo de id</option>
                             <option value="CC">Cédula de Ciudadanía</option>
@@ -97,9 +97,6 @@
                     <select name="sign_up_agreement" id="sign_up_agreement" class="required" onchange="updateSelectedAgreement()">
                         <option value="">Selecciona tu empresa</option>
                     </select>
-                    <input type="text" name="add_ride_date" id="add_ride_date" placeholder="Fecha:" class="datepicker required">
-                    <input type="text" name="add_ride_time" id="add_ride_time" placeholder="Hora:" class="timepicker required">
-
                     <select name="sign_up_document_type" id="sign_up_document_type" class="required">
                         <option value="">Seleccionar tipo de id</option>
                         <option value="CC">Cédula de Ciudadanía</option>
@@ -133,15 +130,13 @@
 
                 <form id="sign-up-vehicle-form" style="display:none">
                     <label class="checkbox-label-no-background-black"><input type="checkbox" name="sign_up_vehicle_owner" id="sign_up_vehicle_owner" data-mini="true">Soy el dueño del vehículo</label>
-                    <div data-role="fieldcontainer" style="display:none">
-                        <select name="sign_up_vehicle_document_type" id="sign_up_vehicle_document_type">
-                            <option value="">Seleccionar tipo de id</option>
-                            <option value="CC">Cédula de Ciudadanía</option>
-                            <option value="TI">Tarjeta de Identidad</option>
-                            <option value="CE">Cédula de Extranjería</option>
-                            <option value="PS">Pasaporte</option>
-                        </select>
-                    </div>
+                    <select name="sign_up_vehicle_document_type" id="sign_up_vehicle_document_type">
+                        <option value="">Seleccionar tipo de id</option>
+                        <option value="CC">Cédula de Ciudadanía</option>
+                        <option value="TI">Tarjeta de Identidad</option>
+                        <option value="CE">Cédula de Extranjería</option>
+                        <option value="PS">Pasaporte</option>
+                    </select>
                     <div data-role="fieldcontainer" style="display:none">
                         <input type="text" name="sign_up_vehicle_document_id" id="sign_up_vehicle_document_id" placeholder="Identificación del dueño"/>
                     </div>
@@ -149,7 +144,7 @@
                         <input type="text" name="sign_up_vehicle_plates" id="sign_up_vehicle_plates" placeholder="Placas" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" style="text-transform:uppercase;"/>
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="date" name="sign_up_vehicle_soat" id="sign_up_vehicle_soat" placeholder="Fecha de vencimiento SOAT:">
+                        <input type="text" name="sign_up_vehicle_soat" id="sign_up_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="datepicker">
                         <div class="label-text">Fecha de vencimiento del SOAT</div>
                     </div>
                 </form>
@@ -245,13 +240,11 @@
                 <br/>
                 <p>Selecciona la causa del problema, introduce tu correo electrónico registrado y da click en 'Enviar correo'.</p>
                 <form id="forgot-form">
-                    <div data-role="fieldcontainer">
-                        <select name="forgot_problem" id="forgot_problem" class="required">
-                            <option value="">Selecciona una opción</option>
-                            <option value="forgot">Olvidé mi contraseña</option>
-                            <option value="confirmation">No recibí el correo de confirmación</option>
-                        </select>
-                    </div>
+                    <select name="forgot_problem" id="forgot_problem" class="required">
+                        <option value="">Selecciona una opción</option>
+                        <option value="forgot">Olvidé mi contraseña</option>
+                        <option value="confirmation">No recibí el correo de confirmación</option>
+                    </select>
                     <div data-role="fieldcontainer">
                         <input type="email" name="forgot_email" id="forgot_email" placeholder="Correo electrónico" class="required"/>
                     </div>
@@ -345,15 +338,13 @@
                 <hr>
                 <form id="add-vehicle-form">
                     <label class="checkbox-label-no-background-black"><input type="checkbox" name="add_vehicle_owner" id="add_vehicle_owner" data-mini="true">Soy el dueño del vehículo</label>
-                    <div data-role="fieldcontainer" style="display:none">
-                        <select name="add_vehicle_document_type" id="add_vehicle_document_type" class="required">
-                            <option value="">Seleccionar tipo de id</option>
-                            <option value="CC">Cédula de Ciudadanía</option>
-                            <option value="TI">Tarjeta de Identidad</option>
-                            <option value="CE">Cédula de Extranjería</option>
-                            <option value="PS">Pasaporte</option>
-                        </select>
-                    </div>
+                    <select name="add_vehicle_document_type" id="add_vehicle_document_type" class="required">
+                        <option value="">Seleccionar tipo de id</option>
+                        <option value="CC">Cédula de Ciudadanía</option>
+                        <option value="TI">Tarjeta de Identidad</option>
+                        <option value="CE">Cédula de Extranjería</option>
+                        <option value="PS">Pasaporte</option>
+                    </select>
                     <div data-role="fieldcontainer" style="display:none">
                         <input type="text" name="add_vehicle_document_id" id="add_vehicle_document_id" placeholder="Identificación del dueño" class="required"/>
                     </div>
@@ -361,7 +352,7 @@
                         <input type="text" name="add_vehicle_plates" id="add_vehicle_plates" placeholder="Placas" class="required" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" style="text-transform:uppercase;"/>
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="date" name="add_vehicle_soat" id="add_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="required"/>
+                        <input type="text" name="add_vehicle_soat" id="add_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="datepicker required">
                         <div class="label-text">Fecha de vencimiento del SOAT</div>
                     </div>
                 </form>
@@ -405,11 +396,10 @@
                         <input type="text" name="add_ride_destination" id="add_ride_destination" placeholder="Hasta:" class="required">
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="datetime-local" name="add_ride_datetime" id="add_ride_datetime" placeholder="Fecha:" class="required">
+                        <input type="text" name="add_ride_date" id="add_ride_date" placeholder="Fecha:" class="datepicker required">
+                        <input type="text" name="add_ride_time" id="add_ride_time" placeholder="Hora:" class="timepicker required">
                     </div>
-                    <div data-role="fieldcontainer">
-                        <select name="add_ride_vehicle_plates" id="add_ride_vehicle_plates"></select>
-                    </div>
+                    <select name="add_ride_vehicle_plates" id="add_ride_vehicle_plates"></select>
                     <div data-role="fieldcontainer">
                         <input type="number" pattern="[0-9]*" name="add_ride_seats" id="add_ride_seats" placeholder="Asientos disponibles:" class="required" min="1" onKeyPress="return numberPattern(event)">
                     </div>

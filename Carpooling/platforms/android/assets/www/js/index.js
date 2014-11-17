@@ -56,7 +56,7 @@ var app = {
                 } else {
                     clearInterval(animation);
 
-                    if (false) {
+                    if (getCache('carpooling_rememberMe')) {
                         logIn(true);
                     } else {
                         window.scrollTo(0,0);
@@ -95,10 +95,10 @@ var app = {
 
         $('#sign_up_vehicle_owner').change(function(){
             if ($("#sign_up_vehicle_owner").is(':checked')) {
-                $('#sign_up_vehicle_document_type').parents('div[data-role="fieldcontainer"]').hide();
+                $('#sign_up_vehicle_document_type-button').hide();
                 $('#sign_up_vehicle_document_id').parents('div[data-role="fieldcontainer"]').hide();
             } else {
-                $('#sign_up_vehicle_document_type').parents('div[data-role="fieldcontainer"]').show();
+                $('#sign_up_vehicle_document_type-button').show();
                 $('#sign_up_vehicle_document_id').parents('div[data-role="fieldcontainer"]').show();
 
                 if ($('#sign-up-vehicle-form label.error').filter(':visible').length) {
@@ -109,13 +109,13 @@ var app = {
 
         $('#add_vehicle_owner').change(function(){
             if ($("#add_vehicle_owner").is(':checked')) {
-                $('#add_vehicle_document_type').parents('div[data-role="fieldcontainer"]').hide();
+                $('#add_vehicle_document_type-button').hide();
                 $('#add_vehicle_document_id').parents('div[data-role="fieldcontainer"]').hide();
 
                 $('#add_vehicle_document_type').removeClass('required');
                 $('#add_vehicle_document_id').removeClass('required');
             } else {
-                $('#add_vehicle_document_type').parents('div[data-role="fieldcontainer"]').show();
+                $('#add_vehicle_document_type-button').show();
                 $('#add_vehicle_document_id').parents('div[data-role="fieldcontainer"]').show();
 
                 $('#add_vehicle_document_type').addClass('required');
@@ -176,7 +176,7 @@ var app = {
             var date = new Date();
 
             if (currentField.val()){
-                date =   new Date(currentField.val().split('/').reverse().join('/'));
+                date = new Date(reverseDate(currentField.val(), '/', '/'))
             }
 
             // Same handling for iPhone and Android
@@ -198,8 +198,6 @@ var app = {
                 currentField.blur();
             });
         });
-
-        // 2009-06-23T13:44:16:00
 
         $('.timepicker').focus(function(event) {
             var currentField = $(this);
@@ -697,9 +695,6 @@ function openTerms() {
 }
 
 function signUp() {
-
-    alert($('#add_ride_date').val().split('/').reverse().join('-') + ' ' + get24Format($('#add_ride_time').val()) + ':00');
-
     if ($("#sign-up-form").valid() & $("#sign-up-vehicle-form").valid() & $("#sign-up-terms-form").valid()){
 
         var data = {
@@ -721,14 +716,14 @@ function signUp() {
             if ($('#sign_up_vehicle_owner').is(':checked')) {
                 data.vehicle = {
                     "plate_number": $('#sign_up_vehicle_plates').val().toUpperCase(),
-                    "soat_date": $('#sign_up_vehicle_soat').val(),
+                    "soat_date": reverseDate($('#sign_up_vehicle_soat').val(), '/', '-'),
                     "document_type_owner": $('#sign_up_document_type').val(),
                     "document_id_owner": $('#sign_up_document_id').val()
                 };
             } else {
                 data.vehicle = {
                     "plate_number": $('#sign_up_vehicle_plates').val().toUpperCase(),
-                    "soat_date": $('#sign_up_vehicle_soat').val(),
+                    "soat_date": reverseDate($('#sign_up_vehicle_soat').val(), '/', '-'),
                     "document_type_owner": $('#sign_up_vehicle_document_type').val(),
                     "document_id_owner": $('#sign_up_vehicle_document_id').val()
                 };
@@ -1033,14 +1028,14 @@ function addVehicle() {
         if ($('#add_vehicle_owner').is(':checked')) {
             data.vehicle = {
                 "plate_number": $('#add_vehicle_plates').val().toUpperCase(),
-                "soat_date": $('#add_vehicle_soat').val(),
+                "soat_date": reverseDate($('#add_vehicle_soat').val(), '/', '-'),
                 "document_type_owner": user.document_type,
                 "document_id_owner": user.document_id
             };
         } else {
             data.vehicle = {
                 "plate_number": $('#add_vehicle_plates').val().toUpperCase(),
-                "soat_date": $('#add_vehicle_soat').val(),
+                "soat_date": reverseDate($('#add_vehicle_soat').val(), '/', '-'),
                 "document_type_owner": $('#add_vehicle_document_type').val(),
                 "document_id_owner": $('#add_vehicle_document_id').val()
             };
@@ -1577,7 +1572,8 @@ function confirmDeleteVehicle(vehiclePlateNumber) {
 function clearAddRide() {
     $('#add_ride_origin').val('');
     $('#add_ride_destination').val('');
-    $('#add_ride_datetime').val('');
+    $('#add_ride_date').val('');
+    $('#add_ride_time').val('');
     $('#add_ride_seats').val('');
     $('#add_ride_cost').val('');
     $('#add_ride_notes').val('');
@@ -1597,14 +1593,13 @@ function clearAddRide() {
 }
 
 function addRide() {
-
     if ($("#add-ride-form").valid()){
         var user = getCache('carpooling_user');
         var ride = {
             "ride": {
                 "agreement_id": user.agreement_id,
                 "user_id": user.id,
-                "ride_when": $('#add_ride_date').val() + ' ' + $('#add_ride_time').val().substr(0,4),
+                "ride_when": reverseDate($('#add_ride_date').val(), '/', '-') + ' ' + get24Format($('#add_ride_time').val()),
                 "cost": (($('#add_ride_cost').val().length > 0) ? $('#add_ride_cost').val() : 0),
                 "seats": $('#add_ride_seats').val(),
                 "origin": $('#add_ride_origin').val(),
@@ -1618,7 +1613,7 @@ function addRide() {
             ride.ride.notes = $('#add_ride_notes').val() + '<div>No se especifican las placas del vehículo.</div>';
         }
 
-        /*showLoader();
+        showLoader();
         $.ajax({
             type: "POST",
             url: "http://166.78.117.195/rides.json",
@@ -1654,7 +1649,7 @@ function addRide() {
                     showAlert('Publicar viaje', 'Ocurrió un error al publicar el viaje. Favor intentar nuevamente.');
                 }
             }
-        });*/
+        });
     }
 }
 
@@ -1829,5 +1824,10 @@ function get24Format(time) {
     var sMinutes = minutes.toString();
     if (hours < 10) sHours = "0" + sHours;
     if (minutes < 10) sMinutes = "0" + sMinutes;
-    return sHours + ":" + sMinutes;
+    return sHours + ":" + sMinutes + ':00';
+}
+
+// Funcion que invierte la fecha y regresa un formato YYYY/MM/DD
+function reverseDate(date, splitCharacter, joinCharacter) {
+    return date.split(splitCharacter).reverse().join(joinCharacter);
 }
