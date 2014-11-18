@@ -446,6 +446,8 @@ function showAlert(title, message, onCloseFunction) {
     $('#popupAlert').popup('open');
 }
 
+var callAcceptFunction = false;
+
 function showDialog(title, message, acceptFunction) {
     var popUp = '<div data-role="popup" id="popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false">' +
         '<div data-role="header" data-theme="a">' +
@@ -467,13 +469,19 @@ function showDialog(title, message, acceptFunction) {
     $('#popupDialog').popup({
         afterclose: function( event, ui ) {
             $('#popupDialog').remove();
+            if(callAcceptFunction) {
+                if (acceptFunction !== undefined){
+                    acceptFunction();
+                }
+                callAcceptFunction = false;
+            }
         },
         transition: 'pop'
     });
 
     $('#popupDialog a.ok').off('click');
     $('#popupDialog a.ok').on('click', function(){
-        acceptFunction();
+        callAcceptFunction = true;
         $('#popupDialog').popup('close');
     });
 
@@ -1537,11 +1545,12 @@ function confirmDeleteVehicle(vehiclePlateNumber) {
                 dataType: "json",
                 success: function(response) {
                     if (response.success == true) {
-                        hideLoader();
-                        showAlert('Eliminar Vehículo', response.message);
-                        user.vehicles = response.vehicles;
-                        setCache('carpooling_user', user);
-                        getProfile();
+                        showAlert('Eliminar Vehículo',
+                            response.message,
+                            function(){
+                                getProfile();
+                            }
+                        );
                     } else {
                         hideLoader();
                         showAlert('Eliminar Vehículo', response.message);
