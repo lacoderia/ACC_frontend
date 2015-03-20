@@ -9,11 +9,12 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <preference name="Fullscreen" value="true" />
+    <preference name="Fullscreen" value="false" />
     <preference name="Orientation" value="portrait" />
     <preference name="DisallowOverscroll" value="true"/>
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="android-windowSoftInputMode" value="adjustUnspecified" />
 
     <platform name="ios">
         <!-- iOS 7.0+ -->

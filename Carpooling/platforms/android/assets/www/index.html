@@ -94,10 +94,10 @@
                     <div><b>Datos personales</b></div>
                     <hr>
                     <input name="sign_up_domain" id="sign_up_domain" type="hidden" value=""/>
-                    <select name="sign_up_agreement" id="sign_up_agreement" class="required" onchange="updateSelectedAgreement()">
+                    <select name="sign_up_agreement" id="sign_up_agreement" onchange="updateSelectedAgreement()">
                         <option value="">Selecciona tu empresa</option>
                     </select>
-                    <select name="sign_up_document_type" id="sign_up_document_type" class="required">
+                    <select name="sign_up_document_type" id="sign_up_document_type">
                         <option value="">Seleccionar tipo de id</option>
                         <option value="CC">Cédula de Ciudadanía</option>
                         <option value="TI">Tarjeta de Identidad</option>
@@ -401,10 +401,10 @@
                     </div>
                     <select name="add_ride_vehicle_plates" id="add_ride_vehicle_plates"></select>
                     <div data-role="fieldcontainer">
-                        <input type="number" pattern="[0-9]*" name="add_ride_seats" id="add_ride_seats" placeholder="Asientos disponibles:" class="required" min="1" onKeyPress="return numberPattern(event)">
+                        <input type="text" onfocus="this.type='number'" onblur="this.type='text'" pattern="[0-9]*" name="add_ride_seats" id="add_ride_seats" placeholder="Asientos disponibles:" class="required" min="1" onKeyPress="return numberPattern(event)">
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="number" pattern="[0-9]*" name="add_ride_cost" id="add_ride_cost" placeholder="Costo:" onKeyPress="return numberPattern(event)">
+                        <input type="text" onfocus="this.type='number'" onblur="this.type='text'" pattern="[0-9]*" name="add_ride_cost" id="add_ride_cost" placeholder="Costo:" onKeyPress="return numberPattern(event)">
                     </div>
                     <div data-role="fieldcontainer">
                         <textarea name="add_ride_notes" id="add_ride_notes" placeholder="Notas:" rows="2"></textarea>
