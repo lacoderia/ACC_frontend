@@ -222,6 +222,8 @@ var app = {
 
             // Same handling for iPhone and Android
             datePicker.show({
+                doneButtonLabel : 'Ok',
+                cancelButtonLabel : 'Cancelar',
                 date : date,
                 mode : 'time'
             }, function(returnTime) {
