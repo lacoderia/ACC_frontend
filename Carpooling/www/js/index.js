@@ -75,7 +75,7 @@ var app = {
                 $('#sign_up_vehicle_document_type').addClass('required');
                 $('#sign_up_vehicle_document_id').addClass('required');
                 $('#sign_up_vehicle_plates').addClass('required');
-                $('#sign_up_vehicle_soat').addClass('required');
+                //$('#sign_up_vehicle_soat').addClass('required');
 
                 $("#sign-up-vehicle-form").validate({
                     errorPlacement: function(error, element) {
@@ -87,7 +87,7 @@ var app = {
                 $('#sign_up_vehicle_document_type').removeClass('required');
                 $('#sign_up_vehicle_document_id').removeClass('required');
                 $('#sign_up_vehicle_plates').removeClass('required');
-                $('#sign_up_vehicle_soat').removeClass('required');
+                //$('#sign_up_vehicle_soat').removeClass('required');
 
                 $("#sign-up-vehicle-form").unbind('submit');
             }
@@ -903,10 +903,14 @@ function getProfile() {
 
                     for (var i=0; i<user.vehicles.length; i++) {
                         var date = createDateFromMysql(user.vehicles[i].soat_date);
+                        var soatDate = '--/--/----';
+                        if (date) {
+                            soatDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                        }
                         vehicleHTML += '<div class="vehicle-item">' +
                                             '<div class="vehicle-info">' +
                                                 '<div>Placas: ' + user.vehicles[i].plate_number + '</div>' +
-                                                '<div>Vencimiento SOAT: ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</div>' +
+                                                '<div>Vencimiento SOAT: ' + soatDate + '</div>' +
                                             '</div>' +
                                             '<div class="vehicle-actions">' +
                                                 '<div class="delete-btn icon-cancel-circle" onclick="confirmDeleteVehicle(\'' + user.vehicles[i].plate_number + '\')"></div>' +
