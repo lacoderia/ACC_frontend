@@ -94,20 +94,16 @@
                     <div><b>Datos personales</b></div>
                     <hr>
                     <input name="sign_up_domain" id="sign_up_domain" type="hidden" value=""/>
-                    <div data-role="fieldcontainer">
-                        <select name="sign_up_agreement" id="sign_up_agreement" class="required" onchange="updateSelectedAgreement()">
-                            <option value="">Selecciona tu empresa</option>
-                        </select>
-                    </div>
-                    <div data-role="fieldcontainer">
-                        <select name="sign_up_document_type" id="sign_up_document_type" class="required">
-                            <option value="">Seleccionar tipo de id</option>
-                            <option value="CC">Cédula de Ciudadanía</option>
-                            <option value="TI">Tarjeta de Identidad</option>
-                            <option value="CE">Cédula de Extranjería</option>
-                            <option value="PS">Pasaporte</option>
-                        </select>
-                    </div>
+                    <select name="sign_up_agreement" id="sign_up_agreement" class="required" onchange="updateSelectedAgreement()">
+                        <option value="">Selecciona tu empresa</option>
+                    </select>
+                    <select name="sign_up_document_type" id="sign_up_document_type" class="required">
+                        <option value="">Seleccionar tipo de id</option>
+                        <option value="CC">Cédula de Ciudadanía</option>
+                        <option value="TI">Tarjeta de Identidad</option>
+                        <option value="CE">Cédula de Extranjería</option>
+                        <option value="PS">Pasaporte</option>
+                    </select>
                     <div data-role="fieldcontainer">
                         <input type="text" name="sign_up_document_id" id="sign_up_document_id" placeholder="Identificación" class="required"/>
                     </div>
@@ -134,15 +130,13 @@
 
                 <form id="sign-up-vehicle-form" style="display:none">
                     <label class="checkbox-label-no-background-black"><input type="checkbox" name="sign_up_vehicle_owner" id="sign_up_vehicle_owner" data-mini="true">Soy el dueño del vehículo</label>
-                    <div data-role="fieldcontainer" style="display:none">
-                        <select name="sign_up_vehicle_document_type" id="sign_up_vehicle_document_type">
-                            <option value="">Seleccionar tipo de id</option>
-                            <option value="CC">Cédula de Ciudadanía</option>
-                            <option value="TI">Tarjeta de Identidad</option>
-                            <option value="CE">Cédula de Extranjería</option>
-                            <option value="PS">Pasaporte</option>
-                        </select>
-                    </div>
+                    <select name="sign_up_vehicle_document_type" id="sign_up_vehicle_document_type">
+                        <option value="">Seleccionar tipo de id</option>
+                        <option value="CC">Cédula de Ciudadanía</option>
+                        <option value="TI">Tarjeta de Identidad</option>
+                        <option value="CE">Cédula de Extranjería</option>
+                        <option value="PS">Pasaporte</option>
+                    </select>
                     <div data-role="fieldcontainer" style="display:none">
                         <input type="text" name="sign_up_vehicle_document_id" id="sign_up_vehicle_document_id" placeholder="Identificación del dueño"/>
                     </div>
@@ -150,7 +144,7 @@
                         <input type="text" name="sign_up_vehicle_plates" id="sign_up_vehicle_plates" placeholder="Placas" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" style="text-transform:uppercase;"/>
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="date" name="sign_up_vehicle_soat" id="sign_up_vehicle_soat" placeholder="Fecha de vencimiento SOAT:">
+                        <input type="text" name="sign_up_vehicle_soat" id="sign_up_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="datepicker">
                         <div class="label-text">Fecha de vencimiento del SOAT</div>
                     </div>
                 </form>
@@ -246,13 +240,11 @@
                 <br/>
                 <p>Selecciona la causa del problema, introduce tu correo electrónico registrado y da click en 'Enviar correo'.</p>
                 <form id="forgot-form">
-                    <div data-role="fieldcontainer">
-                        <select name="forgot_problem" id="forgot_problem" class="required">
-                            <option value="">Selecciona una opción</option>
-                            <option value="forgot">Olvidé mi contraseña</option>
-                            <option value="confirmation">No recibí el correo de confirmación</option>
-                        </select>
-                    </div>
+                    <select name="forgot_problem" id="forgot_problem" class="required">
+                        <option value="">Selecciona una opción</option>
+                        <option value="forgot">Olvidé mi contraseña</option>
+                        <option value="confirmation">No recibí el correo de confirmación</option>
+                    </select>
                     <div data-role="fieldcontainer">
                         <input type="email" name="forgot_email" id="forgot_email" placeholder="Correo electrónico" class="required"/>
                     </div>
@@ -346,15 +338,13 @@
                 <hr>
                 <form id="add-vehicle-form">
                     <label class="checkbox-label-no-background-black"><input type="checkbox" name="add_vehicle_owner" id="add_vehicle_owner" data-mini="true">Soy el dueño del vehículo</label>
-                    <div data-role="fieldcontainer" style="display:none">
-                        <select name="add_vehicle_document_type" id="add_vehicle_document_type" class="required">
-                            <option value="">Seleccionar tipo de id</option>
-                            <option value="CC">Cédula de Ciudadanía</option>
-                            <option value="TI">Tarjeta de Identidad</option>
-                            <option value="CE">Cédula de Extranjería</option>
-                            <option value="PS">Pasaporte</option>
-                        </select>
-                    </div>
+                    <select name="add_vehicle_document_type" id="add_vehicle_document_type" class="required">
+                        <option value="">Seleccionar tipo de id</option>
+                        <option value="CC">Cédula de Ciudadanía</option>
+                        <option value="TI">Tarjeta de Identidad</option>
+                        <option value="CE">Cédula de Extranjería</option>
+                        <option value="PS">Pasaporte</option>
+                    </select>
                     <div data-role="fieldcontainer" style="display:none">
                         <input type="text" name="add_vehicle_document_id" id="add_vehicle_document_id" placeholder="Identificación del dueño" class="required"/>
                     </div>
@@ -362,7 +352,7 @@
                         <input type="text" name="add_vehicle_plates" id="add_vehicle_plates" placeholder="Placas" class="required" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" style="text-transform:uppercase;"/>
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="date" name="add_vehicle_soat" id="add_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="required"/>
+                        <input type="text" name="add_vehicle_soat" id="add_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="datepicker required">
                         <div class="label-text">Fecha de vencimiento del SOAT</div>
                     </div>
                 </form>
@@ -400,17 +390,16 @@
 
                 <form id="add-ride-form">
                     <div data-role="fieldcontainer">
-                        <input type="text" name="add_ride_origin" id="add_ride_origin" placeholder="Desde:" class="required">
+                        <input type="text" name="add_ride_origin" id="add_ride_origin" placeholder="Desde: (Ej. Calle 102)" class="required">
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="text" name="add_ride_destination" id="add_ride_destination" placeholder="Hasta:" class="required">
+                        <input type="text" name="add_ride_destination" id="add_ride_destination" placeholder="Hasta: (Ej: Centro Comercial)" class="required">
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="datetime-local" name="add_ride_datetime" id="add_ride_datetime" placeholder="Fecha:" class="required">
+                        <input type="text" name="add_ride_date" id="add_ride_date" placeholder="Fecha:" class="datepicker required">
+                        <input type="text" name="add_ride_time" id="add_ride_time" placeholder="Hora:" class="timepicker required">
                     </div>
-                    <div data-role="fieldcontainer">
-                        <select name="add_ride_vehicle_plates" id="add_ride_vehicle_plates"></select>
-                    </div>
+                    <select name="add_ride_vehicle_plates" id="add_ride_vehicle_plates"></select>
                     <div data-role="fieldcontainer">
                         <input type="number" pattern="[0-9]*" name="add_ride_seats" id="add_ride_seats" placeholder="Asientos disponibles:" class="required" min="1" onKeyPress="return numberPattern(event)">
                     </div>
@@ -418,7 +407,7 @@
                         <input type="number" pattern="[0-9]*" name="add_ride_cost" id="add_ride_cost" placeholder="Costo:" onKeyPress="return numberPattern(event)">
                     </div>
                     <div data-role="fieldcontainer">
-                        <textarea name="add_ride_notes" id="add_ride_notes" placeholder="Notas:" rows="2"></textarea>
+                        <textarea name="add_ride_notes" id="add_ride_notes" placeholder="Notas: (Ej. Voy por la calle 100. No consumo de alimentos)" rows="2"></textarea>
                     </div>
                 </form>
                 <p><a data-role="button" onclick="addRide()">Publicar</a></p>

@@ -38,7 +38,11 @@ var app = {
             e.preventDefault();
         }
 
+        alert('1')
+
         navigator.splashscreen.hide();
+
+        alert('2')
 
         var imgLoad = imagesLoaded('#splash_table');
 
@@ -95,10 +99,10 @@ var app = {
 
         $('#sign_up_vehicle_owner').change(function(){
             if ($("#sign_up_vehicle_owner").is(':checked')) {
-                $('#sign_up_vehicle_document_type').parents('div[data-role="fieldcontainer"]').hide();
+                $('#sign_up_vehicle_document_type-button').hide();
                 $('#sign_up_vehicle_document_id').parents('div[data-role="fieldcontainer"]').hide();
             } else {
-                $('#sign_up_vehicle_document_type').parents('div[data-role="fieldcontainer"]').show();
+                $('#sign_up_vehicle_document_type-button').show();
                 $('#sign_up_vehicle_document_id').parents('div[data-role="fieldcontainer"]').show();
 
                 if ($('#sign-up-vehicle-form label.error').filter(':visible').length) {
@@ -109,13 +113,13 @@ var app = {
 
         $('#add_vehicle_owner').change(function(){
             if ($("#add_vehicle_owner").is(':checked')) {
-                $('#add_vehicle_document_type').parents('div[data-role="fieldcontainer"]').hide();
+                $('#add_vehicle_document_type-button').hide();
                 $('#add_vehicle_document_id').parents('div[data-role="fieldcontainer"]').hide();
 
                 $('#add_vehicle_document_type').removeClass('required');
                 $('#add_vehicle_document_id').removeClass('required');
             } else {
-                $('#add_vehicle_document_type').parents('div[data-role="fieldcontainer"]').show();
+                $('#add_vehicle_document_type-button').show();
                 $('#add_vehicle_document_id').parents('div[data-role="fieldcontainer"]').show();
 
                 $('#add_vehicle_document_type').addClass('required');
@@ -167,7 +171,89 @@ var app = {
 	            document.addEventListener("backbutton", function (e) {
 	                e.preventDefault();
 	            }, false );
+
+                //$("select").click(function() { $(this).focus(); });
 	    };
+
+        $('.datepicker').focus(function(event) {
+            var currentField = $(this);
+            var date = new Date();
+
+            if (currentField.val()){
+                date = new Date(reverseDate(currentField.val(), '/', '/'))
+            }
+
+            // Same handling for iPhone and Android
+            datePicker.show({
+                date : date,
+                mode : 'date'
+            }, function(returnDate) {
+                if (returnDate != 'cancel') {
+                    var d = new Date(returnDate);
+
+                    var curr_date = d.getDate();
+                    var curr_month = d.getMonth();
+                    curr_month++;
+                    var curr_year = d.getFullYear();
+                    currentField.val( ('0'+curr_date).substr(-2,2) + "/" + ('0'+curr_month).substr(-2,2) + "/" + curr_year);
+                }
+
+                // This fixes the problem you mention at the bottom of this script with it not working a second/third time around, because it is in focus.
+                currentField.blur();
+            });
+        });
+
+        $('.timepicker').focus(function(event) {
+            var currentField = $(this);
+            var date = new Date();
+
+            if (currentField.val()){
+                date =   new Date('1 Jan 1900 ' + currentField.val());
+            }
+
+            // Same handling for iPhone and Android
+            datePicker.show({
+                date : date,
+                mode : 'time'
+            }, function(returnTime) {
+
+                if (returnTime != 'cancel') {
+                    var a_p = "";
+                    var d = new Date(returnTime);
+                    var curr_hour = d.getHours();
+                    if (curr_hour < 12)
+                    {
+                        a_p = "AM";
+                    }
+                    else
+                    {
+                        a_p = "PM";
+                    }
+                    if (curr_hour == 0)
+                    {
+                        curr_hour = 12;
+                    }
+                    if (curr_hour > 12)
+                    {
+                        curr_hour = curr_hour - 12;
+                    }
+
+                    var curr_min = d.getMinutes();
+
+                    curr_min = curr_min + "";
+
+                    if (curr_min.length == 1)
+                    {
+                        curr_min = "0" + curr_min;
+                    }
+
+                    currentField.val(curr_hour + ":" + curr_min + " " + a_p);
+                }
+
+                // This fixes the problem you mention at the bottom of this script with it not working a second/third time around, because it is in focus.
+                currentField.blur();
+            });
+        });
         
     }
 };
@@ -364,6 +450,8 @@ function showAlert(title, message, onCloseFunction) {
     $('#popupAlert').popup('open');
 }
 
+var callAcceptFunction = false;
+
 function showDialog(title, message, acceptFunction) {
     var popUp = '<div data-role="popup" id="popupDialog" data-overlay-theme="a" data-theme="a" data-dismissible="false">' +
         '<div data-role="header" data-theme="a">' +
@@ -385,13 +473,19 @@ function showDialog(title, message, acceptFunction) {
     $('#popupDialog').popup({
         afterclose: function( event, ui ) {
             $('#popupDialog').remove();
+            if(callAcceptFunction) {
+                if (acceptFunction !== undefined){
+                    acceptFunction();
+                }
+                callAcceptFunction = false;
+            }
         },
         transition: 'pop'
     });
 
     $('#popupDialog a.ok').off('click');
     $('#popupDialog a.ok').on('click', function(){
-        acceptFunction();
+        callAcceptFunction = true;
         $('#popupDialog').popup('close');
     });
 
@@ -634,14 +728,14 @@ function signUp() {
             if ($('#sign_up_vehicle_owner').is(':checked')) {
                 data.vehicle = {
                     "plate_number": $('#sign_up_vehicle_plates').val().toUpperCase(),
-                    "soat_date": $('#sign_up_vehicle_soat').val(),
+                    "soat_date": reverseDate($('#sign_up_vehicle_soat').val(), '/', '-'),
                     "document_type_owner": $('#sign_up_document_type').val(),
                     "document_id_owner": $('#sign_up_document_id').val()
                 };
             } else {
                 data.vehicle = {
                     "plate_number": $('#sign_up_vehicle_plates').val().toUpperCase(),
-                    "soat_date": $('#sign_up_vehicle_soat').val(),
+                    "soat_date": reverseDate($('#sign_up_vehicle_soat').val(), '/', '-'),
                     "document_type_owner": $('#sign_up_vehicle_document_type').val(),
                     "document_id_owner": $('#sign_up_vehicle_document_id').val()
                 };
@@ -946,14 +1040,14 @@ function addVehicle() {
         if ($('#add_vehicle_owner').is(':checked')) {
             data.vehicle = {
                 "plate_number": $('#add_vehicle_plates').val().toUpperCase(),
-                "soat_date": $('#add_vehicle_soat').val(),
+                "soat_date": reverseDate($('#add_vehicle_soat').val(), '/', '-'),
                 "document_type_owner": user.document_type,
                 "document_id_owner": user.document_id
             };
         } else {
             data.vehicle = {
                 "plate_number": $('#add_vehicle_plates').val().toUpperCase(),
-                "soat_date": $('#add_vehicle_soat').val(),
+                "soat_date": reverseDate($('#add_vehicle_soat').val(), '/', '-'),
                 "document_type_owner": $('#add_vehicle_document_type').val(),
                 "document_id_owner": $('#add_vehicle_document_id').val()
             };
@@ -1455,11 +1549,12 @@ function confirmDeleteVehicle(vehiclePlateNumber) {
                 dataType: "json",
                 success: function(response) {
                     if (response.success == true) {
-                        hideLoader();
-                        showAlert('Eliminar Vehículo', response.message);
-                        user.vehicles = response.vehicles;
-                        setCache('carpooling_user', user);
-                        getProfile();
+                        showAlert('Eliminar Vehículo',
+                            response.message,
+                            function(){
+                                getProfile();
+                            }
+                        );
                     } else {
                         hideLoader();
                         showAlert('Eliminar Vehículo', response.message);
@@ -1490,7 +1585,8 @@ function confirmDeleteVehicle(vehiclePlateNumber) {
 function clearAddRide() {
     $('#add_ride_origin').val('');
     $('#add_ride_destination').val('');
-    $('#add_ride_datetime').val('');
+    $('#add_ride_date').val('');
+    $('#add_ride_time').val('');
     $('#add_ride_seats').val('');
     $('#add_ride_cost').val('');
     $('#add_ride_notes').val('');
@@ -1510,14 +1606,13 @@ function clearAddRide() {
 }
 
 function addRide() {
-
     if ($("#add-ride-form").valid()){
         var user = getCache('carpooling_user');
         var ride = {
             "ride": {
                 "agreement_id": user.agreement_id,
                 "user_id": user.id,
-                "ride_when": $('#add_ride_datetime').val(),
+                "ride_when": reverseDate($('#add_ride_date').val(), '/', '-') + ' ' + get24Format($('#add_ride_time').val()),
                 "cost": (($('#add_ride_cost').val().length > 0) ? $('#add_ride_cost').val() : 0),
                 "seats": $('#add_ride_seats').val(),
                 "origin": $('#add_ride_origin').val(),
@@ -1729,4 +1824,23 @@ function numberPattern(e) {
         return true;
     else
         return false;
+}
+
+// Converts 12 hour format to 24 hour format example: 5:12 PM -> 17:12
+function get24Format(time) {
+    var hours = Number(time.match(/^(\d+)/)[1]);
+    var minutes = Number(time.match(/:(\d+)/)[1]);
+    var AMPM = time.match(/\s(.*)$/)[1];
+    if (AMPM == "PM" && hours < 12) hours = hours + 12;
+    if (AMPM == "AM" && hours == 12) hours = hours - 12;
+    var sHours = hours.toString();
+    var sMinutes = minutes.toString();
+    if (hours < 10) sHours = "0" + sHours;
+    if (minutes < 10) sMinutes = "0" + sMinutes;
+    return sHours + ":" + sMinutes + ':00';
+}
+
+// Funcion que invierte la fecha y regresa un formato YYYY/MM/DD
+function reverseDate(date, splitCharacter, joinCharacter) {
+    return date.split(splitCharacter).reverse().join(joinCharacter);
 }

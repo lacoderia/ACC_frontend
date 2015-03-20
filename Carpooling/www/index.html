@@ -390,10 +390,10 @@
 
                 <form id="add-ride-form">
                     <div data-role="fieldcontainer">
-                        <input type="text" name="add_ride_origin" id="add_ride_origin" placeholder="Desde:" class="required">
+                        <input type="text" name="add_ride_origin" id="add_ride_origin" placeholder="Desde: (Ej. Calle 102)" class="required">
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="text" name="add_ride_destination" id="add_ride_destination" placeholder="Hasta:" class="required">
+                        <input type="text" name="add_ride_destination" id="add_ride_destination" placeholder="Hasta: (Ej: Centro Comercial)" class="required">
                     </div>
                     <div data-role="fieldcontainer">
                         <input type="text" name="add_ride_date" id="add_ride_date" placeholder="Fecha:" class="datepicker required">
@@ -407,7 +407,7 @@
                         <input type="number" pattern="[0-9]*" name="add_ride_cost" id="add_ride_cost" placeholder="Costo:" onKeyPress="return numberPattern(event)">
                     </div>
                     <div data-role="fieldcontainer">
-                        <textarea name="add_ride_notes" id="add_ride_notes" placeholder="Notas:" rows="2"></textarea>
+                        <textarea name="add_ride_notes" id="add_ride_notes" placeholder="Notas: (Ej. Voy por la calle 100. No consumo de alimentos)" rows="2"></textarea>
                     </div>
                 </form>
                 <p><a data-role="button" onclick="addRide()">Publicar</a></p>

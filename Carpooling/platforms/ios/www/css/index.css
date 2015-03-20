@@ -358,6 +358,11 @@ label.error {
 }
 
 /** Sign-up **/
+
+#sign_up_vehicle_document_type-button {
+    display: none;
+}
+
 #sign_up_vehicle_soat {
     background: url(img/calendar.png) no-repeat;
     background-position: left center;
@@ -469,6 +474,10 @@ label.error {
     padding-left: 35px;
 }
 
+#add_vehicle_document_type-button {
+    display: none;
+}
+
 #add-vehicle .label-text{
     font-size: 12px;
 }
@@ -520,7 +529,7 @@ label.error {
 
 /** Add ride **/
 
-#add_ride_datetime {
+#add_ride_date {
     background: url(img/calendar.png) no-repeat;
     background-position: left center;
     background-size: 21px;

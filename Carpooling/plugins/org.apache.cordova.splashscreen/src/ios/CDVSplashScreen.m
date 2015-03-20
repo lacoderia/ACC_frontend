@@ -128,6 +128,7 @@
     CDVViewController* vc = (CDVViewController*)self.viewController;
     BOOL supportsLandscape = [vc supportsOrientation:UIInterfaceOrientationLandscapeLeft] || [vc supportsOrientation:UIInterfaceOrientationLandscapeRight];
     BOOL supportsPortrait = [vc supportsOrientation:UIInterfaceOrientationPortrait] || [vc supportsOrientation:UIInterfaceOrientationPortraitUpsideDown];
+    BOOL isOrientationLocked = !(supportsPortrait && supportsLandscape);
 
     if (imageName) {
         imageName = [imageName stringByDeletingPathExtension];
@@ -137,7 +138,7 @@
 
     if (CDV_IsIPhone5()) {
         imageName = [imageName stringByAppendingString:@"-568h"];
-    } else if (CDV_IsIPad()) {
+    } else if (CDV_IsIPad() && isOrientationLocked) {
         switch (orientation) {
             case UIInterfaceOrientationLandscapeLeft:
             case UIInterfaceOrientationLandscapeRight:
