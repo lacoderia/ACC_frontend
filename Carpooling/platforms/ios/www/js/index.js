@@ -703,11 +703,6 @@ function openTerms() {
 }
 
 function signUp() {
-
-    console.log('XXXX')
-    console.log(reverseDate($('#add_vehicle_soat').val(), '/', '-'));
-    console.log('XXXX')
-
     if ($("#sign-up-form").valid() & $("#sign-up-vehicle-form").valid() & $("#sign-up-terms-form").valid()){
 
         var data = {
@@ -1847,9 +1842,5 @@ function get24Format(time) {
 
 // Funcion que invierte la fecha y regresa un formato YYYY/MM/DD
 function reverseDate(date, splitCharacter, joinCharacter) {
-    var algo = date.split(splitCharacter).reverse().join(joinCharacter);
-    console.log('XXXXXXXXXXXX');
-    console.log(algo);
-    console.log('XXXXXXXXXXXX');
-    return algo;
+    return date.split(splitCharacter).reverse().join(joinCharacter);
 }

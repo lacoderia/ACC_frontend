@@ -401,10 +401,10 @@
                     </div>
                     <select name="add_ride_vehicle_plates" id="add_ride_vehicle_plates"></select>
                     <div data-role="fieldcontainer">
-                        <input type="number" pattern="[0-9]*" name="add_ride_seats" id="add_ride_seats" placeholder="Asientos disponibles:" class="required" min="1" onKeyPress="return numberPattern(event)">
+                        <input type="number" pattern="[0-9]*" name="add_ride_seats" id="add_ride_seats" placeholder="Asientos disponibles:" class="required" min="1" max="5" onKeyPress="return numberPattern(event)">
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="number" pattern="[0-9]*" name="add_ride_cost" id="add_ride_cost" placeholder="Costo:" onKeyPress="return numberPattern(event)">
+                        <input type="number" pattern="[0-9]*" name="add_ride_cost" id="add_ride_cost" placeholder="Costo:" min="0" max="9999" onKeyPress="return numberPattern(event)">
                     </div>
                     <div data-role="fieldcontainer">
                         <textarea name="add_ride_notes" id="add_ride_notes" placeholder="Notas: (Ej. Voy por la calle 100. No consumo de alimentos)" rows="2"></textarea>
