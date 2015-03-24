@@ -67,6 +67,7 @@ module.exports = {
     getDeviceInfo: function (success, error) {
         setTimeout(function () {
             success({
+                cordova: firefoxos.cordovaVersion,
                 platform: 'firefoxos',
                 model: getModel(),
                 version: getVersion(),
@@ -76,4 +77,4 @@ module.exports = {
     }
 };
 
-require("cordova/exec/proxy").add("Device", module.exports);
+require("cordova/firefoxos/commandProxy").add("Device", module.exports);
