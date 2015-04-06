@@ -39,7 +39,7 @@
         </script>
 
         <script src="jquery/jquery.mobile-1.4.2.min.js"></script>
-        
+
         <script type="text/javascript" src="js/owl-carousel/owl.carousel.min.js"></script>
         <link rel="stylesheet" type="text/css" href="js/owl-carousel/owl.carousel.css" />
         <link rel="stylesheet" type="text/css" href="js/owl-carousel/owl.theme.css" />
@@ -70,33 +70,33 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="menu-button" onclick="showProcessMenu()">
+                        <div class="icon icon-document"></div>
+                        <div class="text">Trámites</div>
+                    </div>
                     <a href="tel:0314895050" rel="external">
                         <div class="menu-button">
                             <div class="icon icon-phone"></div>
                             <div class="text">ACC</div>
                         </div>
                     </a>
-                    <div class="menu-button" onclick="toggleTrafficLayer(event)">
-                        <div class="icon icon-streetlight"></div>
-                        <div class="text">Tráfico</div>
-                    </div>
-                    <div class="menu-button" onclick="toggleDiscounts()">
-                        <div class="icon icon-tag"></div>
-                        <div class="text">Descuentos</div>
+                    <div class="menu-button" onclick="showInsuranceMenu()">
+                        <div class="icon icon-car-insurance"></div>
+                        <div class="text">Seguros</div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="menu-button" onclick="toggleParking()">
-                        <div class="icon icon-Parqueaderos"></div>
-                        <div class="text">Parqueaderos</div>
-                    </div>
                     <div class="menu-button" onclick="toggleGas()">
                         <div class="icon icon-gaspump"></div>
                         <div class="text">Gasolineras</div>
                     </div>
-                    <div class="menu-button" onclick="toggleFun()">
-                        <div class="icon icon-ticket"></div>
-                        <div class="text">Diversión</div>
+                    <div class="menu-button" onclick="openCarpooling()">
+                        <div class="icon icon-carpooling"></div>
+                        <div class="text">Carro Compartido</div>
+                    </div>
+                    <div class="menu-button" onclick="toggleDiscounts()">
+                        <div class="icon icon-tag"></div>
+                        <div class="text">Descuentos</div>
                     </div>
                 </div>
             </div>
@@ -117,6 +117,36 @@
                             <div class="text">Ambulancia</div>
                         </div>
                     </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="menu-tramites" class="menu dismissable" onclick="exitMenu(event)">
+            <div id="menu-tramites-container" class="menu-container">
+                <div class="row">
+                    <div class="menu-button" onclick="showProcessRequest()">
+                        <div class="icon icon-checklist"></div>
+                        <div class="text">Iniciar trámite</div>
+                    </div>
+                    <div class="menu-button" onclick="showProcessLookup()">
+                        <div class="icon icon-document-search"></div>
+                        <div class="text">Consulta trámite</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="menu-seguros" class="menu dismissable" onclick="exitMenu(event)">
+            <div id="menu-seguros-container" class="menu-container">
+                <div class="row">
+                    <div class="menu-button" onclick="showInsurancePrices()">
+                        <div class="icon icon-price"></div>
+                        <div class="text">Precios</div>
+                    </div>
+                    <div class="menu-button" onclick="showInsuranceRequest()">
+                        <div class="icon icon-checklist"></div>
+                        <div class="text">Solicitud</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -349,6 +379,96 @@
 	            </div>
             </div>
         </div><!-- /ayuda -->
+
+        <!-- Start of process-request -->
+        <div data-role="page" id="process-request">
+
+            <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left" previous-page="dashboard"></span>
+                <h1>Iniciar Trámite</h1>
+            </div><!-- /header -->
+
+            <div role="main" class="ui-content">
+                <form id="process-request-form">
+                    <div><b>Datos personales</b></div>
+                    <hr>
+                    <div data-role="fieldcontainer">
+                        <select name="process_request_type" id="process_type" class="required">
+                            <option value="">Tipo de trámite</option>
+                            <option value="XXX">Trámite 1</option>
+                            <option value="XXX">Trámite 2</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="process_request_first_name" id="process_request_first_name" placeholder="Nombre" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="process_request_last_name" id="process_request_last_name" placeholder="Primer apellido" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="process_request_second_last_name" id="process_request_second_last_name" placeholder="Segundo apellido"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" pattern="[0-9]*" name="process_request_phone" id="process_request_phone" placeholder="Teléfono" minlength="7" maxlength="10" onKeyPress="return numberPattern(event)" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="email" name="process_request_email" id="process_request_email" placeholder="Correo electrónico" class="required"/>
+                    </div>
+                    <p><a data-role="button" onclick="sendProcessRequest()">Enviar solicitud</a></p>
+                </form>
+            </div><!-- /content -->
+        </div><!-- /process-request -->
+
+        <!-- Start of insurance-prices -->
+        <div data-role="page" id="insurance-prices">
+
+            <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left" previous-page="dashboard"></span>
+                <h1>Precios SOAT</h1>
+            </div><!-- /header -->
+
+            <div role="main" class="ui-content">
+                <div id="soat-table"></div>
+            </div><!-- /content -->
+        </div><!-- /insurance-prices -->
+
+        <!-- Start of insurance-request -->
+        <div data-role="page" id="insurance-request">
+
+            <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left" previous-page="dashboard"></span>
+                <h1>Solicitud SOAT</h1>
+            </div><!-- /header -->
+
+            <div role="main" class="ui-content">
+                <form id="insurance-request-form">
+                    <div><b>Datos personales</b></div>
+                    <hr>
+                    <div data-role="fieldcontainer">
+                        <select name="insurance_request_type" id="insurance_type" class="required">
+                            <option value="">Seleccionar tipo de seguro</option>
+                            <option value="SOAT">SOAT</option>
+                        </select>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="insurance_request_first_name" id="insurance_request_first_name" placeholder="Nombre" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="insurance_request_last_name" id="insurance_request_last_name" placeholder="Primer apellido" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="insurance_request_second_last_name" id="insurance_request_second_last_name" placeholder="Segundo apellido"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" pattern="[0-9]*" name="insurance_request_phone" id="insurance_request_phone" placeholder="Teléfono" minlength="7" maxlength="10" onKeyPress="return numberPattern(event)" class="required"/>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="email" name="insurance_request_email" id="insurance_request_email" placeholder="Correo electrónico" class="required"/>
+                    </div>
+                    <p><a data-role="button" onclick="sendInsuranceRequest()">Enviar solicitud</a></p>
+                </form>
+            </div><!-- /content -->
+        </div><!-- /insurance-request -->
         
     </body>
 </html>

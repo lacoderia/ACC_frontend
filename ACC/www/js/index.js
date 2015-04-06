@@ -39,7 +39,30 @@ var markerConstants = {
     'GAS' : 2,
     'PARKING' : 3,
     'FUN' : 4
-}
+};
+
+var DIALOG_TYPE = {
+    'ALERT': {
+        'ok': {
+            'text': 'Usar App',
+            'visible': true
+        },
+        'cancel': {
+            'text': '',
+            'visible': false
+        }
+    },
+    'SIGN_IN': {
+        'ok': {
+            'text': 'Iniciar sesión',
+            'visible': true
+        },
+        'cancel': {
+            'text': 'Continuar como invitado',
+            'visible': true
+        }
+    }
+};
 
 var markerActivity = {
     'discounts' : {
@@ -58,7 +81,93 @@ var markerActivity = {
         'loadSuccess': false,
         'loadAttemp': false
     }
-}
+};
+
+var testTable = {
+  'vehicle_types': [
+      {
+          'name': 'Motos',
+          'capacities' : [
+              {
+                  'name': 'Menos de 100cc',
+                  'models': [],
+                  'cost': '$267,400'
+              },
+              {
+                  'name': 'De 100 a 200cc',
+                  'models': [],
+                  'cost': '$358,450'
+              }
+          ]
+      },
+      {
+          'name': 'Autos familiares',
+          'capacities' : [
+              {
+                  'name': 'Menos de 1500cc',
+                  'models': [
+                      {
+                          'name': '0 a 9 años',
+                          'cost': '$242,200'
+                      },
+                      {
+                          'name': '10 años o más',
+                          'cost': '$321,000'
+                      }
+                  ],
+                  'cost': undefined
+              },
+              {
+                  'name': 'De 1500 a 2500cc',
+                  'models': [
+                      {
+                          'name': '0 a 9 años',
+                          'cost': '$295,000'
+                      },
+                      {
+                          'name': '10 años o más',
+                          'cost': '$366,850'
+                      }
+                  ],
+                  'cost': undefined
+              }
+          ]
+      },
+      {
+          'name': 'Otros autos',
+          'capacities' : [
+              {
+                  'name': 'Menos de 1500cc',
+                  'models': [
+                      {
+                          'name': '0 a 9 años',
+                          'cost': '$242,200'
+                      },
+                      {
+                          'name': '10 años o más',
+                          'cost': '$321,000'
+                      }
+                  ],
+                  'cost': undefined
+              },
+              {
+                  'name': 'De 1500 a 2500cc',
+                  'models': [
+                      {
+                          'name': '0 a 9 años',
+                          'cost': '$295,000'
+                      },
+                      {
+                          'name': '10 años o más',
+                          'cost': '$366,850'
+                      }
+                  ],
+                  'cost': undefined
+              }
+          ]
+      }
+  ]
+};
 
 
 window.sessionStorage.acc_previousPage = 'dashboard';
@@ -138,14 +247,6 @@ $(document).on('pagebeforeshow', '#sign-up', function(){
     }).resetForm();
 });
 
-$(document).on('pagebeforeshow', '#dashboard', function(){
-    autosetPicoYPlaca();
-});
-
-$(document).on('pageshow', '#dashboard', function(){
-    $('#dashboard-header').slideDown(100);
-});
-
 $(document).on('pagebeforeshow', '#profile', function(){
     var user = getCache('acc_user');
 
@@ -195,6 +296,84 @@ $(document).on('pagebeforeshow', '#profile', function(){
 $(document).on('pageshow', '#lista-descuentos', function(){
     getDescuentos();
 });
+
+$(document).on('pagebeforeshow', '#dashboard', function(){
+    autosetPicoYPlaca();
+});
+
+$(document).on('pageshow', '#dashboard', function(){
+    $('#dashboard-header').slideDown(100);
+});
+
+$(document).on('pagebeforeshow', '#process-request', function(){
+    clearProcessRequest();
+
+    $("#process-request-form").validate({
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent().parent().after());
+        }
+    }).resetForm();
+});
+
+$(document).on('pagebeforeshow', '#insurance-prices', function(){
+    showLoader();
+
+    //Llamamos al servicio que consulta la información de la tabla
+
+    $('#soat-table').html('');
+
+    var contentString = '';
+    $.each(testTable.vehicle_types, function(i, vehicleType) {
+        var listView = '';
+        $.each(vehicleType.capacities, function(j, capacity) {
+
+            var models = ''
+            // Si hay division según la antigüedad del vehículo
+            if (capacity.models.length) {
+                $.each(capacity.models, function(j, model) {
+                    models += '<div class="model">' +
+                                '<div class="model-name">'+ model.name + '</div>' +
+                                '<div class="model-price">' + model.cost + '</div>' +
+                            '</div>';
+                });
+            } else {
+                models = '<div class="model-price">' + capacity.cost + '</div>';
+            }
+
+            listView += '<li>' +
+                            '<div class="capacity-name">' + capacity.name + '</div>' +
+                            models +
+                        '</li>';
+        });
+
+        contentString += '<div class="ui-collapsible" data-role="collapsible" data-iconpos="right" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">' +
+                            '<h2>' + vehicleType.name + '</h2>' +
+                            '<ul class="vehicle-type-content" data-role="listview" class="ui-listview">' +
+                                listView +
+                            '</ul>' +
+                        '</div>';
+    });
+
+    $('#soat-table').html(contentString);
+    $('#soat-table > div').collapsible();
+    $('#soat-table > div').removeClass($.mobile.activeBtnClass);
+
+    $('#soat-table > div ul.vehicle-type-content').listview();
+    $('#soat-table > div ul.vehicle-type-content').listview('refresh');
+
+    hideLoader();
+});
+
+$(document).on('pagebeforeshow', '#insurance-request', function(){
+    clearInsuranceRequest();
+
+    $("#insurance-request-form").validate({
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent().parent().after());
+        }
+    }).resetForm();
+});
+
 
 jQuery.extend(jQuery.validator.messages, {
     required: "Este campo es requerido.",
@@ -336,6 +515,21 @@ function showEmergencias() {
     $('#menu-emergencias').show();
 }
 
+function showInsuranceMenu() {
+    hideMenu();
+    $('#menu-seguros').show();
+}
+
+function showInsurancePrices() {
+    hideMenu();
+    $.mobile.changePage($('#insurance-prices'));
+}
+
+function showInsuranceRequest() {
+    hideMenu();
+    $.mobile.changePage($('#insurance-request'));
+}
+
 function showServicios() {
     hideMenu();
     clearForm('menu-servicio-form');
@@ -424,8 +618,18 @@ function showAlert(title, message, onCloseFunction) {
     $('#popupAlert').popup('open');
 }
 
-function showDialog(title, message, acceptFunction, cancelFunction) {
-    var popUp = '<div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="a" data-dismissible="false">' +
+function showDialog(type, title, message, dismissable, acceptFunction, cancelFunction) {
+
+    // Generamos los botones que se mostraran en el popup
+    var buttons = '';
+    if(type.ok.visible){
+        buttons += '<a href="#" class="ok" data-role="button" data-theme="a">' + type.ok.text + '</a>';
+    }
+    if(type.cancel.visible){
+        buttons += '<a href="#" class="cancel" data-role="button" data-theme="a">' + type.cancel.text + '</a>';
+    }
+
+    var popUp = '<div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="a" data-dismissible="' + dismissable + '">' +
                     '<div data-role="header" data-theme="a">' +
                         '<h1>' + title + '</h1>' +
                     '</div>' +
@@ -433,8 +637,7 @@ function showDialog(title, message, acceptFunction, cancelFunction) {
                         '<p>' + message + '</p>' +
                         '<br>' +
                         '<div class="confirmation-buttons">' +
-                            '<a href="#" class="ok" data-role="button" data-theme="a">Iniciar sesión</a>' +
-                            '<a href="#" class="cancel" data-role="button" data-theme="a">Continuar como invitado</a>' +
+                            buttons +
                         '</div>'+
                     '</div>' +
                 '</div>';
@@ -450,17 +653,21 @@ function showDialog(title, message, acceptFunction, cancelFunction) {
         transition: 'pop'
     });
 
-    $('#popupDialog a.ok').off('click');
-    $('#popupDialog a.ok').on('click', function(){
-        acceptFunction();
-        $('#popupDialog').popup('close');
-    });
+    if(type.ok.visible){
+        $('#popupDialog a.ok').off('click');
+        $('#popupDialog a.ok').on('click', function(){
+            acceptFunction();
+            $('#popupDialog').popup('close');
+        });
+    }
 
-    $('#popupDialog a.cancel').off('click');
-    $('#popupDialog a.cancel').on('click', function(){
-        cancelFunction();
-        $('#popupDialog').popup('close');
-    });
+    if(type.cancel.visible){
+        $('#popupDialog a.cancel').off('click');
+        $('#popupDialog a.cancel').on('click', function(){
+            cancelFunction();
+            $('#popupDialog').popup('close');
+        });
+    }
 
     $('#popupDialog').popup('open');
 }
@@ -727,8 +934,10 @@ function solicitarServicio(pagina){
             var title = "¿Eres socio de ACC?";
             var message = 'Si eres socio puedes iniciar sesión, si aun no lo eres puedes continuar como invitado.';
             showDialog(
+                DIALOG_TYPE.SIGN_IN,
                 title,
                 message,
+                false,
                 function(){
                     window.sessionStorage.acc_previousPage = 'dashboard';
                     $.mobile.changePage($('#login'));
@@ -801,6 +1010,199 @@ function enviarSolicitudServicio(){
             }
         });
     }
+}
+
+
+/** Funciones de Trámites **/
+
+function showProcessMenu() {
+    hideMenu();
+    $('#menu-tramites').show();
+}
+
+function showProcessRequest() {
+    hideMenu();
+    $.mobile.changePage($('#process-request'));
+}
+
+function showProcessLookup() {
+    window.open('http://www.google.com.mx', '_blank', 'location=no,closebuttoncaption=Cerrar');
+}
+
+function clearProcessRequest() {
+    $('#process_request_type').val('');
+    $('#process_request_type').selectmenu();
+    $('#process_request_type').selectmenu('refresh', true);
+    $('#process_request_first_name').val('');
+    $('#process_request_last_name').val('');
+    $('#process_request_second_last_name').val('');
+    $('#process_request_phone').val('');
+    $('#process_request_email').val('');
+}
+
+function sendProcessRequest() {
+    if ($("#process-request-form").valid()){
+
+        var data = {
+            "utf8": "V",
+            "lead": {
+                "process_type": $('#process_request_type').val(),
+                "first_name": $('#process_request_first_name').val(),
+                "last_name_f": $('#process_request_last_name').val(),
+                "last_name_m": $('#process_request_second_last_name').val(),
+                "phone_number": $('#process_request_phone').val(),
+                "email": $('#process_request_email').val()
+            }
+        };
+
+        showLoader();
+        $.ajax({
+            type: "POST",
+            url: "http://166.78.117.195/",
+            data: data,
+            dataType: "json",
+            success: function(response) {
+                if (response.success == true) {
+                    hideLoader();
+                    showAlert('Solicitud trámite',
+                        response.message,
+                        function() {
+                            window.scrollTo(0,0);
+                            $.mobile.changePage($('#dashboard'));
+                        }
+                    );
+                } else {
+                    hideLoader();
+                    showAlert('Solicitud trámite',
+                        response.message,
+                        function() {
+                            window.scrollTo(0,0);
+                            $.mobile.changePage($('#process-request'));
+                        }
+                    );
+                }
+            },
+            error: function(error) {
+                hideLoader();
+                showAlert('Registro',
+                    'Ocurrió un error al enviar tu solicitud de trámite. Intenta nuevamente.',
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#process-request'));
+                    }
+                );
+            }
+        });
+    }
+}
+
+
+/** Funciones de seguros **/
+function clearInsuranceRequest() {
+    $('#insurance_request_type').val('');
+    $('#insurance_request_type').selectmenu();
+    $('#insurance_request_type').selectmenu('refresh', true);
+    $('#insurance_request_first_name').val('');
+    $('#insurance_request_last_name').val('');
+    $('#insurance_request_second_last_name').val('');
+    $('#insurance_request_phone').val('');
+    $('#insurance_request_email').val('');
+}
+
+function sendInsuranceRequest() {
+    if ($("#insurance-request-form").valid()){
+
+        var data = {
+            "utf8": "V",
+            "lead": {
+                "insurance_type": $('#insurance_request_type').val(),
+                "first_name": $('#insurance_request_first_name').val(),
+                "last_name_f": $('#insurance_request_last_name').val(),
+                "last_name_m": $('#insurance_request_second_last_name').val(),
+                "phone_number": $('#insurance_request_phone').val(),
+                "email": $('#insurance_request_email').val()
+            }
+        };
+
+        showLoader();
+        $.ajax({
+            type: "POST",
+            url: "http://166.78.117.195/",
+            data: data,
+            dataType: "json",
+            success: function(response) {
+                if (response.success == true) {
+                    hideLoader();
+                    showAlert('Solicitud SOAT',
+                        response.message,
+                        function() {
+                            window.scrollTo(0,0);
+                            $.mobile.changePage($('#dashboard'));
+                        }
+                    );
+                } else {
+                    hideLoader();
+                    showAlert('Solicitud SOAT',
+                        response.message,
+                        function() {
+                            window.scrollTo(0,0);
+                            $.mobile.changePage($('#insurance-request'));
+                        }
+                    );
+                }
+            },
+            error: function(error) {
+                hideLoader();
+                showAlert('Registro',
+                    'Ocurrió un error al enviar tu solicitud de seguro. Intenta nuevamente.',
+                    function() {
+                        window.scrollTo(0,0);
+                        $.mobile.changePage($('#insurance-request'));
+                    }
+                );
+            }
+        });
+    }
+}
+
+
+/** Funciones de Carro Compartido **/
+function openCarpooling() {
+
+    var title = "Carro Compartido";
+    var message = 'Te invitamos a usar Carro Compartido.';
+    showDialog(
+        DIALOG_TYPE.ALERT,
+        title,
+        message,
+        true,
+        function(){
+
+            var appCheck = '';
+            if(device.platform == 'iOS'){
+                appCheck = 'carrocompartido://';
+            } else {
+                appCheck = 'mx.coderia.ACC.CarroCompartido';
+            }
+
+            navigator.startApp.check(appCheck, function(message) {
+                    navigator.startApp.start("carrocompartido://", function(message) {
+                        },
+                        function(error) {
+                            showAlert('Error', 'Ocurrió un error al abrir Carro Compartido. Intenta nuevamente.');
+                        });
+                },
+                function(error) {
+                    // Redirigimos a la app store
+
+                    window.open('https://itunes.apple.com/us/app/id920231776?mt=8', '_system');
+                });
+        },
+        function(){
+
+        }
+    );
+
 }
 
 

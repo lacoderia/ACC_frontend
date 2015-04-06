@@ -180,6 +180,14 @@ html, body {
     width: 11.7em !important;
 }
 
+#menu-tramites-container {
+    width: 11.7em !important;
+}
+
+#menu-seguros-container {
+    width: 11.7em !important;
+}
+
 #menu-servicio-container {
     background-color: #FFF !important;
     color: #000 !important;
@@ -492,6 +500,22 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
 
 #btn-follow-me.active {
     color: #64A6B6;
+}
+
+
+/** Seguros **/
+
+#insurance-prices .capacity-name {
+    font-weight: 500;
+}
+
+#insurance-prices .model div {
+    display: inline-block;
+    padding-left: 0.5em;
+}
+
+#insurance-prices .model-price {
+    float: right;
 }
 
 /** Login **/

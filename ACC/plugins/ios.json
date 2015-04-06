@@ -7,13 +7,19 @@
         "files": {
             "framework": {
                 "parents": {
+                    "CoreGraphics.framework": [
+                        {
+                            "xml": "false",
+                            "count": 2
+                        }
+                    ],
                     "CoreMotion.framework": [
                         {
                             "xml": "false",
                             "count": 1
                         }
                     ],
-                    "CoreGraphics.framework": [
+                    "CoreLocation.framework": [
                         {
                             "xml": "false",
                             "count": 1
@@ -25,6 +31,10 @@
                 "parents": {
                     "/*": [
                         {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
                             "xml": "<feature name=\"Accelerometer\"><param name=\"ios-package\" value=\"CDVAccelerometer\" /></feature>",
                             "count": 1
                         },
@@ -33,27 +43,7 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Geolocation\"><param name=\"ios-package\" value=\"CDVLocation\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"Console\"><param name=\"ios-package\" value=\"CDVLogger\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"StatusBar\"><param name=\"ios-package\" onload=\"true\" value=\"CDVStatusBar\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<preference name=\"StatusBarOverlaysWebView\" value=\"true\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<preference name=\"StatusBarBackgroundColor\" value=\"#000000\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<preference name=\"StatusBarStyle\" value=\"lightcontent\" />",
                             "count": 1
                         },
                         {
@@ -61,7 +51,37 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "xml": "<feature name=\"StatusBar\"><param name=\"ios-package\" value=\"CDVStatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"StatusBarOverlaysWebView\" value=\"true\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"StatusBarStyle\" value=\"lightcontent\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Geolocation\"><param name=\"ios-package\" value=\"CDVLocation\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"startApp\"><param name=\"ios-package\" value=\"startApp\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"InAppBrowser\"><param name=\"ios-package\" value=\"CDVInAppBrowser\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "*-Info.plist": {
+                "parents": {
+                    "NSLocationWhenInUseUsageDescription": [
+                        {
+                            "xml": "<string />",
                             "count": 1
                         }
                     ]
@@ -70,25 +90,31 @@
         }
     },
     "installed_plugins": {
-        "org.apache.cordova.device-motion": {
-            "PACKAGE_NAME": "mx.coderia.ACC"
-        },
-        "org.apache.cordova.device-orientation": {
-            "PACKAGE_NAME": "mx.coderia.ACC"
-        },
-        "org.apache.cordova.geolocation": {
-            "PACKAGE_NAME": "mx.coderia.ACC"
-        },
-        "org.apache.cordova.console": {
+        "org.apache.cordova.splashscreen": {
             "PACKAGE_NAME": "mx.coderia.ACC.ACC"
         },
-        "org.apache.cordova.statusbar": {
+        "org.apache.cordova.device-motion": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
+        },
+        "org.apache.cordova.device-orientation": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
+        },
+        "org.apache.cordova.console": {
             "PACKAGE_NAME": "mx.coderia.ACC.ACC"
         },
         "org.apache.cordova.device": {
             "PACKAGE_NAME": "mx.coderia.ACC.ACC"
         },
-        "org.apache.cordova.splashscreen": {
+        "org.apache.cordova.statusbar": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
+        },
+        "org.apache.cordova.geolocation": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
+        },
+        "com.lampa.startapp": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
+        },
+        "org.apache.cordova.inappbrowser": {
             "PACKAGE_NAME": "mx.coderia.ACC.ACC"
         }
     },
