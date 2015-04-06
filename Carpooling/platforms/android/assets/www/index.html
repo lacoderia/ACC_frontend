@@ -94,10 +94,10 @@
                     <div><b>Datos personales</b></div>
                     <hr>
                     <input name="sign_up_domain" id="sign_up_domain" type="hidden" value=""/>
-                    <select name="sign_up_agreement" id="sign_up_agreement" class="required" onchange="updateSelectedAgreement()">
+                    <select name="sign_up_agreement" id="sign_up_agreement" onchange="updateSelectedAgreement()">
                         <option value="">Selecciona tu empresa</option>
                     </select>
-                    <select name="sign_up_document_type" id="sign_up_document_type" class="required">
+                    <select name="sign_up_document_type" id="sign_up_document_type">
                         <option value="">Seleccionar tipo de id</option>
                         <option value="CC">Cédula de Ciudadanía</option>
                         <option value="TI">Tarjeta de Identidad</option>
@@ -352,7 +352,7 @@
                         <input type="text" name="add_vehicle_plates" id="add_vehicle_plates" placeholder="Placas" class="required" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" style="text-transform:uppercase;"/>
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="text" name="add_vehicle_soat" id="add_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="datepicker required">
+                        <input type="text" name="add_vehicle_soat" id="add_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="datepicker">
                         <div class="label-text">Fecha de vencimiento del SOAT</div>
                     </div>
                 </form>
@@ -390,10 +390,10 @@
 
                 <form id="add-ride-form">
                     <div data-role="fieldcontainer">
-                        <input type="text" name="add_ride_origin" id="add_ride_origin" placeholder="Desde:" class="required">
+                        <input type="text" name="add_ride_origin" id="add_ride_origin" placeholder="Desde: (Ej. Calle 102)" class="required">
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="text" name="add_ride_destination" id="add_ride_destination" placeholder="Hasta:" class="required">
+                        <input type="text" name="add_ride_destination" id="add_ride_destination" placeholder="Hasta: (Ej: Centro Comercial)" class="required">
                     </div>
                     <div data-role="fieldcontainer">
                         <input type="text" name="add_ride_date" id="add_ride_date" placeholder="Fecha:" class="datepicker required">
@@ -401,13 +401,13 @@
                     </div>
                     <select name="add_ride_vehicle_plates" id="add_ride_vehicle_plates"></select>
                     <div data-role="fieldcontainer">
-                        <input type="number" pattern="[0-9]*" name="add_ride_seats" id="add_ride_seats" placeholder="Asientos disponibles:" class="required" min="1" onKeyPress="return numberPattern(event)">
+                        <input type="text" onfocus="this.type='number'" onblur="this.type='text'" pattern="[0-9]*" name="add_ride_seats" id="add_ride_seats" placeholder="Asientos disponibles:" class="required" min="1" max="5" onKeyPress="return numberPattern(event)">
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="number" pattern="[0-9]*" name="add_ride_cost" id="add_ride_cost" placeholder="Costo:" onKeyPress="return numberPattern(event)">
+                        <input type="text" onfocus="this.type='number'" onblur="this.type='text'" pattern="[0-9]*" name="add_ride_cost" id="add_ride_cost" min="0" max="9999" placeholder="Costo:" onKeyPress="return numberPattern(event)">
                     </div>
                     <div data-role="fieldcontainer">
-                        <textarea name="add_ride_notes" id="add_ride_notes" placeholder="Notas:" rows="2"></textarea>
+                        <textarea name="add_ride_notes" id="add_ride_notes" placeholder="Notas: (Ej. Voy por la calle 100. No consumo de alimentos)" rows="2"></textarea>
                     </div>
                 </form>
                 <p><a data-role="button" onclick="addRide()">Publicar</a></p>

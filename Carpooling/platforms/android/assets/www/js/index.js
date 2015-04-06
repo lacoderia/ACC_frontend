@@ -16,6 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+var pagina_anterior, pagina_actual;
 var app = {
     // Application Constructor
     initialize: function() {
@@ -35,7 +37,25 @@ var app = {
     onDeviceReady: function() {
         document.addEventListener("backbutton", onBackKeyDown, false);
         function onBackKeyDown(e) {
-            e.preventDefault();
+            //e.preventDefault();
+        	var pg = $.mobile.activePage;
+        	var btn = pg.find(".acc-btn-back");
+        	if(btn != undefined){
+        		var transition = 'slide';
+                if (btn.attr('transition')) {
+                    transition = btn.attr('transition');
+                }
+                
+                if( pg.attr("id")=="login" || pg.attr("id")=="dashboard"){
+                	navigator.app.exitApp();
+                }else if(btn.attr('previous-page')!= undefined){
+                	window.scrollTo(0,0);
+                    $.mobile.changePage($('#' + btn.attr('previous-page')), {transition: transition, reverse: 'true'});
+                }else{
+                	window.scrollTo(0,0);
+                    $.mobile.changePage($('#login'), {transition: transition, reverse: 'true'});
+                }
+        	}
         }
 
         navigator.splashscreen.hide();
@@ -75,7 +95,7 @@ var app = {
                 $('#sign_up_vehicle_document_type').addClass('required');
                 $('#sign_up_vehicle_document_id').addClass('required');
                 $('#sign_up_vehicle_plates').addClass('required');
-                $('#sign_up_vehicle_soat').addClass('required');
+                //$('#sign_up_vehicle_soat').addClass('required');
 
                 $("#sign-up-vehicle-form").validate({
                     errorPlacement: function(error, element) {
@@ -87,7 +107,7 @@ var app = {
                 $('#sign_up_vehicle_document_type').removeClass('required');
                 $('#sign_up_vehicle_document_id').removeClass('required');
                 $('#sign_up_vehicle_plates').removeClass('required');
-                $('#sign_up_vehicle_soat').removeClass('required');
+                //$('#sign_up_vehicle_soat').removeClass('required');
 
                 $("#sign-up-vehicle-form").unbind('submit');
             }
@@ -161,15 +181,6 @@ var app = {
         $('#acc-btn-refresh-search').click(function() {
             refreshAllRides();
         });
-        
-        document.addEventListener("deviceready", onDeviceReady, false);
-	        function onDeviceReady() {
-	            document.addEventListener("backbutton", function (e) {
-	                e.preventDefault();
-	            }, false );
-
-                //$("select").click(function() { $(this).focus(); });
-	    };
 
         $('.datepicker').focus(function(event) {
             var currentField = $(this);
@@ -181,6 +192,8 @@ var app = {
 
             // Same handling for iPhone and Android
             datePicker.show({
+            	doneButtonLabel : 'Ok',
+            	cancelButtonLabel : 'Cancelar',
                 date : date,
                 mode : 'date'
             }, function(returnDate) {
@@ -209,6 +222,8 @@ var app = {
 
             // Same handling for iPhone and Android
             datePicker.show({
+                doneButtonLabel : 'Ok',
+                cancelButtonLabel : 'Cancelar',
                 date : date,
                 mode : 'time'
             }, function(returnTime) {
@@ -903,10 +918,14 @@ function getProfile() {
 
                     for (var i=0; i<user.vehicles.length; i++) {
                         var date = createDateFromMysql(user.vehicles[i].soat_date);
+                        var soatDate = '--/--/----';
+                        if (date) {
+                            soatDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                        }
                         vehicleHTML += '<div class="vehicle-item">' +
                                             '<div class="vehicle-info">' +
                                                 '<div>Placas: ' + user.vehicles[i].plate_number + '</div>' +
-                                                '<div>Vencimiento SOAT: ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '</div>' +
+                                                '<div>Vencimiento SOAT: ' + soatDate + '</div>' +
                                             '</div>' +
                                             '<div class="vehicle-actions">' +
                                                 '<div class="delete-btn icon-cancel-circle" onclick="confirmDeleteVehicle(\'' + user.vehicles[i].plate_number + '\')"></div>' +
