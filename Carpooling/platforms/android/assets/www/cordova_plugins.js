@@ -1,6 +1,13 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
     {
+        "file": "plugins/com.sharinglabs.cordova.plugin.datepicker/www/android/DatePicker.js",
+        "id": "com.sharinglabs.cordova.plugin.datepicker.DatePicker",
+        "clobbers": [
+            "datePicker"
+        ]
+    },
+    {
         "file": "plugins/org.apache.cordova.camera/www/CameraConstants.js",
         "id": "org.apache.cordova.camera.Camera",
         "clobbers": [
@@ -48,24 +55,17 @@ module.exports = [
         "clobbers": [
             "window.StatusBar"
         ]
-    },
-    {
-        "file": "plugins/com.sharinglabs.cordova.plugin.datepicker/www/android/DatePicker.js",
-        "id": "com.sharinglabs.cordova.plugin.datepicker.DatePicker",
-        "clobbers": [
-            "datePicker"
-        ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
+    "com.sharinglabs.cordova.plugin.datepicker": "1.1.3",
     "org.apache.cordova.camera": "0.3.2",
     "org.apache.cordova.console": "0.2.8",
-    "org.apache.cordova.device": "0.2.11-dev",
+    "org.apache.cordova.device": "0.3.0",
     "org.apache.cordova.splashscreen": "0.3.1",
-    "org.apache.cordova.statusbar": "0.1.3",
-    "com.sharinglabs.cordova.plugin.datepicker": "1.1.2"
+    "org.apache.cordova.statusbar": "0.1.10"
 }
 // BOTTOM OF METADATA
 });
