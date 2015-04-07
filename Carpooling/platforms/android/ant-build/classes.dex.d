@@ -46,6 +46,10 @@ C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\ant-build\classes\org\apache\cordova\R$xml.class \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\ant-build\classes\org\apache\cordova\R.class \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\ant-build\classes\org\apache\cordova\splashscreen\SplashScreen.class \
+C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\ant-build\classes\org\apache\cordova\statusbar\StatusBar$1.class \
+C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\ant-build\classes\org\apache\cordova\statusbar\StatusBar$2.class \
+C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\ant-build\classes\org\apache\cordova\statusbar\StatusBar$3.class \
+C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\ant-build\classes\org\apache\cordova\statusbar\StatusBar.class \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\ant-build\classes\org\xwalk\core\R$array.class \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\ant-build\classes\org\xwalk\core\R$attr.class \
 C:\Users\Alberto\Documents\in2teck\ACC\ACC_frontend\Carpooling\platforms\android\ant-build\classes\org\xwalk\core\R$color.class \
