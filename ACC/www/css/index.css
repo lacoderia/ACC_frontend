@@ -234,6 +234,11 @@ html, body {
     color: #FFF;
 }
 
+.menu-container .row .menu-button img{
+    height: 100%;
+    width: 100%;
+}
+
 .menu-container .row a,
 .menu-container .row a:visited,
 .menu-container .row a:hover,

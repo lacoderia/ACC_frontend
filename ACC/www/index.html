@@ -57,46 +57,37 @@
             <div id="menu-principal-container" class="menu-container">
                 <div class="row">
                     <div class="menu-button" onclick="solicitarServicio('desvare')">
-                        <div class="icon icon-settings"></div>
-                        <div class="text">Desvare</div>
+                        <img src="img/icon-desvare.png"/>
                     </div>
                     <div class="menu-button" onclick="solicitarServicio('grua')">
-                        <div class="icon icon-Gruas"></div>
-                        <div class="text">Grúa</div>
+                        <img src="img/icon-grua.png"/>
                     </div>
                     <div class="menu-button" onclick="showEmergencias()">
-                        <div class="icon icon-emergency7"></div>
-                        <div class="text">Emergencias</div>
+                        <img src="img/icon-emergencias.png"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="menu-button" onclick="showProcessMenu()">
-                        <div class="icon icon-document"></div>
-                        <div class="text">Trámites</div>
+                        <img src="img/icon-tramites.png"/>
                     </div>
                     <a href="tel:0314895050" rel="external">
                         <div class="menu-button">
-                            <div class="icon icon-phone"></div>
-                            <div class="text">ACC</div>
+                            <img src="img/icon-acc.png"/>
                         </div>
                     </a>
                     <div class="menu-button" onclick="showInsuranceMenu()">
-                        <div class="icon icon-car-insurance"></div>
-                        <div class="text">Seguros</div>
+                        <img src="img/icon-seguros.png"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="menu-button" onclick="toggleGas()">
-                        <div class="icon icon-gaspump"></div>
-                        <div class="text">Gasolineras</div>
+                        <img src="img/icon-gasolineras.png"/>
                     </div>
                     <div class="menu-button" onclick="openCarpooling()">
-                        <div class="icon icon-carpooling"></div>
-                        <div class="text">Carro Compartido</div>
+                        <img src="img/icon-carro-compartido.png"/>
                     </div>
                     <div class="menu-button" onclick="toggleDiscounts()">
-                        <div class="icon icon-tag"></div>
-                        <div class="text">Descuentos</div>
+                        <img src="img/icon-descuentos.png"/>
                     </div>
                 </div>
             </div>
@@ -393,11 +384,19 @@
                     <div><b>Datos personales</b></div>
                     <hr>
                     <div data-role="fieldcontainer">
-                        <select name="process_request_type" id="process_type" class="required">
+                        <select name="process_request_type" id="process_request_type" class="required" onchange="updateProcessType()">
                             <option value="">Tipo de trámite</option>
-                            <option value="XXX">Trámite 1</option>
-                            <option value="XXX">Trámite 2</option>
+                            <option value="Traspaso">Traspaso</option>
+                            <option value="Levantar prenda">Levantar prenda</option>
+                            <option value="Certificado tradición">Certificado tradición</option>
+                            <option value="Duplicado tarjeta de propiedad">Duplicado tarjeta de propiedad</option>
+                            <option value="Duplicado de placas">Duplicado de placas</option>
+                            <option value="Inscribir prenda">Inscribir prenda</option>
+                            <option value="Otros">Otros</option>
                         </select>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="process_request_other_type" id="process_request_other_type" placeholder="Tipo de trámite"/>
                     </div>
                     <div data-role="fieldcontainer">
                         <input type="text" name="process_request_first_name" id="process_request_first_name" placeholder="Nombre" class="required"/>
@@ -414,6 +413,7 @@
                     <div data-role="fieldcontainer">
                         <input type="email" name="process_request_email" id="process_request_email" placeholder="Correo electrónico" class="required"/>
                     </div>
+                    <p>La información proveída en este formulario será utilizada solamente para responder al interés comercial que el usuario expresa y no será compartida con terceros, ni utilizada para propósitos diferentes.</p>
                     <p><a data-role="button" onclick="sendProcessRequest()">Enviar solicitud</a></p>
                 </form>
             </div><!-- /content -->
@@ -445,10 +445,15 @@
                     <div><b>Datos personales</b></div>
                     <hr>
                     <div data-role="fieldcontainer">
-                        <select name="insurance_request_type" id="insurance_type" class="required">
+                        <select name="insurance_request_type" id="insurance_request_type" class="required" onchange="updateInsuranceType()">
                             <option value="">Seleccionar tipo de seguro</option>
                             <option value="SOAT">SOAT</option>
+                            <option value="Pólizas todo riesgo">Pólizas todo riesgo</option>
+                            <option value="Otros">Otros</option>
                         </select>
+                    </div>
+                    <div data-role="fieldcontainer">
+                        <input type="text" name="insurance_request_other_type" id="insurance_request_other_type" placeholder="Tipo de seguro"/>
                     </div>
                     <div data-role="fieldcontainer">
                         <input type="text" name="insurance_request_first_name" id="insurance_request_first_name" placeholder="Nombre" class="required"/>
@@ -465,6 +470,7 @@
                     <div data-role="fieldcontainer">
                         <input type="email" name="insurance_request_email" id="insurance_request_email" placeholder="Correo electrónico" class="required"/>
                     </div>
+                    <p>La información proveída en este formulario será utilizada solamente para responder al interés comercial que el usuario expresa y no será compartida con terceros, ni utilizada para propósitos diferentes.</p>
                     <p><a data-role="button" onclick="sendInsuranceRequest()">Enviar solicitud</a></p>
                 </form>
             </div><!-- /content -->

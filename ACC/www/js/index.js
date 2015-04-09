@@ -1029,10 +1029,28 @@ function showProcessLookup() {
     window.open('http://www.google.com.mx', '_blank', 'location=no,closebuttoncaption=Cerrar');
 }
 
+function updateProcessType() {
+    if ($('#process_request_type').val() == 'Otros') {
+        $('#process_request_other_type').parent().show();
+        $('#process_request_other_type').addClass('required');
+    } else {
+        $('#process_request_other_type').val('');
+        $('#process_request_other_type').parent().hide();
+        $('#process_request_other_type').removeClass('required');
+    }
+
+    if ($('#process-request-form label.error').filter(':visible').length) {
+        $("#process-request-form").valid();
+    }
+}
+
 function clearProcessRequest() {
     $('#process_request_type').val('');
     $('#process_request_type').selectmenu();
     $('#process_request_type').selectmenu('refresh', true);
+    $('#process_request_other_type').val('');
+    $('#process_request_other_type').parent().hide();
+    $('#process_request_other_type').removeClass('required');
     $('#process_request_first_name').val('');
     $('#process_request_last_name').val('');
     $('#process_request_second_last_name').val('');
@@ -1045,20 +1063,21 @@ function sendProcessRequest() {
 
         var data = {
             "utf8": "V",
-            "lead": {
+            "process_lead": {
                 "process_type": $('#process_request_type').val(),
                 "first_name": $('#process_request_first_name').val(),
                 "last_name_f": $('#process_request_last_name').val(),
                 "last_name_m": $('#process_request_second_last_name').val(),
                 "phone_number": $('#process_request_phone').val(),
-                "email": $('#process_request_email').val()
+                "email": $('#process_request_email').val(),
+                "other_type": $('#process_request_other_type').val()
             }
         };
 
         showLoader();
         $.ajax({
             type: "POST",
-            url: "http://166.78.117.195/",
+            url: "http://166.78.117.195/process_leads.json",
             data: data,
             dataType: "json",
             success: function(response) {
@@ -1098,10 +1117,29 @@ function sendProcessRequest() {
 
 
 /** Funciones de seguros **/
+
+function updateInsuranceType() {
+    if ($('#insurance_request_type').val() == 'Otros') {
+        $('#insurance_request_other_type').parent().show();
+        $('#insurance_request_other_type').addClass('required');
+    } else {
+        $('#insurance_request_other_type').val('');
+        $('#insurance_request_other_type').parent().hide();
+        $('#insurance_request_other_type').removeClass('required');
+    }
+
+    if ($('#insurance-request-form label.error').filter(':visible').length) {
+        $("#insurance-request-form").valid();
+    }
+}
+
 function clearInsuranceRequest() {
     $('#insurance_request_type').val('');
     $('#insurance_request_type').selectmenu();
     $('#insurance_request_type').selectmenu('refresh', true);
+    $('#insurance_request_other_type').val('');
+    $('#insurance_request_other_type').parent().hide();
+    $('#insurance_request_other_type').removeClass('required');
     $('#insurance_request_first_name').val('');
     $('#insurance_request_last_name').val('');
     $('#insurance_request_second_last_name').val('');
@@ -1114,20 +1152,21 @@ function sendInsuranceRequest() {
 
         var data = {
             "utf8": "V",
-            "lead": {
+            "insurance_lead": {
                 "insurance_type": $('#insurance_request_type').val(),
                 "first_name": $('#insurance_request_first_name').val(),
                 "last_name_f": $('#insurance_request_last_name').val(),
                 "last_name_m": $('#insurance_request_second_last_name').val(),
                 "phone_number": $('#insurance_request_phone').val(),
-                "email": $('#insurance_request_email').val()
+                "email": $('#insurance_request_email').val(),
+                "other_type": $('#process_request_other_type').val()
             }
         };
 
         showLoader();
         $.ajax({
             type: "POST",
-            url: "http://166.78.117.195/",
+            url: "http://166.78.117.195/insurance_leads.json",
             data: data,
             dataType: "json",
             success: function(response) {
@@ -1153,7 +1192,7 @@ function sendInsuranceRequest() {
             },
             error: function(error) {
                 hideLoader();
-                showAlert('Registro',
+                showAlert('Solicitud SOAT',
                     'Ocurrió un error al enviar tu solicitud de seguro. Intenta nuevamente.',
                     function() {
                         window.scrollTo(0,0);
@@ -1170,7 +1209,7 @@ function sendInsuranceRequest() {
 function openCarpooling() {
 
     var title = "Carro Compartido";
-    var message = 'Te invitamos a usar Carro Compartido.';
+    var message = '¿Tu empresa ya hace parte de este programa? Contáctanos <a href="mailto:dilenoaltrancon@acc.com.co">dilenoaltrancon@acc.com.co</a>';
     showDialog(
         DIALOG_TYPE.ALERT,
         title,
@@ -1314,12 +1353,14 @@ var infowindow;
 function generateMarkers(markerType, newMarkers){
 
     var iconURL = '';
+    var scaledSize = new google.maps.Size(20, 33);
     switch (markerType) {
         case markerConstants.DISCOUNTS:
             iconURL = 'img/markers/pin-descuentos.png';
             break;
         case markerConstants.GAS:
             iconURL = 'img/markers/pin-gas.png';
+            scaledSize = new google.maps.Size(33, 33);
             break;
         case markerConstants.PARKING:
             iconURL = 'img/markers/pin-parqueaderos.png';
@@ -1354,7 +1395,7 @@ function generateMarkers(markerType, newMarkers){
         }
         var icon = {
             url: iconURL,
-            scaledSize: new google.maps.Size(20, 33)
+            scaledSize: scaledSize
         };
 
         var marker = new google.maps.Marker({
