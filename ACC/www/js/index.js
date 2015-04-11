@@ -1220,12 +1220,14 @@ function openCarpooling() {
             var appCheck = '';
             if(device.platform == 'iOS'){
                 appCheck = 'carrocompartido://';
+                url = 'https://itunes.apple.com/us/app/id920231776?mt=8'
             } else {
-                appCheck = 'mx.coderia.ACC.CarroCompartido';
+                appCheck = 'mx.coderia.ACC.Carpooling';
+                url='https://play.google.com/store/apps/details?id=mx.coderia.ACC.Carpooling'
             }
 
             navigator.startApp.check(appCheck, function(message) {
-                    navigator.startApp.start("carrocompartido://", function(message) {
+                    navigator.startApp.start(appCheck, function(message) {
                         },
                         function(error) {
                             showAlert('Error', 'Ocurrió un error al abrir Carro Compartido. Intenta nuevamente.');
@@ -1234,7 +1236,7 @@ function openCarpooling() {
                 function(error) {
                     // Redirigimos a la app store
 
-                    window.open('https://itunes.apple.com/us/app/id920231776?mt=8', '_system');
+                    window.open(url, '_system');
                 });
         },
         function(){
