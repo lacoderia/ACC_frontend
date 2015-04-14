@@ -1159,7 +1159,7 @@ function sendInsuranceRequest() {
                 "last_name_m": $('#insurance_request_second_last_name').val(),
                 "phone_number": $('#insurance_request_phone').val(),
                 "email": $('#insurance_request_email').val(),
-                "other_type": $('#process_request_other_type').val()
+                "other_type": $('#insurance_request_other_type').val()
             }
         };
 
