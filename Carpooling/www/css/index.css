@@ -272,9 +272,15 @@ label.error {
     vertical-align: middle;
 }
 
-.splash-cell img {
-    width: 100%;
+.splash-cell .image {
     display: none;
+    width: 100%;
+}
+
+.splash-cell .logo {
+    display: none;
+    margin-top: 1em;
+    width: 30%;
 }
 
 #intro_message {

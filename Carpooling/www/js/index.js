@@ -70,8 +70,9 @@ var app = {
             var animation = setInterval(function(){
                 if (i <= 4) {
                     $('#intro_message').html(introMessage);
-                    $('.splash-cell img').hide()
+                    $('.splash-cell img').hide();
                     $('.splash-cell img[splash_frame="' + i + '"]').show();
+                    $('.splash-cell .logo').show();
                     i++;
                 } else {
                     clearInterval(animation);
