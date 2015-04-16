@@ -2,6 +2,7 @@ Carpooling/platforms/android/
 Carpooling/platforms/ios/
 Carpooling/platforms/android/*.*
 Carpooling/platforms/ios/*.*
+Carpooling/plugins
 *.prop
 *.apk
 *.ap_
