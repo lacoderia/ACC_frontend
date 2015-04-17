@@ -193,7 +193,30 @@ var app = {
 
         document.addEventListener("backbutton", onBackKeyDown, false);
         function onBackKeyDown(e) {
-            e.preventDefault();
+        	
+        	var pg = $.mobile.activePage;
+        	var btn = pg.find(".acc-btn-back");
+        	if(btn != undefined){
+        		var transition = 'slide';
+                if (btn.attr('transition')) {
+                    transition = btn.attr('transition');
+                }
+                
+                if( pg.attr("id")=="login" || pg.attr("id")=="dashboard"){
+                	navigator.app.exitApp();
+                }else if(btn.attr('previous-page')!= undefined){
+                	window.scrollTo(0,0);
+                    $.mobile.changePage($('#' + btn.attr('previous-page')), {transition: transition, reverse: 'true'});
+                    if(pg.attr("id")=="process-request"){
+                    	setTimeout(function(){
+                    		showMenu();
+                        }, 200);
+                    }
+                }else{
+                	window.scrollTo(0,0);
+                    $.mobile.changePage($('#dashboard'), {transition: transition, reverse: 'true'});
+                }
+        	}
         }
 
         if (getCache('acc_rememberMe')) {
