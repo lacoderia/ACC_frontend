@@ -126,11 +126,11 @@
                 <div class="row">
                     <div class="menu-button" onclick="showProcessRequest()">
                         <div class="icon icon-checklist"></div>
-                        <div class="text">Iniciar trámite</div>
+                        <div class="text">Solicitar</div>
                     </div>
                     <div class="menu-button" onclick="showProcessLookup()">
                         <div class="icon icon-document-search"></div>
-                        <div class="text">Consulta</div>
+                        <div class="text">Consultar</div>
                     </div>
                 </div>
             </div>
@@ -139,13 +139,13 @@
         <div id="menu-seguros" class="menu dismissable" onclick="exitMenu(event)">
             <div id="menu-seguros-container" class="menu-container">
                 <div class="row">
+                    <div class="menu-button" onclick="showInsuranceRequest()">
+                        <div class="icon icon-checklist"></div>
+                        <div class="text">Solicitar</div>
+                    </div>
                     <div class="menu-button" onclick="showInsurancePrices()">
                         <div class="icon icon-price"></div>
                         <div class="text">Precios</div>
-                    </div>
-                    <div class="menu-button" onclick="showInsuranceRequest()">
-                        <div class="icon icon-checklist"></div>
-                        <div class="text">Solicitud</div>
                     </div>
                 </div>
             </div>
@@ -384,8 +384,8 @@
         <div data-role="page" id="process-request">
 
             <div data-role="header">
-                <span class="acc-btn-back icon-arrow-left" previous-page="dashboard"></span>
-                <h1>Iniciar Trámite</h1>
+                <span class="acc-btn-back icon-arrow-left" previous-page="dashboard" previous-action="showMenu"></span>
+                <h1>Solicitar Trámite</h1>
             </div><!-- /header -->
 
             <div role="main" class="ui-content">
@@ -432,7 +432,7 @@
         <div data-role="page" id="insurance-prices">
 
             <div data-role="header">
-                <span class="acc-btn-back icon-arrow-left" previous-page="dashboard"></span>
+                <span class="acc-btn-back icon-arrow-left" previous-page="dashboard" previous-action="showMenu"></span>
                 <h1>Precios SOAT</h1>
             </div><!-- /header -->
 
@@ -445,8 +445,8 @@
         <div data-role="page" id="insurance-request">
 
             <div data-role="header">
-                <span class="acc-btn-back icon-arrow-left" previous-page="dashboard"></span>
-                <h1>Solicitud SOAT</h1>
+                <span class="acc-btn-back icon-arrow-left" previous-page="dashboard" previous-action="showMenu"></span>
+                <h1>Solicitar Seguro</h1>
             </div><!-- /header -->
 
             <div role="main" class="ui-content">

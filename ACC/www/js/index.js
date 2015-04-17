@@ -219,8 +219,18 @@ var app = {
         $("#panel-menu-lateral").panel('open');
 
         $('.acc-btn-back').click(function() {
+            var previousAction = $(this).attr('previous-action');
+            if(previousAction){
+                setTimeout(function(){
+                    window[previousAction]();
+
+                }, 200);
+            }
+
             window.scrollTo(0,0);
             $.mobile.changePage($('#' + $(this).attr('previous-page')));
+
+
         });
     }
 };
@@ -932,7 +942,7 @@ function solicitarServicio(pagina){
     } else {
         if(sesion != undefined || sesion != null || sesion != ""){
             var title = "¿Eres socio de ACC?";
-            var message = 'Si eres socio puedes iniciar sesión, si aun no lo eres puedes continuar como invitado.';
+            var message = 'Si eres socio puedes iniciar sesión, si aún no lo eres puedes continuar como invitado.';
             showDialog(
                 DIALOG_TYPE.SIGN_IN,
                 title,
@@ -1083,7 +1093,7 @@ function sendProcessRequest() {
             success: function(response) {
                 if (response.success == true) {
                     hideLoader();
-                    showAlert('Solicitud trámite',
+                    showAlert('Solicitar Trámite',
                         response.message,
                         function() {
                             window.scrollTo(0,0);
@@ -1092,7 +1102,7 @@ function sendProcessRequest() {
                     );
                 } else {
                     hideLoader();
-                    showAlert('Solicitud trámite',
+                    showAlert('Solicitar Trámite',
                         response.message,
                         function() {
                             window.scrollTo(0,0);
@@ -1103,7 +1113,7 @@ function sendProcessRequest() {
             },
             error: function(error) {
                 hideLoader();
-                showAlert('Registro',
+                showAlert('Solicitar Trámite',
                     'Ocurrió un error al enviar tu solicitud de trámite. Intenta nuevamente.',
                     function() {
                         window.scrollTo(0,0);
@@ -1172,7 +1182,7 @@ function sendInsuranceRequest() {
             success: function(response) {
                 if (response.success == true) {
                     hideLoader();
-                    showAlert('Solicitud SOAT',
+                    showAlert('Solicitar Seguro',
                         response.message,
                         function() {
                             window.scrollTo(0,0);
@@ -1181,7 +1191,7 @@ function sendInsuranceRequest() {
                     );
                 } else {
                     hideLoader();
-                    showAlert('Solicitud SOAT',
+                    showAlert('Solicitar Seguro',
                         response.message,
                         function() {
                             window.scrollTo(0,0);
@@ -1192,7 +1202,7 @@ function sendInsuranceRequest() {
             },
             error: function(error) {
                 hideLoader();
-                showAlert('Solicitud SOAT',
+                showAlert('Solicitar Seguro',
                     'Ocurrió un error al enviar tu solicitud de seguro. Intenta nuevamente.',
                     function() {
                         window.scrollTo(0,0);
