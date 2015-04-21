@@ -1059,7 +1059,9 @@ function showProcessRequest() {
 }
 
 function showProcessLookup() {
+  exitMenu($('#menu-tramites'));
     window.open('http://www.google.com.mx', '_blank', 'location=no,closebuttoncaption=Cerrar');
+    showMenu();
 }
 
 function updateProcessType() {
