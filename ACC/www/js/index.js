@@ -83,93 +83,6 @@ var markerActivity = {
     }
 };
 
-var testTable = {
-  'vehicle_types': [
-      {
-          'name': 'Motos',
-          'capacities' : [
-              {
-                  'name': 'Menos de 100cc',
-                  'models': [],
-                  'cost': '$267,400'
-              },
-              {
-                  'name': 'De 100 a 200cc',
-                  'models': [],
-                  'cost': '$358,450'
-              }
-          ]
-      },
-      {
-          'name': 'Autos familiares',
-          'capacities' : [
-              {
-                  'name': 'Menos de 1500cc',
-                  'models': [
-                      {
-                          'name': '0 a 9 años',
-                          'cost': '$242,200'
-                      },
-                      {
-                          'name': '10 años o más',
-                          'cost': '$321,000'
-                      }
-                  ],
-                  'cost': undefined
-              },
-              {
-                  'name': 'De 1500 a 2500cc',
-                  'models': [
-                      {
-                          'name': '0 a 9 años',
-                          'cost': '$295,000'
-                      },
-                      {
-                          'name': '10 años o más',
-                          'cost': '$366,850'
-                      }
-                  ],
-                  'cost': undefined
-              }
-          ]
-      },
-      {
-          'name': 'Otros autos',
-          'capacities' : [
-              {
-                  'name': 'Menos de 1500cc',
-                  'models': [
-                      {
-                          'name': '0 a 9 años',
-                          'cost': '$242,200'
-                      },
-                      {
-                          'name': '10 años o más',
-                          'cost': '$321,000'
-                      }
-                  ],
-                  'cost': undefined
-              },
-              {
-                  'name': 'De 1500 a 2500cc',
-                  'models': [
-                      {
-                          'name': '0 a 9 años',
-                          'cost': '$295,000'
-                      },
-                      {
-                          'name': '10 años o más',
-                          'cost': '$366,850'
-                      }
-                  ],
-                  'cost': undefined
-              }
-          ]
-      }
-  ]
-};
-
-
 window.sessionStorage.acc_previousPage = 'dashboard';
 
 var app = {
@@ -252,7 +165,6 @@ var app = {
 
             window.scrollTo(0,0);
             $.mobile.changePage($('#' + $(this).attr('previous-page')));
-
 
         });
     }
@@ -355,46 +267,67 @@ $(document).on('pagebeforeshow', '#insurance-prices', function(){
 
     $('#soat-table').html('');
 
-    var contentString = '';
-    $.each(testTable.vehicle_types, function(i, vehicleType) {
-        var listView = '';
-        $.each(vehicleType.capacities, function(j, capacity) {
+    $.ajax({
+        type: "GET",
+        url: "http://166.78.117.195/insurance_prices/table.json",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(response) {
+            var pricesTable = response;
 
-            var models = ''
-            // Si hay division según la antigüedad del vehículo
-            if (capacity.models.length) {
-                $.each(capacity.models, function(j, model) {
-                    models += '<div class="model">' +
-                                '<div class="model-name">'+ model.name + '</div>' +
-                                '<div class="model-price">' + model.cost + '</div>' +
+            var contentString = '';
+            $.each(pricesTable.vehicles_type, function(i, vehicleType) {
+                var listView = '';
+                $.each(vehicleType.capacities, function(j, capacity) {
+
+                    var models = ''
+                    // Si hay division según la antigüedad del vehículo
+                    if (capacity.models.length) {
+                        $.each(capacity.models, function(j, model) {
+                            models += '<div class="model">' +
+                            '<div class="model-name">'+ model.name + '</div>' +
+                            '<div class="model-price">$ ' + model.cost + '</div>' +
                             '</div>';
+                        });
+                    } else {
+                        models = '<div class="model-price">$ ' + capacity.cost + '</div>';
+                    }
+
+                    listView += '<li>' +
+                    '<div class="capacity-name">' + capacity.name + '</div>' +
+                    models +
+                    '</li>';
                 });
-            } else {
-                models = '<div class="model-price">' + capacity.cost + '</div>';
-            }
 
-            listView += '<li>' +
-                            '<div class="capacity-name">' + capacity.name + '</div>' +
-                            models +
-                        '</li>';
-        });
+                contentString += '<div class="ui-collapsible" data-role="collapsible" data-iconpos="right" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">' +
+                '<h2>' + vehicleType.name + '</h2>' +
+                '<ul class="vehicle-type-content" data-role="listview" class="ui-listview">' +
+                listView +
+                '</ul>' +
+                '</div>';
+            });
 
-        contentString += '<div class="ui-collapsible" data-role="collapsible" data-iconpos="right" data-inset="false" data-collapsed-icon="carat-r" data-expanded-icon="carat-d">' +
-                            '<h2>' + vehicleType.name + '</h2>' +
-                            '<ul class="vehicle-type-content" data-role="listview" class="ui-listview">' +
-                                listView +
-                            '</ul>' +
-                        '</div>';
+            $('#soat-table').html(contentString);
+            $('#soat-table > div').collapsible();
+            $('#soat-table > div').removeClass($.mobile.activeBtnClass);
+
+            $('#soat-table > div ul.vehicle-type-content').listview();
+            $('#soat-table > div ul.vehicle-type-content').listview('refresh');
+
+            hideLoader();
+        },
+        error: function(error) {
+            showAlert(
+                'Precios SOAT',
+                'Hubo un error al obtener los precios de los seguros. Intenta nuevamente.',
+                function() {
+                    $('#insurance-prices .acc-btn-back').trigger('click');
+                }
+            );
+            hideLoader();
+        }
     });
 
-    $('#soat-table').html(contentString);
-    $('#soat-table > div').collapsible();
-    $('#soat-table > div').removeClass($.mobile.activeBtnClass);
-
-    $('#soat-table > div ul.vehicle-type-content').listview();
-    $('#soat-table > div ul.vehicle-type-content').listview('refresh');
-
-    hideLoader();
 });
 
 $(document).on('pagebeforeshow', '#insurance-request', function(){
@@ -721,12 +654,6 @@ function logIn(autologin) {
             "document_id": $('#login-identificacion').val(),
             "password": $('#login-password').val()
         };
-
-        /*data = {
-            "document_type": 'CC',
-            "document_id": '12345',
-            "password": '00000000'
-        };*/
 
         $.ajax({
             type: "POST",
