@@ -183,7 +183,7 @@ var app = {
             refreshAllRides();
         });
 
-        $('.datepicker').focus(function(event) {
+        $('.datepicker').click(function(event) {
             var currentField = $(this);
             var date = new Date();
 
@@ -213,7 +213,7 @@ var app = {
             });
         });
 
-        $('.timepicker').focus(function(event) {
+        $('.timepicker').click(function(event) {
             var currentField = $(this);
             var date = new Date();
 

@@ -145,7 +145,7 @@
                         <input type="text" name="sign_up_vehicle_plates" id="sign_up_vehicle_plates" placeholder="Placas" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" style="text-transform:uppercase;"/>
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="text" name="sign_up_vehicle_soat" id="sign_up_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="datepicker">
+                        <input type="text" name="sign_up_vehicle_soat" id="sign_up_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="datepicker" readonly>
                         <div class="label-text">Fecha de vencimiento del SOAT</div>
                     </div>
                 </form>
@@ -353,7 +353,7 @@
                         <input type="text" name="add_vehicle_plates" id="add_vehicle_plates" placeholder="Placas" class="required" maxlength="6" minlength="6" onKeyPress="return numberLetterPattern(event)" style="text-transform:uppercase;"/>
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="text" name="add_vehicle_soat" id="add_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="datepicker">
+                        <input type="text" name="add_vehicle_soat" id="add_vehicle_soat" placeholder="Fecha de vencimiento SOAT:" class="datepicker" readonly>
                         <div class="label-text">Fecha de vencimiento del SOAT</div>
                     </div>
                 </form>
@@ -397,8 +397,8 @@
                         <input type="text" name="add_ride_destination" id="add_ride_destination" placeholder="Hasta: (Ej: Centro Comercial)" class="required">
                     </div>
                     <div data-role="fieldcontainer">
-                        <input type="text" name="add_ride_date" id="add_ride_date" placeholder="Fecha:" class="datepicker required">
-                        <input type="text" name="add_ride_time" id="add_ride_time" placeholder="Hora:" class="timepicker required">
+                        <input type="text" name="add_ride_date" id="add_ride_date" placeholder="Fecha:" class="datepicker required" readonly>
+                        <input type="text" name="add_ride_time" id="add_ride_time" placeholder="Hora:" class="timepicker required" readonly>
                     </div>
                     <select name="add_ride_vehicle_plates" id="add_ride_vehicle_plates"></select>
                     <div data-role="fieldcontainer">

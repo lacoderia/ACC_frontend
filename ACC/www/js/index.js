@@ -286,11 +286,11 @@ $(document).on('pagebeforeshow', '#insurance-prices', function(){
                         $.each(capacity.models, function(j, model) {
                             models += '<div class="model">' +
                             '<div class="model-name">'+ model.name + '</div>' +
-                            '<div class="model-price">$ ' + model.cost + '</div>' +
+                            '<div class="model-price">' + model.cost + '</div>' +
                             '</div>';
                         });
                     } else {
-                        models = '<div class="model-price">$ ' + capacity.cost + '</div>';
+                        models = '<div class="model-price">' + capacity.cost + '</div>';
                     }
 
                     listView += '<li>' +
