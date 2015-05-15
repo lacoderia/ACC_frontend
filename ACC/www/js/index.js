@@ -1187,7 +1187,6 @@ function openCarpooling() {
                 appCheck = 'mx.coderia.ACC.Carpooling';
                 url='https://play.google.com/store/apps/details?id=mx.coderia.ACC.Carpooling'
             }
-
             navigator.startApp.check(appCheck, function(message) {
                     navigator.startApp.start(appCheck, function(message) {
                         },
