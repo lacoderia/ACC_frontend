@@ -987,7 +987,7 @@ function showProcessRequest() {
 
 function showProcessLookup() {
   exitMenu($('#menu-tramites'));
-    window.open('http://www.google.com.mx', '_blank', 'location=no,closebuttoncaption=Cerrar');
+    window.open('http://acc.servidor-sainet.com/consulta-abierta', '_blank', 'location=no,closebuttoncaption=Cerrar');
     showMenu();
 }
 
@@ -1322,8 +1322,7 @@ function generateMarkers(markerType, newMarkers){
             iconURL = 'img/markers/pin-descuentos.png';
             break;
         case markerConstants.GAS:
-            iconURL = 'img/markers/pin-gas.png';
-            scaledSize = new google.maps.Size(33, 33);
+            scaledSize = new google.maps.Size(50, 50);
             break;
         case markerConstants.PARKING:
             iconURL = 'img/markers/pin-parqueaderos.png';
@@ -1357,9 +1356,14 @@ function generateMarkers(markerType, newMarkers){
             contentString += '<p>'+description+'</p>';
         }
         var icon = {
-            url: iconURL,
             scaledSize: scaledSize
         };
+
+        if(iconURL){
+            icon.url = iconUrl
+        } else {
+            icon.url = 'http://166.78.117.195' + value.logo;
+        }
 
         var marker = new google.maps.Marker({
             position: myLatlng,
@@ -1761,7 +1765,7 @@ function showDescuentos(response){
                                 '<h2>' + value.name + '</h2>' +
                                 '<div>' +
                                     '<div class="logo">' +
-                                        '<img src="img/descuentos/tellantas.png"/>' +
+                                        '<img src="http://166.78.117.195' + value.logo + '"/>' +
                                     '</div>' +
                                     '<div class="description">' +
                                         value.description +
