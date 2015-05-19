@@ -109,6 +109,7 @@ var app = {
         	
         	var pg = $.mobile.activePage;
         	var btn = pg.find(".acc-btn-back");
+        	
         	if(btn != undefined){
         		var transition = 'slide';
                 if (btn.attr('transition')) {
@@ -119,8 +120,9 @@ var app = {
                 	navigator.app.exitApp();
                 }else if(btn.attr('previous-page')!= undefined){
                 	window.scrollTo(0,0);
+                	
                     $.mobile.changePage($('#' + btn.attr('previous-page')), {transition: transition, reverse: 'true'});
-                    if(pg.attr("id")=="process-request"){
+                    if(pg.attr("id")=="process-request" || pg.attr("id")=="lista-descuentos"){
                     	setTimeout(function(){
                     		showMenu();
                         }, 200);
