@@ -94,7 +94,7 @@
                         <div class="icon icon-carpooling"></div>
                         <div class="text">Carro Compartido</div>
                     </div>
-                    <div class="menu-button" onclick="toggleDiscounts()">
+                    <div class="menu-button" onclick="goToDescuentos()">
                         <div class="icon icon-tag"></div>
                         <div class="text">Descuentos</div>
                     </div>
@@ -219,7 +219,7 @@
 	        	<ul id="menu-lateral">
                     <li id="btn_sign_up" onclick="goToSignUp()">Afiliaciones ACC</li>
                     <li onclick="hideMenuLateral(); showProfile()">Mi cuenta</li>
-	        		<li onclick="goToDescuentos()">Descuentos</li>
+	        		<!--li onclick="goToDescuentos()">Descuentos</li-->
 	        		<li onclick="showHelp()">Ayuda</li>
 	        		<li id="boton-cerrar-sesion" onclick="hideMenuLateral(); logOut()">Cerrar sesion</li>
 	        	</ul>
@@ -353,7 +353,7 @@
         <!-- Start of lista-descuentos -->
         <div data-role="page" id="lista-descuentos">
         	<div data-role="header">
-                <span class="acc-btn-back icon-arrow-left" previous-page="dashboard"></span>
+                <span class="acc-btn-back icon-arrow-left" previous-page="dashboard" previous-action="showMenu"></span>
                 <h1>Descuentos</h1>
             </div><!-- /header -->
             <div role="main" class="ui-content">

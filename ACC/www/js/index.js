@@ -1732,6 +1732,9 @@ function goToSignUp(){
 }
 
 function goToDescuentos(){
+    $('#contenido-lista-descuentos').html('');
+    
+    hideMenu();
     $.mobile.changePage($('#lista-descuentos'));
 }
 
