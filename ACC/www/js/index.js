@@ -17,7 +17,7 @@
  * under the License.
  */
 
-var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId;
+var map, mapOptions, currentLocation, currentLocationMarker, Marker, GeoMarker, watchId, myLatlng;
 var trafficLayer,
     showingtrafficLayer = false;
 
@@ -250,6 +250,9 @@ $(document).on('pagebeforeshow', '#dashboard', function(){
 
 $(document).on('pageshow', '#dashboard', function(){
     $('#dashboard-header').slideDown(100);
+    if(map){
+      map.panTo(myLatlng);
+    }
 });
 
 $(document).on('pagebeforeshow', '#process-request', function(){
@@ -369,7 +372,6 @@ function hideLoader() {
     $('#loader').hide();
 }
 
-
 /** Funciones de Google Maps **/
 
 function loadMapScript() {
@@ -381,9 +383,10 @@ function loadMapScript() {
 }
 
 function initializeMap(mapOptions) {
+	google.maps.visualRefresh = true;
 	
-	var myLatlng = new google.maps.LatLng(currentLocation.coords.latitude, currentLocation.coords.longitude);
-	var mapOptions = {
+	myLatlng = new google.maps.LatLng(currentLocation.coords.latitude, currentLocation.coords.longitude);
+	mapOptions = {
 		center : myLatlng,
 		zoom : 16,
         minZoom: 6,
