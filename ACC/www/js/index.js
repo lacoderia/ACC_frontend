@@ -761,6 +761,47 @@ function logOut() {
 
 }
 
+function sendMail() {
+    if ($("#forgot-form").valid()){
+
+        var data = {
+            "utf8": "V",
+            "user": {
+                "email": $('#forgot_email').val()
+            }
+        };
+
+        showLoader();
+
+        $.ajax({
+            type: "POST",
+            url: "http://166.78.117.195/users/password.json",
+            data: data,
+            dataType: "json",
+            success: function(response) {
+                if (response.success == true) {
+                    hideLoader();
+                    showAlert('Contraseña',
+                        response.message,
+                        function(){
+                            window.scrollTo(0,0);
+                            $.mobile.changePage($('#login'), {transition: 'none'});
+                        }
+                    );
+                } else {
+                    hideLoader();
+                    showAlert('Contraseña', response.message);
+                }
+            },
+            error: function(error) {
+                hideLoader();
+                showAlert('Contraseña', "El correo con las instrucciones para recuperar tu contraseña no pudo ser enviado.");
+            }
+        });
+
+
+    }
+}
 
 /** Funciones de registro **/
 function clearSignUp() {

@@ -57,46 +57,37 @@
             <div id="menu-principal-container" class="menu-container">
                 <div class="row">
                     <div class="menu-button" onclick="solicitarServicio('desvare')">
-                        <div class="icon icon-settings"></div>
-                        <div class="text">Desvare</div>
+                        <img src="img/icon-desvare.png"/>
                     </div>
                     <div class="menu-button" onclick="solicitarServicio('grua')">
-                        <div class="icon icon-Gruas"></div>
-                        <div class="text">Grúa</div>
+                        <img src="img/icon-grua.png"/>
                     </div>
                     <div class="menu-button" onclick="showEmergencias()">
-                        <div class="icon icon-emergency7"></div>
-                        <div class="text">Emergencias</div>
+                        <img src="img/icon-emergencias.png"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="menu-button" onclick="showProcessMenu()">
-                        <div class="icon icon-document"></div>
-                        <div class="text">Trámites</div>
+                        <img src="img/icon-tramites.png"/>
                     </div>
                     <a href="tel:0314895050" rel="external">
                         <div class="menu-button">
-                            <div class="icon icon-phone"></div>
-                            <div class="text">ACC</div>
+                            <img src="img/icon-acc.png"/>
                         </div>
                     </a>
                     <div class="menu-button" onclick="showInsuranceMenu()">
-                        <div class="icon icon-car-insurance"></div>
-                        <div class="text">Seguros</div>
+                        <img src="img/icon-seguros.png"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="menu-button" onclick="toggleGas()">
-                        <div class="icon icon-gaspump"></div>
-                        <div class="text">Gasolineras</div>
+                        <img src="img/icon-gasolineras.png"/>
                     </div>
                     <div class="menu-button" onclick="openCarpooling()">
-                        <div class="icon icon-carpooling"></div>
-                        <div class="text">Carro Compartido</div>
+                        <img src="img/icon-carro-compartido.png"/>
                     </div>
                     <div class="menu-button" onclick="goToDescuentos()">
-                        <div class="icon icon-tag"></div>
-                        <div class="text">Descuentos</div>
+                        <img src="img/icon-descuentos.png"/>
                     </div>
                 </div>
             </div>
@@ -107,14 +98,12 @@
                 <div class="row">
                     <a href="tel:123">
                         <div class="menu-button">
-                            <div class="icon icon-police16"></div>
-                            <div class="text">Policía</div>
+                            <img src="img/icon-policia.png"/>
                         </div>
                     </a>
                     <a href="tel:123">
                         <div class="menu-button">
-                            <div class="icon icon-Ambulancia"></div>
-                            <div class="text">Ambulancia</div>
+                            <img src="img/icon-ambulancia.png"/>
                         </div>
                     </a>
                 </div>
@@ -125,12 +114,10 @@
             <div id="menu-tramites-container" class="menu-container">
                 <div class="row">
                     <div class="menu-button" onclick="showProcessRequest()">
-                        <div class="icon icon-checklist"></div>
-                        <div class="text">Solicitar</div>
+                        <img src="img/icon-inicio-tramites.png"/>
                     </div>
                     <div class="menu-button" onclick="showProcessLookup()">
-                        <div class="icon icon-document-search"></div>
-                        <div class="text">Consultar</div>
+                        <img src="img/icon-tramites-consulta.png"/>
                     </div>
                 </div>
             </div>
@@ -140,12 +127,10 @@
             <div id="menu-seguros-container" class="menu-container">
                 <div class="row">
                     <div class="menu-button" onclick="showInsuranceRequest()">
-                        <div class="icon icon-checklist"></div>
-                        <div class="text">Solicitar</div>
+                        <img src="img/icon-seguros-solicitud.png"/>
                     </div>
                     <div class="menu-button" onclick="showInsurancePrices()">
-                        <div class="icon icon-price"></div>
-                        <div class="text">Precios</div>
+                        <img src="img/icon-precios.png"/>
                     </div>
                 </div>
             </div>
@@ -157,7 +142,7 @@
                     Solicitar servicio
                 </div>
                 <div class="ui-content">
-                    <div>Favor de proporcionar la siguiente información.</div>
+                    <div>Favor proporcionar la siguiente información.</div>
                     <form id="menu-servicio-form">
                         <div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset">
                             <input type="text" id="servicio_nombre" name="servicio_nombre" placeholder="Nombre Completo" class="required" />
@@ -264,12 +249,33 @@
                         <a data-role="button" onclick="logIn(false)">Iniciar Sesión</a>
                         <br/>
                         <div id="login-buttons">
-                            <div id="login-forgot"><a href="#dashboard" data-transition="slide">Quiero continuar como invitado</a></div>
+                            <div id="login-guest"><a href="#dashboard" data-transition="slide">Quiero continuar como invitado</a></div>
+                            <div id="login-forgot"><a href="#forgot" data-transition="slide">Olvidé mi contraseña</a></div>
                         </div>
                     </div>
                 </div>
             </div><!-- /content -->
         </div><!-- /page login-->
+
+        <!-- Start of forgot -->
+        <div data-role="page" id="forgot">
+            <div data-role="header">
+                <span class="acc-btn-back icon-arrow-left" previous-page="login"></span>
+                <h1>Restablecer</h1>
+            </div><!-- /header -->
+
+            <div role="main" class="ui-content">
+                <br/>
+                <p>Para restablecer tu contraseña introduce tu correo electrónico registrado y da click en 'Enviar correo'.</p>
+                <form id="forgot-form">
+                    <div data-role="fieldcontainer">
+                        <input type="email" name="forgot_email" id="forgot_email" placeholder="Correo electrónico" class="required"/>
+                    </div>
+                </form>
+                <p><a data-role="button" onclick="sendMail()">Enviar correo</a></p>
+            </div><!-- /content -->
+
+        </div><!-- /page -->
 
         <!-- Start of sign-up -->
         <div data-role="page" id="sign-up">

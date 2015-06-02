@@ -554,7 +554,7 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
     margin-top: 10px;
 }
 
-#login-forgot {
+#login-forgot, #login-guest {
     margin-top: 10px;
 }
 
