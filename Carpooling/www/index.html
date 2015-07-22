@@ -98,7 +98,7 @@
                     <select name="sign_up_agreement" id="sign_up_agreement" onchange="updateSelectedAgreement()">
                         <option value="">Selecciona tu empresa</option>
                     </select>
-                    <select name="sign_up_document_type" id="sign_up_document_type">
+                    <select name="sign_up_document_type" id="sign_up_document_type" class="required">
                         <option value="">Seleccionar tipo de id</option>
                         <option value="CC">Cédula de Ciudadanía</option>
                         <option value="TI">Tarjeta de Identidad</option>
@@ -131,13 +131,15 @@
 
                 <form id="sign-up-vehicle-form" style="display:none">
                     <label class="checkbox-label-no-background-black"><input type="checkbox" name="sign_up_vehicle_owner" id="sign_up_vehicle_owner" data-mini="true">Soy el dueño del vehículo</label>
-                    <select name="sign_up_vehicle_document_type" id="sign_up_vehicle_document_type">
-                        <option value="">Seleccionar tipo de id</option>
-                        <option value="CC">Cédula de Ciudadanía</option>
-                        <option value="TI">Tarjeta de Identidad</option>
-                        <option value="CE">Cédula de Extranjería</option>
-                        <option value="PS">Pasaporte</option>
-                    </select>
+                    <div data-role="fieldcontainer" style="display:none">
+                        <select name="sign_up_vehicle_document_type" id="sign_up_vehicle_document_type">
+                            <option value="">Seleccionar tipo de id</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="TI">Tarjeta de Identidad</option>
+                            <option value="CE">Cédula de Extranjería</option>
+                            <option value="PS">Pasaporte</option>
+                        </select>
+                    </div>
                     <div data-role="fieldcontainer" style="display:none">
                         <input type="text" name="sign_up_vehicle_document_id" id="sign_up_vehicle_document_id" placeholder="Identificación del dueño"/>
                     </div>

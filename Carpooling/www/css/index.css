@@ -365,10 +365,6 @@ label.error {
 
 /** Sign-up **/
 
-#sign_up_vehicle_document_type-button {
-    display: none;
-}
-
 #sign_up_vehicle_soat {
     background: url(img/calendar.png) no-repeat;
     background-position: left center;

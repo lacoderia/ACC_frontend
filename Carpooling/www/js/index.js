@@ -116,10 +116,10 @@ var app = {
 
         $('#sign_up_vehicle_owner').change(function(){
             if ($("#sign_up_vehicle_owner").is(':checked')) {
-                $('#sign_up_vehicle_document_type-button').hide();
+                $('#sign_up_vehicle_document_type').parents('div[data-role="fieldcontainer"]').hide();
                 $('#sign_up_vehicle_document_id').parents('div[data-role="fieldcontainer"]').hide();
             } else {
-                $('#sign_up_vehicle_document_type-button').show();
+                $('#sign_up_vehicle_document_type').parents('div[data-role="fieldcontainer"]').show();
                 $('#sign_up_vehicle_document_id').parents('div[data-role="fieldcontainer"]').show();
 
                 if ($('#sign-up-vehicle-form label.error').filter(':visible').length) {
@@ -130,13 +130,13 @@ var app = {
 
         $('#add_vehicle_owner').change(function(){
             if ($("#add_vehicle_owner").is(':checked')) {
-                $('#add_vehicle_document_type-button').hide();
+                $('#sign_up_vehicle_document_type').parents('div[data-role="fieldcontainer"]').hide();
                 $('#add_vehicle_document_id').parents('div[data-role="fieldcontainer"]').hide();
 
                 $('#add_vehicle_document_type').removeClass('required');
                 $('#add_vehicle_document_id').removeClass('required');
             } else {
-                $('#add_vehicle_document_type-button').show();
+                $('#sign_up_vehicle_document_type').parents('div[data-role="fieldcontainer"]').show();
                 $('#add_vehicle_document_id').parents('div[data-role="fieldcontainer"]').show();
 
                 $('#add_vehicle_document_type').addClass('required');
