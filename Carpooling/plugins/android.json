@@ -9,6 +9,10 @@
                 "parents": {
                     "/*": [
                         {
+                            "xml": "<feature name=\"DatePickerPlugin\"><param name=\"android-package\" value=\"com.sharinglabs.cordova.plugin.datepicker.DatePickerPlugin\" /></feature>",
+                            "count": 1
+                        },
+                        {
                             "xml": "<feature name=\"Camera\"><param name=\"android-package\" value=\"org.apache.cordova.camera.CameraLauncher\" /></feature>",
                             "count": 1
                         },
@@ -25,7 +29,15 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"DatePickerPlugin\"><param name=\"android-package\" value=\"com.sharinglabs.cordova.plugin.datepicker.DatePickerPlugin\" /></feature>",
+                            "xml": "<preference name=\"webView\" value=\"org.crosswalk.engine.XWalkWebViewEngine\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -44,6 +56,9 @@
         }
     },
     "installed_plugins": {
+        "com.sharinglabs.cordova.plugin.datepicker": {
+            "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
+        },
         "org.apache.cordova.camera": {
             "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
         },
@@ -53,13 +68,16 @@
         "org.apache.cordova.device": {
             "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
         },
-        "org.apache.cordova.splashscreen": {
-            "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
-        },
         "org.apache.cordova.statusbar": {
             "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
         },
-        "com.sharinglabs.cordova.plugin.datepicker": {
+        "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
+        },
+        "org.apache.cordova.splashscreen": {
             "PACKAGE_NAME": "mx.coderia.ACC.Carpooling"
         }
     },

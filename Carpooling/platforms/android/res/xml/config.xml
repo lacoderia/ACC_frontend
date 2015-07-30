@@ -1,9 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="8" id="mx.coderia.ACC.Carpooling" version="1.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="9" id="mx.coderia.ACC.Carpooling" version="1.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
-    <preference name="AndroidLaunchMode" value="singleTop" />
-    <feature name="App">
-        <param name="android-package" value="org.apache.cordova.App" />
+    <feature name="DatePickerPlugin">
+        <param name="android-package" value="com.sharinglabs.cordova.plugin.datepicker.DatePickerPlugin" />
     </feature>
     <feature name="Camera">
         <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
@@ -18,13 +17,23 @@
         <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
         <param name="onload" value="true" />
     </feature>
-    <feature name="DatePickerPlugin">
-        <param name="android-package" value="com.sharinglabs.cordova.plugin.datepicker.DatePickerPlugin" />
+    <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine" />
+    <feature name="Whitelist">
+        <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+        <param name="onload" value="true" />
     </feature>
     <icon density="ldpi" src="res/android/ldpi.png" />
     <icon density="mdpi" src="res/android/mdpi.png" />
     <icon density="hdpi" src="res/android/hdpi.png" />
     <icon density="xhdpi" src="res/android/xhdpi.png" />
+    <splash density="port-ldpi" src="res/android/screen/splash-port-ldpi.png" />
+    <splash density="port-mdpi" src="res/android/screen/splash-port-mdpi.png" />
+    <splash density="port-hdpi" src="res/android/screen/splash-port-hdpi.png" />
+    <splash density="port-xhdpi" src="res/android/screen/splash-port-xhdpi.png" />
     <name>CarroCompartido</name>
     <description>
         An ACC app to organize shared rides.
@@ -39,5 +48,8 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="android-minSdkVersion" value="11" />
     <preference name="android-windowSoftInputMode" value="adjustUnspecified" />
+    <preference name="AndroidLaunchMode" value="singleTop" />
+    <preference name="SplashScreen" value="screen" />
 </widget>

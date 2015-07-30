@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="mx.coderia.ACC.ACC" version="0.0.11" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="mx.coderia.ACC.ACC" version="1.0.0" android-versionCode="1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>ACC</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        An ACC app to use ACC services
     </description>
     <author email="dev@cordova.apache.org" href="http://cordova.io">
         Apache Cordova Team
@@ -16,7 +16,7 @@
 	<preference name="WebViewBounce" value="false" />
 	<preference name="AutoHideSplashScreen" value="true" />
     <preference name="ShowSplashScreenSpinner" value="false" />
-    <preference name="android-minSdkVersion" value="7" />            
+    <preference name="android-minSdkVersion" value="11" />
     <preference name="android-installLocation" value="auto" />
 
     <platform name="ios">
@@ -32,5 +32,12 @@
         <icon src="www/res/icon/ios/icon-small.png" width="29" height="29" />
         <icon src="www/res/icon/ios/icon-small@2x.png" width="58" height="58" />
         <icon src="www/res/icon/ios/icon-40@2x.png" width="80" height="80" />
+    </platform>
+
+    <platform name="android">
+      <icon src="www/res/icon/android/icon-36-ldpi.png" density="ldpi" />
+      <icon src="www/res/icon/android/icon-48-mdpi.png" density="mdpi" />
+      <icon src="www/res/icon/android/icon-72-hdpi.png" density="hdpi" />
+      <icon src="www/res/icon/android/icon-96-xhdpi.png" density="xhdpi" />
     </platform>
 </widget>
