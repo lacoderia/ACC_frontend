@@ -460,6 +460,15 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
     font-size: 1.2em;
 }
 
+#dashboard .ui-content {
+    padding: 0 !important;
+    position : absolute !important;
+    top : 0 !important;
+    right : 0 !important;
+    bottom : 0 !important;
+    left : 0 !important;
+}
+
 #dashboard #map_canvas {
     position: absolute;
     top: 0;
@@ -709,6 +718,7 @@ a[href^="http://maps.google.com/maps"]{display:none !important}
 
 #help .owl-item img {
     height: 100%;
+    width: 80%;
 }
 
 #help .owl-controls {

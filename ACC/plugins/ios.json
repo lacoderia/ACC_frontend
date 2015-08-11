@@ -11,6 +11,10 @@
                         {
                             "xml": "false",
                             "count": 2
+                        },
+                        {
+                            "xml": false,
+                            "count": 1
                         }
                     ],
                     "CoreMotion.framework": [
@@ -30,10 +34,6 @@
             "config.xml": {
                 "parents": {
                     "/*": [
-                        {
-                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
                         {
                             "xml": "<feature name=\"Accelerometer\"><param name=\"ios-package\" value=\"CDVAccelerometer\" /></feature>",
                             "count": 1
@@ -77,6 +77,10 @@
                         {
                             "xml": "<feature name=\"DatePicker\"><param name=\"ios-package\" value=\"DatePicker\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -94,9 +98,6 @@
         }
     },
     "installed_plugins": {
-        "org.apache.cordova.splashscreen": {
-            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
-        },
         "org.apache.cordova.device-motion": {
             "PACKAGE_NAME": "mx.coderia.ACC.ACC"
         },
@@ -122,6 +123,15 @@
             "PACKAGE_NAME": "mx.coderia.ACC.ACC"
         },
         "com.sharinglabs.cordova.plugin.datepicker": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
+        },
+        "org.apache.cordova.splashscreen": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
+        },
+        "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "mx.coderia.ACC.ACC"
+        },
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "mx.coderia.ACC.ACC"
         }
     },

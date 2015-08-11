@@ -9,6 +9,7 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <access origin="tel:*" launch-external="yes" />
     
     <preference name="Fullscreen" value="false" />
     <preference name="Orientation" value="portrait" />
@@ -18,6 +19,7 @@
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="android-minSdkVersion" value="11" />
     <preference name="android-installLocation" value="auto" />
+    <preference name="SplashScreen" value="screen" />
 
     <platform name="ios">
         <!-- iOS 7.0+ -->
@@ -39,5 +41,9 @@
       <icon src="www/res/icon/android/icon-48-mdpi.png" density="mdpi" />
       <icon src="www/res/icon/android/icon-72-hdpi.png" density="hdpi" />
       <icon src="www/res/icon/android/icon-96-xhdpi.png" density="xhdpi" />
+      <splash src="www/res/screen/android/splash-port-ldpi.png" density="port-ldpi"/>
+      <splash src="www/res/screen/android/splash-port-mdpi.png" density="port-mdpi"/>
+      <splash src="www/res/screen/android/splash-port-hdpi.png" density="port-hdpi"/>
+      <splash src="www/res/screen/android/splash-port-xhdpi.png" density="port-xhdpi"/>
     </platform>
 </widget>

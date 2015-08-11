@@ -384,7 +384,7 @@ function loadMapScript() {
 
 function initializeMap(mapOptions) {
 	google.maps.visualRefresh = true;
-	
+
 	myLatlng = new google.maps.LatLng(currentLocation.coords.latitude, currentLocation.coords.longitude);
 	mapOptions = {
 		center : myLatlng,
