@@ -724,15 +724,17 @@ function signUp() {
         var data = {
             "utf8": "V",
             "user": {
-                "first_name": $('#sign_up_first_name').val(),
-                "last_name": $('#sign_up_last_name').val(),
                 "document_type": $('#sign_up_document_type').val(),
                 "document_id": $('#sign_up_document_id').val(),
                 "is_member": false,
                 "agreement_id": $('#sign_up_agreement').val(),
+                "first_name": $('#sign_up_first_name').val(),
+                "last_name": $('#sign_up_last_name').val(),
+                "email": $('#sign_up_email').val(),
+                "phone_number": $('#sign_up_phone').val(),
                 "password": $('#sign_up_password').val(),
-                "password_confirmation": $('#sign_up_password_confirmation').val(),
-                "email": $('#sign_up_email').val()
+                "password_confirmation": $('#sign_up_password_confirmation').val()
+
             }
         };
 
@@ -1167,17 +1169,25 @@ function updateDashboard() {
         var dateText = '';
 
         for(var i=0; i<myRides.length; i++) {
-            var myRideDateText = getDateFromMysql(myRides[i].ride_when)
+            var myRideDateText = getDateFromMysql(myRides[i].ride_when);
 
             if (myRideDateText != dateText) {
                 myRidesList.append($('<li data-role="list-divider" class="date-divider">' + myRideDateText + '</li>'));
                 dateText = myRideDateText;
             }
 
+            myRides[i].status = 'canceled';
+
+            if (myRides[i].status == 'canceled') {
+                var myRideTimeText = '<div style="color: red;">Viaje cancelado</div>';
+            } else {
+                var myRideTimeText = '<div>' + getTimeFromMysql(myRides[i].ride_when) + '</div>';
+            }
+
             var html = '<li class="ui-nodisc-icon">' +
                             '<a onclick="showRideDetail(' + myRides[i].id + ', \'dashboard\')">' +
                                 '<div>' + myRides[i].origin + ' - ' + myRides[i].destination + '</div>'+
-                                '<div>' + getTimeFromMysql(myRides[i].ride_when) + '</div>' +
+                                myRideTimeText +
                             '</a>' +
                         '</li>';
             myRidesList.append($(html));
@@ -1349,6 +1359,8 @@ function getRideDetail(rideId) {
     $('#btn-accept-ride').addClass('ui-disabled');
     $('#btn-email-passengers').hide();
     $('#btn-email-passengers').addClass('ui-disabled');
+    $('#btn-cancel-ride').hide();
+    $('#btn-cancel-ride').addClass('ui-disabled');
 
     var user = getCache('carpooling_user');
 
@@ -1364,9 +1376,20 @@ function getRideDetail(rideId) {
 
                 var date = createDateFromMysql(ride.ride_when);
 
-                $('#view-ride .date').html(date.getDate() + ' ' + months[date.getMonth()]);
-                $('#view-ride .time').html(("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2));
-                $('#view-ride .time').html(ride.time);
+                ride.status = 'canceled';
+
+                if (ride.status == 'canceled') {
+                    $('.container-when').hide();
+                    $('.container-canceled').show();
+                } else {
+                    $('.container-when').show();
+                    $('.container-canceled').hide();
+
+                    $('#view-ride .date').html(date.getDate() + ' ' + months[date.getMonth()]);
+                    $('#view-ride .time').html(("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2));
+                    $('#view-ride .time').html(ride.time);
+                }
+
                 $('#view-ride .origin').html(ride.origin);
                 $('#view-ride .destination').html(ride.destination);
 
@@ -1412,15 +1435,26 @@ function getRideDetail(rideId) {
                 $('#view-ride .notes').html(ride.notes);
 
                 var showAcceptRideButton = true;
-                var showContactPassengersButton = false;
 
                 // El usuario es el creador del viaje
                 if (user.id == ride.owner.id) {
                     showAcceptRideButton = false;
-                    showContactPassengersButton = true;
+
+                    $('#btn-email-passengers').attr('href', 'mailto:' + mailList);
+                    if (mailList != '') {
+                        $('#btn-email-passengers').removeClass('ui-disabled');
+                    }
+                    $('#btn-email-passengers').show();
+
+                    $('#btn-cancel-ride').show();
+
+                    if(ride.status != 'canceled') {
+                        $('#btn-cancel-ride').removeClass('ui-disabled');
+                    }
+
                 } else {
                     // El viaje va lleno
-                    if (takenSeats >= availableSeats) {
+                    if (takenSeats >= availableSeats || ride.status == 'canceled') {
                         showAcceptRideButton = false;
                     } else {
                         // El usuario ya aceptó el viaje
@@ -1435,14 +1469,6 @@ function getRideDetail(rideId) {
                 if (showAcceptRideButton) {
                     $('#btn-accept-ride').removeClass('ui-disabled');
                     $('#btn-accept-ride').show();
-                }
-
-                if (showContactPassengersButton) {
-                    $('#btn-email-passengers').attr('href', 'mailto:' + mailList);
-                    if (mailList != '') {
-                        $('#btn-email-passengers').removeClass('ui-disabled');
-                    }
-                    $('#btn-email-passengers').show();
                 }
 
                 $('#view-ride .ui-content').show();
@@ -1728,6 +1754,15 @@ function acceptRide() {
             }
         }
     });
+}
+
+function cancelRide() {
+    showDialog('Cancelar viaje',
+        '¿Estás seguro que deseas cancelar el viaje?',
+        function() {
+
+        }
+    );
 }
 
 

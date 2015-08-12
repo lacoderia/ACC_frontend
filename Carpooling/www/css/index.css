@@ -568,6 +568,10 @@ label.error {
     margin-right: 10px;
 }
 
+#view-ride .container-canceled {
+    color: red;
+}
+
 #view-ride .container-passengers {
     display: table;
     width: 100%;
@@ -609,6 +613,11 @@ label.error {
 
 #view-ride .notes {
     color: #666;
+}
+
+#view-ride #btn-cancel-ride {
+    border-color: red;
+    color: red;
 }
 
 /** Search Ride **/
