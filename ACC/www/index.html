@@ -93,7 +93,7 @@
             </div>
 	    </div>
 
-        <div id="menu-emergencias" class="menu dismissable" onclick="exitMenu(event)">
+        <div id="menu-emergencias" class="menu submenu dismissable" onclick="exitMenu(event)">
             <div id="menu-emergencias-container" class="menu-container">
                 <div class="row">
                     <a href="tel:123">
@@ -110,7 +110,7 @@
             </div>
         </div>
 
-        <div id="menu-tramites" class="menu dismissable" onclick="exitMenu(event)">
+        <div id="menu-tramites" class="menu submenu dismissable" onclick="exitMenu(event)">
             <div id="menu-tramites-container" class="menu-container">
                 <div class="row">
                     <div class="menu-button" onclick="showProcessRequest()">
@@ -123,7 +123,7 @@
             </div>
         </div>
 
-        <div id="menu-seguros" class="menu dismissable" onclick="exitMenu(event)">
+        <div id="menu-seguros" class="menu submenu dismissable" onclick="exitMenu(event)">
             <div id="menu-seguros-container" class="menu-container">
                 <div class="row">
                     <div class="menu-button" onclick="showInsuranceRequest()">
@@ -136,7 +136,7 @@
             </div>
         </div>
 
-        <div id="menu-servicio" class="menu dismissable" onclick="exitMenu(event)">
+        <div id="menu-servicio" class="menu submenu dismissable" onclick="exitMenu(event)">
             <div id="menu-servicio-container" class="menu-container">
                 <div class="ui-header ui-bar-a">
                     Solicitar servicio
@@ -203,10 +203,10 @@
                 <hr>
 	        	<ul id="menu-lateral">
                     <li id="btn_sign_up" onclick="goToSignUp()">Afiliaciones ACC</li>
-                    <li onclick="hideMenuLateral(); showProfile()">Mi cuenta</li>
+                    <li onclick="showProfile()">Mi cuenta</li>
 	        		<!--li onclick="goToDescuentos()">Descuentos</li-->
 	        		<li onclick="showHelp()">Ayuda</li>
-	        		<li id="boton-cerrar-sesion" onclick="hideMenuLateral(); logOut()">Cerrar sesion</li>
+	        		<li id="boton-cerrar-sesion" onclick="logOut()">Cerrar sesion</li>
 	        	</ul>
 	        </div>
 	        <!-- /menu-lateral -->
@@ -280,7 +280,7 @@
         <!-- Start of sign-up -->
         <div data-role="page" id="sign-up">
             <div data-role="header">
-                <span class="acc-btn-back icon-arrow-left" previous-page="login"></span>
+                <span class="acc-btn-back icon-arrow-left" previous-page="dashboard" previous-action="showMenuLateral"></span>
                 <h1>Registro</h1>
             </div><!-- /header -->
 
@@ -371,7 +371,7 @@
         <!-- Start of help-->
         <div data-role="page" id="help">
             <div role="main" class="ui-content">
-        		<div id="cerrar-ayuda" class="icon-cancel" onclick="showDashboard()"></div>
+        		<div id="cerrar-ayuda" class="icon-cancel" onclick="hideHelp()"></div>
 	            <div id="help-carousel" class="owl-carousel" >
 	            	<div>
                         <img src="img/help/help_01.png" />

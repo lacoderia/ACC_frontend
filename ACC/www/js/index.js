@@ -115,21 +115,36 @@ var app = {
                 if (btn.attr('transition')) {
                     transition = btn.attr('transition');
                 }
-                
-                if( pg.attr("id")=="login" || pg.attr("id")=="dashboard"){
+
+                if ($("#menu-principal:visible").length || $('#menu-pico-y-placa:visible').length) {
+                    // Cerrar el menu
+                    hideMenu();
+                } else if ($(".submenu:visible").length) {
+                    // Regresar al menu
+                    showMenu();
+                } else if ($('#popupDialog').parent().hasClass('ui-popup-active')) {
+                    // Cerrar la alerta
+                    $('#popupDialog').popup('close');
+                    showMenu();
+                } else if ($('#panel-menu-lateral').hasClass('ui-panel-open')) {
+                    // Cerrar el menu lateral
+                    hideMenuLateral();
+                } else if(pg.attr("id")=="dashboard"){
                 	navigator.app.exitApp();
-                }else if(btn.attr('previous-page')!= undefined){
-                	window.scrollTo(0,0);
-                	
-                    $.mobile.changePage($('#' + btn.attr('previous-page')), {transition: transition, reverse: 'true'});
-                    if(pg.attr("id")=="process-request" || pg.attr("id")=="lista-descuentos"){
-                    	setTimeout(function(){
-                    		showMenu();
-                        }, 200);
-                    }
-                }else{
+                } else if(btn.attr('previous-page') != undefined){
+                    btn.trigger('click');
+                } else if(pg.attr("id")=="help"){
+                    hideHelp();
+                } else {
                 	window.scrollTo(0,0);
                     $.mobile.changePage($('#dashboard'), {transition: transition, reverse: 'true'});
+
+                    if (pg.attr("id")=="login" && window.sessionStorage.acc_previousAction) {
+                        setTimeout(function(){
+                            window[window.sessionStorage.acc_previousAction]();
+                        }, 1000);
+                    }
+
                 }
         	}
         }
@@ -154,15 +169,14 @@ var app = {
             }
         });
 
-        $("#panel-menu-lateral").panel('open');
+        showMenuLateral();
 
         $('.acc-btn-back').click(function() {
             var previousAction = $(this).attr('previous-action');
             if(previousAction){
                 setTimeout(function(){
                     window[previousAction]();
-
-                }, 200);
+                }, 1000);
             }
 
             window.scrollTo(0,0);
@@ -251,7 +265,9 @@ $(document).on('pagebeforeshow', '#dashboard', function(){
 $(document).on('pageshow', '#dashboard', function(){
     $('#dashboard-header').slideDown(100);
     if(map){
-      map.panTo(myLatlng);
+        google.maps.event.trigger(map, 'resize');
+        map.setCenter(myLatlng);
+
     }
 });
 
@@ -390,26 +406,29 @@ function initializeMap(mapOptions) {
 		center : myLatlng,
 		zoom : 16,
         minZoom: 6,
-        maxZoom: 16,
 		enableHighAccuracy: true,
 		disableDefaultUI: true,
 		mapTypeId : google.maps.MapTypeId.ROADMAP
 	};
 
-	map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-	
-	 var markerOpts = {
-		'icon': {
-		    'url': 'img/gpsloc.png',
-		    'size': new google.maps.Size(34, 34),
+    map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+    var markerOpts = {
+        'icon': {
+            'url': 'img/gpsloc.png',
+            'size': new google.maps.Size(34, 34),
 		    'scaledSize': new google.maps.Size(17, 17),
 		    'origin': new google.maps.Point(0, 0),
 		    'anchor': new google.maps.Point(8, 8)
-		    }
-		};
+        }
+	};
 	
 	GeoMarker = new GeolocationMarker(map, markerOpts);
-	GeoMarker.setMap(map);
+    GeoMarker.setCircleOptions({
+        fillOpacity: 0,
+        strokeOpacity: 0
+    });
+    GeoMarker.setMap(map);
 	
 	google.maps.event.trigger(map, 'resize');
 
@@ -908,10 +927,13 @@ function hideMenuLateral(){
 /** Mi cuenta **/
 
 function showProfile(){
+    hideMenuLateral();
+
     var user = getCache("acc_user");
 
     if (user == undefined){
         window.sessionStorage.acc_previousPage = 'profile';
+        window.sessionStorage.acc_previousAction = 'showMenuLateral';
         $.mobile.changePage($('#login'));
     } else {
         $.mobile.changePage($('#profile'));
@@ -946,6 +968,7 @@ function solicitarServicio(pagina){
                 false,
                 function(){
                     window.sessionStorage.acc_previousPage = 'dashboard';
+                    window.sessionStorage.acc_previousAction = 'showMenu';
                     $.mobile.changePage($('#login'));
                 },
                 function(){
@@ -1033,7 +1056,7 @@ function showProcessRequest() {
 
 function showProcessLookup() {
   exitMenu($('#menu-tramites'));
-    window.open('http://acc.servidor-sainet.com/consulta-abierta', '_blank', 'location=no,closebuttoncaption=Cerrar');
+    window.open('http://tramitesenlinea.acc.com.co', '_blank', 'location=no,closebuttoncaption=Cerrar');
     showMenu();
 }
 
@@ -1765,12 +1788,18 @@ $(document).on('pagebeforeshow', '#help', function(){
 	});
 });
 
-function showDashboard(){
-	$.mobile.changePage($('#dashboard'));
+function showHelp(){
+    hideMenuLateral();
+	$.mobile.changePage($('#help'));
 }
 
-function showHelp(){
-	$.mobile.changePage($('#help'));
+function hideHelp(){
+    setTimeout(function(){
+        showMenuLateral();
+    }, 1000);
+
+    window.scrollTo(0,0);
+    $.mobile.changePage($('#dashboard'));
 }
 
 function goToSignUp(){
