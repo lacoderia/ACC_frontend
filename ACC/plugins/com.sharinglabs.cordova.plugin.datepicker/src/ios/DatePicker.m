@@ -87,7 +87,8 @@
     self.datePickerComponentsContainer.frame = CGRectOffset(frame,
                                                             0,
                                                             frame.size.height );
-    
+
+    self.datePickerComponentsContainer.backgroundColor = [UIColor whiteColor];
     
     self.datePickerContainer.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0];
     
