@@ -188,7 +188,7 @@ var app = {
             var date = new Date();
 
             if (currentField.val()){
-                date = new Date(reverseDate(currentField.val(), '/', '/'))
+                date = new Date(reverseDate(currentField.val(), '/', '/'));
             }
 
             // Same handling for iPhone and Android
@@ -210,6 +210,8 @@ var app = {
 
                 // This fixes the problem you mention at the bottom of this script with it not working a second/third time around, because it is in focus.
                 currentField.blur();
+            }, function(error){
+                currentField.blur();
             });
         });
 
@@ -218,7 +220,7 @@ var app = {
             var date = new Date();
 
             if (currentField.val()){
-                date =   new Date('1 Jan 1900 ' + currentField.val());
+                date =   new Date('1 Jan 2010 ' + currentField.val());
             }
 
             // Same handling for iPhone and Android
@@ -233,20 +235,16 @@ var app = {
                     var a_p = "";
                     var d = new Date(returnTime);
                     var curr_hour = d.getHours();
-                    if (curr_hour < 12)
-                    {
+                    if (curr_hour < 12) {
                         a_p = "AM";
                     }
-                    else
-                    {
+                    else {
                         a_p = "PM";
                     }
-                    if (curr_hour == 0)
-                    {
+                    if (curr_hour == 0) {
                         curr_hour = 12;
                     }
-                    if (curr_hour > 12)
-                    {
+                    if (curr_hour > 12) {
                         curr_hour = curr_hour - 12;
                     }
 
@@ -254,8 +252,7 @@ var app = {
 
                     curr_min = curr_min + "";
 
-                    if (curr_min.length == 1)
-                    {
+                    if (curr_min.length == 1) {
                         curr_min = "0" + curr_min;
                     }
 
@@ -263,6 +260,8 @@ var app = {
                 }
 
                 // This fixes the problem you mention at the bottom of this script with it not working a second/third time around, because it is in focus.
+                currentField.blur();
+            }, function(error){
                 currentField.blur();
             });
         });
