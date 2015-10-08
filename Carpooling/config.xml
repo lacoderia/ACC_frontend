@@ -4,8 +4,8 @@
     <description>
         An ACC app to organize shared rides.
     </description>
-    <author email="ricardo@coderia.mx" href="http://www.coderia.mx">
-        La Codería
+    <author email="example@example.com" href="http://www.example.com">
+        Example
     </author>
     <content src="index.html" />
     <access origin="*" />
