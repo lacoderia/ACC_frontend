@@ -408,7 +408,7 @@
                     <div data-role="fieldcontainer">
                         <input type="number" pattern="[0-9]*" name="add_ride_seats" id="add_ride_seats" placeholder="Asientos disponibles:" class="required" min="1" max="5" onKeyPress="return numberPattern(event)">
                     </div>
-                    <div data-role="fieldcontainer">
+                    <div data-role="fieldcontainer" style="display:none">
                         <input type="number" pattern="[0-9]*" name="add_ride_cost" id="add_ride_cost" min="0" max="9999" placeholder="Costo:" onKeyPress="return numberPattern(event)">
                     </div>
                     <div data-role="fieldcontainer">
@@ -445,7 +445,7 @@
                     <span>Hasta:</span>
                     <span class="destination"></span>
                 </div>
-                <div class="row">
+                <div class="row" style="display:none">
                     <span>Costo:</span>
                     <span class="cost"></span>
                 </div>
